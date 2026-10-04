@@ -1,0 +1,34 @@
+# Local contributor and editor state
+.serena/
+.codex/
+.agents/
+.DS_Store
+.idea/
+.vscode/
+
+# Credentials and local configuration
+.env
+.env.*
+!.env.example
+brain-openkit.local.*
+
+# Runtime indexes, virtual environments, and Python build output
+.cache/
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+build/
+dist/
+.coverage
+htmlcov/
+
+# Personal vaults and downloaded model files
+vaults/
+models/
+*.safetensors
+*.onnx
