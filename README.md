@@ -127,6 +127,7 @@ in both terminals. These public weights need no Hugging Face token or Jev key.
 ## Configuration and output
 
 Each subcommand accepts `--config settings.json` and `--json`.
+Standard output and error use UTF-8, including redirected files and pipes.
 Example configuration saved at the checkout root:
 
 ~~~json

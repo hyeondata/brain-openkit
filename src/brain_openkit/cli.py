@@ -1,6 +1,7 @@
 """Command line interface; importing it never loads model weights."""
 
 import argparse
+import io
 import json
 import math
 import os
@@ -179,6 +180,10 @@ def main(argv: list[str] | None = None) -> int:
     options = argv[:argv.index("--")] if "--" in argv else argv
     json_output = "--json" in options
     try:
+        # Preserve Korean source text when Windows redirects output to a pipe.
+        for stream in (sys.stdout, sys.stderr):
+            if isinstance(stream, io.TextIOWrapper):
+                stream.reconfigure(encoding="utf-8")
         args = _parser().parse_args(argv)
         json_output = args.json
         report, status = _execute(args)

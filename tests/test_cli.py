@@ -1,6 +1,9 @@
 import contextlib
 import io
 import json
+import os
+import subprocess
+import sys
 import tempfile
 import unittest
 from pathlib import Path
@@ -86,6 +89,28 @@ class CLITests(unittest.TestCase):
                 self.assertEqual(status, 2)
                 self.assertIn("error", json.loads(out))
                 self.assertEqual(err, "")
+
+    def test_redirected_cli_outputs_utf8_under_a_legacy_encoding(self):
+        dataset = self.root / "evaluation.jsonl"
+        dataset.write_text(json.dumps({"query": "로컬", "relevant": ["note.md"]}, ensure_ascii=False) + "\n", encoding="utf-8")
+        cases = [
+            (["search", "로컬", *self.common()], 0, "stdout", "한국어"),
+            (["search", "로컬", *self.common()[:-1]], 0, "stdout", "한국어"),
+            (["evaluate", str(dataset), *self.common()], 0, "stdout", "로컬"),
+            (["없는명령", "--json"], 2, "stdout", "없는명령"),
+            (["없는명령"], 2, "stderr", "없는명령"),
+        ]
+        env = {**os.environ, "PYTHONIOENCODING": "cp1252", "PYTHONUTF8": "0"}
+        for args, status, output_stream, expected in cases:
+            with self.subTest(args=args):
+                result = subprocess.run([sys.executable, "-m", "brain_openkit", *args],
+                                        env=env, capture_output=True, timeout=20)
+                self.assertEqual(result.returncode, status, result.stderr)
+                output = getattr(result, output_stream).decode("utf-8")
+                self.assertIn(expected, output)
+                if "--json" in args:
+                    self.assertIsInstance(json.loads(output), dict)
+                    self.assertEqual(result.stderr, b"")
 
 
 if __name__ == "__main__":

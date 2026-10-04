@@ -124,6 +124,7 @@ brain-openkit evaluate examples/evaluation.jsonl --vault examples/vault --provid
 ## 설정과 출력
 
 각 하위 명령은 `--config settings.json`, `--json`을 받습니다.
+표준 출력과 오류 출력은 파일·파이프로 연결할 때도 UTF-8을 사용합니다.
 체크아웃 루트에 저장할 설정 예시입니다.
 
 ~~~json
