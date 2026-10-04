@@ -1,8 +1,8 @@
 # Brain OpenKit agent workflows
 
-Status: release validation. Implementation, local/actual-host checks, clean
-build/install, and the acceptance evidence audit are complete; publication/PR
-and current-revision CI remain pending. This extends the approved CLI design under
+Status: implemented and verified for the source-installable 0.2.0a1 scope.
+Local/actual-host checks, clean build/install, independent review, all six CI
+jobs, and publication in draft PR #1 are complete. This extends the approved CLI design under
 the user's instruction to execute and verify the roadmap autonomously. See
 [implementation evidence](../../implementation-notes.md) for completed checks
 and separately unmet live-service and real-vault quality targets.

@@ -4,6 +4,11 @@ This matrix tracks the original roadmap rather than treating a plugin manifest
 as the completed product. Release target: **0.2.0a1**, source installation from
 `codex/cli-mvp`. Validation is against synthetic vaults, not private user data.
 
+Implementation is available in [draft PR #1](https://github.com/hyeondata/brain-openkit/pull/1).
+All six [CI jobs at `33d3a42`](https://github.com/hyeondata/brain-openkit/actions/runs/37210403995)
+passed; actual host and model evidence is recorded in
+[implementation notes](implementation-notes.md).
+
 | Original item | Implementation | Verification and remaining limits |
 | --- | --- | --- |
 | Read-only indexing and retrieval | SQLite refresh, BM25, exact path/line/excerpt | Original CLI tests; unchanged source hashes; Korean/English and CRLF checks |

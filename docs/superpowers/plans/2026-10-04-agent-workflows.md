@@ -132,8 +132,10 @@ Files: READMEs, implementation notes, attribution, CI, roadmap.
 - [x] Obtain independent full-diff review and resolve actionable findings.
 - [x] Update each roadmap item with implementation and verification evidence;
   leave unmet requirements explicitly open.
-- [ ] Publish branch and attach a reviewable PR; confirm all six CI jobs for
-  the new revision. The passing `9075acb` matrix is historical evidence only.
+- [x] Publish branch and attach [draft PR #1](https://github.com/hyeondata/brain-openkit/pull/1);
+  all six [CI jobs at `33d3a42`](https://github.com/hyeondata/brain-openkit/actions/runs/37210403995)
+  passed. The earlier `9075acb` matrix remains historical evidence only.
 - [x] Audit implementation and acceptance evidence, including clean installation,
-  while preserving publication/CI and the separate live-Jev/real-vault quality
-  gaps. A package loading successfully alone does not complete those requirements.
+  publication/CI, and both hosts' actual workflows. Live Jev and user-reviewed
+  real-vault quality remain explicitly open follow-up requirements; no production
+  quality or model-superiority claim is made.

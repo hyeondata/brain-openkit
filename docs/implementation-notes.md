@@ -84,8 +84,8 @@ web alternative, not an Obsidian plugin. It still writes a derived search cache.
 | Area | Evidence at this snapshot | Boundary |
 | --- | --- | --- |
 | Previous 0.1 baseline | 71 local tests and all six CI jobs passed at `9075acb`. | Historical evidence only; not the final 0.2 test/CI result. |
-| Current 0.2 unit/fixture suite | Independent full runs on Python 3.11 and 3.13 each reported 159 tests, OK with four Windows-only skips. Coverage includes transactions, note workflows, providers, CLI, web, packaging, and evaluation. | These are local macOS results; the current-revision six-job CI matrix is still pending. |
-| Distribution build and clean installation | The source distribution contained all eight skills, shared runtime reference, runner, and four host manifests. A wheel installed offline into a new Python 3.13 environment outside the checkout completed 17 CLI commands, including five planned/applied transactions and their reverse-order undo. Original Markdown hashes were fully restored. | Local installation proof; Linux/Windows release checks remain part of the pending CI matrix. |
+| Current 0.2 unit/fixture suite | Independent local Python 3.11/3.13 runs each reported 159 tests, OK with four Windows-only skips. All six [CI jobs at implementation revision `33d3a42`](https://github.com/hyeondata/brain-openkit/actions/runs/37210403995) passed on Ubuntu/macOS/Windows × Python 3.11/3.13, including source installation and installed CLI checks. Windows logs confirm the four junction regressions actually ran. | Platform-specific tests are skipped where inapplicable; CI does not run paid providers or host agents. |
+| Distribution build and clean installation | The source distribution contained all eight skills, shared runtime reference, runner, and four host manifests. A wheel installed offline into a new Python 3.13 environment outside the checkout completed 17 CLI commands, including five planned/applied transactions and their reverse-order undo. Original Markdown hashes were fully restored. The final warning-free build retained identical bytes for all 12 runtime modules. | The full installed-wheel write loop ran locally; all six CI jobs separately installed from source and exercised the CLI. |
 | Real Laya | Installed CLI health/probe, rerank, classify, evaluate, unavailable-server fallback, and a larger frozen evaluation were exercised. | Synthetic data; quality results below are mixed or worse than BM25. |
 | Jev | Official-contract request/response fixtures and CLI configuration/selection checks. | No actual key or live inference; costs and deployment behavior remain unverified. |
 | Claude packaging | Claude Code 2.1.220 validated both manifest files individually with strict validation and discovered eight skills. | Discovery alone is not task execution. |
@@ -97,12 +97,13 @@ web alternative, not an Obsidian plugin. It still writes a derived search cache.
 | Actual Codex research | A real session invoked the research skill, used one official Python documentation source through its web tool, drafted with that source URL, inspected a plan, applied it, and reread the saved note. Independent verification confirmed the applied transaction, source URL, and unchanged copied runtime. | One bounded, single-source run; not general web/PDF/media extraction coverage or a Claude research execution check. |
 | Browser | Actual browser automation opened the loopback UI, searched “한국어 BM25 검색 후보”, and inspected two results including `local-search.md:1–7`. | One local browser run; not broad browser/platform certification. |
 
-Local full-suite, host execution, and clean build/install checks above are
-complete. The tested distributions preceded removal of an unused skills YAML
-glob from the source manifest; implementation code was unchanged. Publication,
-PR, and the six-job CI result for the new revision remain pending. Record those
-results for the exact revision when available. A passing package import or
-plugin inventory alone does not close acceptance.
+Local tests, actual host execution, clean build/install, independent review,
+and the six-job implementation CI matrix are complete. The source branch is
+published in [draft PR #1](https://github.com/hyeondata/brain-openkit/pull/1).
+The CI link above identifies the tested implementation revision; later evidence
+documentation updates do not change its runtime. The PR checks show the latest
+branch revision. Source installation remains the release path; no PyPI package
+has been published.
 
 ## Referenced versions
 
@@ -158,9 +159,6 @@ is established. See [the full run, raw artifacts, and limitations](../benchmarks
 
 ## Remaining boundaries and acceptance work
 
-- Complete publication/PR and record the new-revision CI matrix. Local acceptance
-  evidence includes clean installation, both hosts' search/write flows, and one
-  bounded Codex research flow; separately unmet requirements remain below.
 - Verify Jev live inference with an intentionally configured service key;
   fixture coverage does not establish deployed service behavior.
 - Evaluate at least 30 user-reviewed real-vault retrieval queries and 50
