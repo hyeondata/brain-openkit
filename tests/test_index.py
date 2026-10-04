@@ -126,7 +126,7 @@ class IndexTests(unittest.TestCase):
         self.assertEqual('note.md', reopened.search('originalword')[0].chunk.path)
 
     def test_old_line_number_cache_is_rebuilt_before_serving_citations(self):
-        self.note('note.md', 'alpha\u2028beta\n\n# Target\nneedle\n')
+        (self.vault / 'note.md').write_bytes('alpha\u2028beta\n\n# Target\nneedle\n'.encode('utf-8'))
         self.index.update()
         self.index.close()
         conn = sqlite3.connect(next(self.cache.glob('*.sqlite3')))

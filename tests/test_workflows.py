@@ -33,14 +33,21 @@ class WorkflowTests(unittest.TestCase):
         (self.vault / "b.md").write_text("# Other search\n\nSearch remote notes.\n", encoding="utf-8")
 
     def test_search_refreshes_deleted_notes_and_preserves_exact_source_slice(self):
-        result = search(self.vault, "local", cache_dir=self.cache)
-        self.assertEqual(result["rerank_status"], "disabled")
-        hit = result["results"][0]
-        lines = (self.vault / hit["path"]).read_text().splitlines(keepends=True)
-        self.assertEqual(hit["text"], "".join(lines[hit["start_line"]-1:hit["end_line"]]))
-        self.assertIsNone(hit["model_score"])
-        (self.vault / "a.md").unlink()
-        self.assertEqual(search(self.vault, "local", cache_dir=self.cache)["results"], [])
+        for newline in ("\n", "\r\n"):
+            with self.subTest(newline=repr(newline)):
+                path = self.vault / "a.md"
+                source = newline.join(["# Local 검색", "", "Search local notes.", ""]).encode("utf-8")
+                path.write_bytes(source)
+                result = search(self.vault, "local", cache_dir=self.cache)
+                self.assertEqual(result["rerank_status"], "disabled")
+                hit = result["results"][0]
+                self.assertEqual(hit["path"], "a.md")
+                lines = source.splitlines(keepends=True)
+                self.assertEqual(hit["text"].encode("utf-8"), b"".join(lines[hit["start_line"]-1:hit["end_line"]]))
+                self.assertEqual(path.read_bytes(), source)
+                self.assertIsNone(hit["model_score"])
+                path.unlink()
+                self.assertEqual(search(self.vault, "local", cache_dir=self.cache)["results"], [])
 
     def test_partial_failure_rolls_back_entire_reranking(self):
         baseline = search(self.vault, "search", cache_dir=self.cache)
