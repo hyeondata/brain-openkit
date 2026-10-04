@@ -1,0 +1,16 @@
+{
+  "categories": {
+    "software": "Implementation, operation, and reliability of software systems or data stores.",
+    "knowledge": "Personal notes, reading highlights, citations, and organization of a knowledge library.",
+    "home": "Care and organization of a household, its equipment, food, plants, or paper documents.",
+    "travel": "Planning journeys and protecting travel documents, maps, routes, or photographs.",
+    "research": "Designing studies, collecting research observations, evaluating methods, and handling participant data.",
+    "workplace": "Coordinating employees, meetings, tasks, access, and team priorities."
+  },
+  "tags": {
+    "privacy": "Protects sensitive or identifying information through minimization, restricted access, redaction, or not sending it to outsiders.",
+    "backup": "Creates or verifies recoverable copies of digital files or databases. Alternative travel routes and a rebuildable search cache alone do not count.",
+    "offline": "Explicitly supports or verifies an activity without an internet or mobile network connection.",
+    "maintenance": "Describes recurring scheduled inspection, upkeep, repair, cleanup, inventory review, or a restoration drill for equipment, software, documents, food stores, or plants. Routine copying or checking a newly captured file alone does not count; explicitly rehearsing restoration does."
+  }
+}

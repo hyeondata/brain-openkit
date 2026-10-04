@@ -1,8 +1,13 @@
+import os
+import stat
+import subprocess
 import tempfile
 import unittest
 from pathlib import Path
+from types import SimpleNamespace
+from unittest.mock import patch
 
-from brain_openkit.vault import chunk_markdown, read_note
+from brain_openkit.vault import chunk_markdown, read_note, validate_vault
 
 
 class ChunkMarkdownTests(unittest.TestCase):
@@ -110,6 +115,26 @@ class ReadNoteTests(unittest.TestCase):
                 path.write_text('not a user note', encoding='utf-8')
                 with self.assertRaises(ValueError):
                     read_note(self.vault, path)
+
+    def test_reparse_root_is_rejected_before_resolving_its_target(self):
+        metadata = SimpleNamespace(st_mode=stat.S_IFDIR, st_file_attributes=0x400)
+        with patch.object(Path, 'lstat', return_value=metadata):
+            with self.assertRaises(ValueError):
+                validate_vault(self.vault)
+
+    @unittest.skipUnless(os.name == 'nt', 'Windows junction behavior')
+    def test_windows_junction_roots_and_note_ancestors_are_excluded(self):
+        external = Path(self.tmp.name) / 'external'
+        external.mkdir()
+        (external / 'private.md').write_bytes(b'private\n')
+        junction = self.vault / 'alias'
+        subprocess.run(['cmd', '/c', 'mklink', '/J', str(junction), str(external)],
+                       check=True, capture_output=True)
+        self.addCleanup(os.rmdir, junction)
+        with self.assertRaises(ValueError):
+            validate_vault(junction)
+        with self.assertRaises(ValueError):
+            read_note(self.vault, Path('alias/private.md'))
 
 
 if __name__ == '__main__':

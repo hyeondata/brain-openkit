@@ -22,21 +22,32 @@ class _ArgumentParser(argparse.ArgumentParser):
 
 
 def _parser() -> argparse.ArgumentParser:
-    parser = _ArgumentParser(prog="brain-openkit", description="Read-only search and organization for Obsidian vaults")
+    parser = _ArgumentParser(prog="brain-openkit", description="Source-grounded search and reviewed organization for Obsidian")
     parser.add_argument("--version", action="version", version=__version__)
     commands = parser.add_subparsers(dest="command", required=True)
-    descriptions = {"doctor": "Check the Laya server (no inference unless --probe)",
+    descriptions = {"doctor": "Check the decision provider (no inference unless --probe)",
                     "index": "Refresh the local Markdown index", "search": "Search with source excerpts",
-                    "classify": "Suggest existing categories and tags", "evaluate": "Evaluate retrieval on labeled JSONL"}
+                    "classify": "Suggest existing categories and tags", "evaluate": "Evaluate retrieval on labeled JSONL",
+                    "init": "Preview initialization or adoption of an existing vault",
+                    "ingest": "Preview a preserved source and linked knowledge note",
+                    "save": "Preview saving a selected draft with source links",
+                    "organize": "Preview category, tags and existing-note links",
+                    "fold": "Preview an extractive rollup, preserving its source notes",
+                    "lint": "Inspect links and supported metadata without changing notes",
+                    "apply": "Apply a reviewed change plan with its exact ID",
+                    "undo": "Undo a transaction if its files have not changed",
+                    "recover": "Recover an interrupted transaction without overwriting edits",
+                    "web": "Browse local BM25 search on 127.0.0.1"}
     for name, description in descriptions.items():
         command = commands.add_parser(name, help=description, description=description)
         command.add_argument("--config", type=Path, help="JSON settings; relative paths resolve from this file")
         command.add_argument("--vault", type=Path)
         command.add_argument("--cache-dir", type=Path, help="Derived SQLite cache (default: .cache/brain-openkit)")
         command.add_argument("--json", action="store_true", help="Emit one JSON object, including errors")
-        if name != "index":
-            command.add_argument("--provider", choices=("none", "laya"))
-            command.add_argument("--base-url", help="Laya server (default: http://127.0.0.1:8000)")
+        if name in ("doctor", "search", "classify", "evaluate"):
+            command.add_argument("--provider", choices=("none", "laya", "jev"))
+            command.add_argument("--base-url", help="Override the selected provider's endpoint")
+            command.add_argument("--model", dest="jev_model", help="Jev model ID (default: jev-latest)")
             command.add_argument("--timeout", type=float, help="HTTP timeout in seconds")
             command.add_argument("--max-tokens", type=int, help="Laya sequence budget, 1024 by default")
         if name in ("search", "evaluate"):
@@ -51,27 +62,59 @@ def _parser() -> argparse.ArgumentParser:
             command.add_argument("dataset", type=Path)
         elif name == "doctor":
             command.add_argument("--probe", action="store_true", help="Run a synthetic inference; server may download the model")
+        elif name == "ingest":
+            command.add_argument("source", type=Path)
+            command.add_argument("--title", required=True)
+            command.add_argument("--draft", type=Path, help="Optional host-written UTF-8 draft")
+            command.add_argument("--source-url")
+        elif name == "save":
+            command.add_argument("draft", type=Path)
+            command.add_argument("--path", required=True, help="Vault-relative Markdown destination")
+            command.add_argument("--source", action="append", default=[], help="Existing source note; repeat to add more")
+        elif name == "organize":
+            command.add_argument("note")
+            command.add_argument("--category")
+            command.add_argument("--tag", action="append", help="Tag to add; repeat for multiple tags")
+            command.add_argument("--link", action="append", help="Existing note to link; repeat for more links")
+        elif name == "fold":
+            command.add_argument("notes", nargs="+")
+            command.add_argument("--path", required=True)
+            command.add_argument("--title", required=True)
+        elif name == "apply":
+            command.add_argument("plan_file", type=Path)
+            command.add_argument("--approve", required=True, help="ID of the plan you inspected")
+        elif name in ("undo", "recover"):
+            command.add_argument("transaction_id")
+        elif name == "web":
+            command.add_argument("--port", type=int, default=8765, help="Loopback port; 0 selects an available port")
+        if name in ("init", "ingest", "save", "organize", "fold"):
+            command.add_argument("--plan", type=Path, help="Save preview JSON to a new file outside the vault")
     return parser
 
 
-def _read_json(path: Path) -> dict:
-    if path.stat().st_size > 1024 * 1024:
-        raise ValueError("JSON input exceeds 1 MiB")
+def _read_json(path: Path, max_bytes: int = 1024 * 1024) -> dict:
+    if path.stat().st_size > max_bytes:
+        raise ValueError("JSON input exceeds the size limit")
     try:
-        return json.loads(path.read_text(encoding="utf-8"))
-    except (json.JSONDecodeError, UnicodeError) as exc:
+        with path.open("rb") as stream:
+            raw = stream.read(max_bytes + 1)
+        if len(raw) > max_bytes:
+            raise ValueError("JSON input exceeds the size limit")
+        return json.loads(raw.decode("utf-8"))
+    except (json.JSONDecodeError, UnicodeError, RecursionError) as exc:
         raise ValueError("Input must be valid UTF-8 JSON") from exc
 
 
 def _settings(args: argparse.Namespace) -> dict:
     result = {"vault": None, "cache_dir": Path(".cache/brain-openkit"),
               "provider": "laya" if args.command in ("classify", "doctor") else "none",
-              "base_url": "http://127.0.0.1:8000", "timeout": 10.0,
+              "base_url": None, "laya_base_url": "http://127.0.0.1:8000",
+              "jev_base_url": "https://api.typesafe.ai", "jev_model": "jev-latest", "timeout": 10.0,
               "max_tokens": 1024, "limit": 5, "candidates": 20}
     if args.config:
         config = _read_json(args.config)
         if not isinstance(config, dict) or set(config) - result.keys():
-            raise ValueError("Unknown configuration fields; keep API keys in LAYA_API_KEY, not JSON")
+            raise ValueError("Unknown configuration fields; keep API keys in environment variables, not JSON")
         for key in ("vault", "cache_dir"):
             if key in config:
                 if not isinstance(config[key], str) or not config[key].strip():
@@ -83,10 +126,13 @@ def _settings(args: argparse.Namespace) -> dict:
         value = getattr(args, key, None)
         if value is not None:
             result[key] = value
-    if result["provider"] not in ("none", "laya"):
-        raise ValueError("Supported providers are none and laya; Jev is not implemented yet")
-    if not isinstance(result["base_url"], str):
+    if result["provider"] not in ("none", "laya", "jev"):
+        raise ValueError("Supported providers are none, laya and jev")
+    if result["base_url"] is not None and not isinstance(result["base_url"], str):
         raise ValueError("base_url must be a URL string")
+    for key in ("laya_base_url", "jev_base_url", "jev_model"):
+        if not isinstance(result[key], str) or not result[key].strip():
+            raise ValueError(f"{key} must be a nonempty string")
     for key in ("limit", "candidates", "max_tokens"):
         if type(result[key]) is not int:
             raise ValueError(f"{key} must be an integer")
@@ -100,10 +146,7 @@ def _settings(args: argparse.Namespace) -> dict:
     for key in ("vault", "cache_dir"):
         if result[key] is not None:
             result[key] = Path(result[key]).expanduser().absolute()
-    if args.command == "classify" and result["vault"] is None:
-        args.note = args.note.expanduser().absolute()
-        result["vault"] = args.note.parent
-    if args.command in ("index", "search", "classify", "evaluate") and result["vault"] is None:
+    if args.command != "doctor" and result["vault"] is None:
         raise ValueError("Specify --vault or a vault path in --config")
     return result
 
@@ -111,13 +154,64 @@ def _settings(args: argparse.Namespace) -> dict:
 def _provider(settings: dict):
     if settings["provider"] == "none":
         return None
-    return LayaProvider(base_url=settings["base_url"], api_key=os.environ.get("LAYA_API_KEY"),
+    if settings["provider"] == "jev":
+        from .jev import JevProvider
+        return JevProvider(base_url=settings["base_url"] or settings["jev_base_url"],
+                           api_key=os.environ.get("TYPESAFE_API_KEY") or os.environ.get("JEV_API_KEY"),
+                           model=settings["jev_model"], timeout=settings["timeout"])
+    return LayaProvider(base_url=settings["base_url"] or settings["laya_base_url"], api_key=os.environ.get("LAYA_API_KEY"),
                         timeout=settings["timeout"], max_tokens=settings["max_tokens"])
+
+
+def _draft(path: Path) -> str:
+    with path.open("rb") as stream:
+        raw = stream.read(2 * 1024 * 1024 + 1)
+    if len(raw) > 2 * 1024 * 1024:
+        raise ValueError("Draft exceeds the 2 MiB limit")
+    return raw.decode("utf-8")
+
+
+def _export_plan(vault: Path, plan: dict, destination: Path | None) -> dict:
+    if destination is not None:
+        if destination.resolve().is_relative_to(vault.resolve()):
+            raise ValueError("Store review plans outside the vault")
+        data = (json.dumps(plan, ensure_ascii=False, indent=2, allow_nan=False) + "\n").encode("utf-8")
+        descriptor = os.open(destination, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
+        with os.fdopen(descriptor, "wb") as stream:
+            stream.write(data)
+    return plan
 
 
 def _execute(args: argparse.Namespace) -> tuple[dict, int]:
     settings = _settings(args)
     vault, cache = settings["vault"], settings["cache_dir"]
+    if args.command in ("init", "ingest", "save", "organize", "fold", "lint"):
+        from . import notes
+        if args.command == "lint":
+            report = notes.lint(vault)
+            return report, 0
+        if args.command == "init":
+            plan = notes.plan_init(vault)
+        elif args.command == "ingest":
+            plan = notes.plan_ingest(vault, args.source, args.title,
+                                     draft=_draft(args.draft) if args.draft else None, source_url=args.source_url)
+        elif args.command == "save":
+            plan = notes.plan_save(vault, args.path, _draft(args.draft), sources=args.source)
+        elif args.command == "organize":
+            plan = notes.plan_organize(vault, args.note, category=args.category, tags=args.tag, links=args.link)
+        else:
+            plan = notes.plan_fold(vault, args.notes, args.path, args.title)
+        return _export_plan(vault, plan, args.plan), 0
+    if args.command in ("apply", "undo", "recover"):
+        from . import changes
+        if args.command == "apply":
+            return changes.apply_plan(vault, _read_json(args.plan_file, 64 * 1024 * 1024), args.approve), 0
+        operation = changes.undo if args.command == "undo" else changes.recover
+        return operation(vault, args.transaction_id), 0
+    if args.command == "web":
+        from .web import serve
+        serve(vault, cache, port=args.port)
+        return {"status": "stopped"}, 0
     if args.command == "index":
         index = Index(vault, cache)
         try:
@@ -130,7 +224,7 @@ def _execute(args: argparse.Namespace) -> tuple[dict, int]:
         if provider is None:
             return {"version": __version__, "provider": "none", "inference_verified": False}, 0
         health = provider.health()
-        report = {"version": __version__, "provider": "laya", "health": health, "inference_verified": False}
+        report = {"version": __version__, "provider": provider.name, "health": health, "inference_verified": False}
         if args.probe:
             from dataclasses import asdict
             report["probe"] = asdict(provider.choose("The note explains how to back up Markdown files.",
@@ -140,7 +234,7 @@ def _execute(args: argparse.Namespace) -> tuple[dict, int]:
         return report, 0
     if args.command == "classify":
         if provider is None:
-            raise ValueError("Classification requires --provider laya and a reachable server")
+            raise ValueError("Classification requires --provider laya or jev and a reachable service")
         return classify(vault, args.note, _read_json(args.taxonomy), provider), 0
     options = {"cache_dir": cache, "provider": provider, "limit": settings["limit"], "candidates": settings["candidates"]}
     if args.command == "search":
@@ -155,7 +249,7 @@ def _text_report(command: str, report: dict) -> str:
             lines.append(f"Using BM25: {report['fallback_reason']}")
         for hit in report["results"]:
             lines.extend([f"\n{hit['path']}:{hit['start_line']}-{hit['end_line']}",
-                          f"BM25={hit['bm25_score']:.4f}" + (f"  Laya={hit['model_score']:.4f}" if hit["model_score"] is not None else ""),
+                          f"BM25={hit['bm25_score']:.4f}" + (f"  {report['provider']}={hit['model_score']:.4f}" if hit["model_score"] is not None else ""),
                           hit["text"].rstrip()])
         if not report["results"]:
             lines.append("No matching notes.")

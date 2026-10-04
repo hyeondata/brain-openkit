@@ -1,0 +1,12 @@
+{
+  "name": "brain-openkit",
+  "description": "Brain OpenKit knowledge workflows for Claude Code",
+  "owner": {"name": "Brain OpenKit contributors"},
+  "plugins": [
+    {
+      "name": "brain-openkit",
+      "description": "Source-linked Markdown search, capture, organization, and recovery",
+      "source": "./"
+    }
+  ]
+}

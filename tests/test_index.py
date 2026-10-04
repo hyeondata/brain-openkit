@@ -1,5 +1,6 @@
 import os
 import sqlite3
+import subprocess
 import tempfile
 import unittest
 from pathlib import Path
@@ -180,6 +181,24 @@ class IndexTests(unittest.TestCase):
             conn.close()
         with self.assertRaisesRegex(ValueError, 'another vault'):
             Index(self.vault, self.cache)
+
+    @unittest.skipUnless(os.name == 'nt', 'Windows junction regression')
+    def test_windows_junction_is_not_walked_or_used_as_cache(self):
+        outside = self.root / 'outside'
+        outside.mkdir()
+        (outside / 'private.md').write_text('outside-secret', encoding='utf-8')
+        junction = self.vault / 'linked'
+        result = subprocess.run(['cmd', '/c', 'mklink', '/J', str(junction), str(outside)],
+                                capture_output=True, timeout=10)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        try:
+            report = self.index.update()
+            self.assertEqual(report['indexed'], 0)
+            self.assertEqual(self.index.search('outside-secret'), [])
+            with self.assertRaises(ValueError):
+                Index(self.vault, junction)
+        finally:
+            junction.rmdir()
 
 
 if __name__ == '__main__':

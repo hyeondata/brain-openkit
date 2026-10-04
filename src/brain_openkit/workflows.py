@@ -53,7 +53,7 @@ def search(vault: Path, query: str, *, cache_dir: Path,
             seen.add(row["path"])
         if len(distinct) == limit:
             break
-    return {"query": query, "provider": "none" if provider is None else "laya",
+    return {"query": query, "provider": "none" if provider is None else getattr(provider, "name", type(provider).__name__),
             "model": model, "rerank_status": status, "fallback_reason": reason,
             "candidate_count": len(hits), "results": distinct, "index": report,
             "elapsed_ms": round((perf_counter() - started) * 1000, 3)}
@@ -101,7 +101,8 @@ def classify(vault: Path, note: Path, taxonomy: dict, provider: DecisionProvider
             tag_results[name] = {"suggested": applies, **asdict(decision)}
         passages.append({**asdict(chunk), "category": selected,
                          "category_decision": asdict(category), "tags": tag_results})
-    return {"path": chunks[0].path, "provider": "laya", "model": passages[0]["category_decision"]["model"],
+    return {"path": chunks[0].path, "provider": getattr(provider, "name", type(provider).__name__),
+            "model": passages[0]["category_decision"]["model"],
             "status": "complete", "review_required": len(category_names) > 1,
             "category": next(iter(category_names)) if len(category_names) == 1 else None,
             "category_candidates": sorted(category_names), "tags": sorted(tags), "passages": passages,

@@ -1,0 +1,24 @@
+{"id":"hold-01","language":"ko","query":"인터넷 없이 Git 저장소의 브랜치까지 복원할 사본","relevant":["git-backup.md"]}
+{"id":"hold-02","language":"en","query":"local SQLite index stale entries after deleting private notes","relevant":["sqlite-cache.md"]}
+{"id":"hold-03","language":"en","query":"a timed out payment retry could charge twice; which key prevents that?","relevant":["api-retries.md"]}
+{"id":"hold-04","language":"ko","query":"이전 버전으로 배포를 되돌리기 전 데이터 스냅샷 복구 연습","relevant":["release-rollback.md"]}
+{"id":"hold-05","language":"ko","query":"상담 메모와 독서 기록을 외부로 보내지 않고 검색하고 복원","relevant":["private-vault.md"]}
+{"id":"hold-06","language":"en","query":"link to the project budget when another Budget.md exists","relevant":["wikilinks.md"]}
+{"id":"hold-07","language":"en","query":"preserve source URL and line numbers while separating quotations from interpretation","relevant":["citations.md"]}
+{"id":"hold-08","language":"ko","query":"매주 독서 하이라이트 수집함을 주제 노트로 정리","relevant":["capture-inbox.md"]}
+{"id":"hold-09","language":"ko","query":"여행 전 이웃에게 베란다 허브 물 주기를 설명","relevant":["basil.md"]}
+{"id":"hold-10","language":"en","query":"avoid duplicate frozen food purchases and use oldest meals first","relevant":["freezer.md"]}
+{"id":"hold-11","language":"en","query":"separate guest Wi-Fi and check unknown home router devices","relevant":["router.md"]}
+{"id":"hold-12","language":"ko","query":"집에서 종이 세금 고지서와 계약서를 잠그고 보관 기한 확인","relevant":["paper-archive.md"]}
+{"id":"hold-13","language":"ko","query":"계곡 통신 불가에 대비해 비행기 모드로 하산 경로 점검","relevant":["offline-maps.md"]}
+{"id":"hold-14","language":"en","query":"alternative itinerary via River Station when the train is cancelled","relevant":["train-backup.md"]}
+{"id":"hold-15","language":"ko","query":"단체 채팅에 여권 사진을 공유하지 않고 분실 대비 사본 보관","relevant":["passport.md"]}
+{"id":"hold-16","language":"en","query":"verify copied holiday photos before erasing the camera card","relevant":["camera.md"]}
+{"id":"hold-17","language":"en","query":"which retrieval metric rewards the first relevant result's position?","relevant":["experiment-metrics.md"]}
+{"id":"hold-18","language":"ko","query":"참여 동의와 철회 방법을 설명하고 전사본 실명을 제거","relevant":["survey-consent.md"]}
+{"id":"hold-19","language":"ko","query":"검색 평가 정답을 먼저 확정하고 홀드아웃 결과로 설정을 바꾸지 않기","relevant":["evaluation-split.md"]}
+{"id":"hold-20","language":"en","query":"record birds in a forest without internet and verify audio file copies","relevant":["field-recorder.md"]}
+{"id":"hold-21","language":"ko","query":"회의 대화 요약보다 누가 언제 무엇을 할지 기록","relevant":["meeting-followup.md"]}
+{"id":"hold-22","language":"en","query":"service outage timeline without blaming an individual, with follow-up owners","relevant":["incident-review.md"]}
+{"id":"hold-23","language":"ko","query":"신입 직원에게 고객 정보 최소 권한과 비밀 관리 도구 안내","relevant":["onboarding.md"]}
+{"id":"hold-24","language":"en","query":"choose team work by benefit, effort, and dependency risk","relevant":["project-priority.md"]}

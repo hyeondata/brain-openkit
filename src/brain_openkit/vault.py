@@ -22,10 +22,20 @@ class Chunk:
     text: str
 
 
+def is_link_path(path: Path) -> bool:
+    """Reject symlinks and Windows reparse points, including directory junctions."""
+    try:
+        metadata = Path(path).lstat()
+    except FileNotFoundError:
+        return False
+    return (stat.S_ISLNK(metadata.st_mode)
+            or bool(getattr(metadata, "st_file_attributes", 0) & 0x400))
+
+
 def validate_vault(vault: Path) -> Path:
     vault = Path(vault)
-    if vault.is_symlink() or not vault.is_dir():
-        raise ValueError("vault must be an existing directory, not a symlink")
+    if is_link_path(vault) or not vault.is_dir():
+        raise ValueError("vault must be an existing directory, not a symlink or reparse point")
     return vault.resolve()
 
 
@@ -46,8 +56,8 @@ def _read_note_text(vault: Path, path: Path) -> tuple[str, str]:
     candidate = root
     for component in relative.parts:
         candidate = candidate / component
-        if candidate.is_symlink():
-            raise ValueError("symlink notes and directories are excluded")
+        if is_link_path(candidate):
+            raise ValueError("symlink and reparse notes and directories are excluded")
     flags = os.O_RDONLY | getattr(os, "O_NOFOLLOW", 0) | getattr(os, "O_NONBLOCK", 0)
     descriptor = os.open(candidate, flags)
     with os.fdopen(descriptor, "rb") as stream:

@@ -11,7 +11,7 @@ import re
 import sqlite3
 import unicodedata
 
-from .vault import Chunk, EXCLUDED_DIRECTORIES, _read_note_text, chunk_markdown, validate_vault
+from .vault import Chunk, EXCLUDED_DIRECTORIES, _read_note_text, chunk_markdown, is_link_path, validate_vault
 
 
 _CACHE_VERSION = 2  # Rebuild citations previously counted with str.splitlines().
@@ -43,7 +43,7 @@ class Index:
     def __init__(self, vault: Path, cache_dir: Path):
         self.vault = validate_vault(vault)
         cache_dir = Path(cache_dir)
-        if cache_dir.is_symlink():
+        if is_link_path(cache_dir):
             raise ValueError("cache directory must not be a symlink")
         self.cache_dir = cache_dir.resolve()
         if self.vault == self.cache_dir or self.vault.is_relative_to(self.cache_dir):
@@ -51,7 +51,7 @@ class Index:
         self.cache_dir.mkdir(parents=True, exist_ok=True)
         identity = hashlib.sha256(str(self.vault).encode()).hexdigest()
         database = self.cache_dir / f"{identity}.sqlite3"
-        if database.is_symlink():
+        if is_link_path(database):
             raise ValueError("cache database must not be a symlink")
         self._connection = sqlite3.connect(database, timeout=10)
         self._connection.execute("PRAGMA foreign_keys = ON")
@@ -95,11 +95,11 @@ class Index:
             for directory, names, filenames in os.walk(self.vault, followlinks=False, onerror=walk_error):
                 base = Path(directory)
                 names[:] = sorted(name for name in names if not name.startswith(".")
-                                  and name not in EXCLUDED_DIRECTORIES and not (base / name).is_symlink()
+                                  and name not in EXCLUDED_DIRECTORIES and not is_link_path(base / name)
                                   and (base / name).resolve() != self.cache_dir)
                 for name in sorted(filenames):
                     path = base / name
-                    if name.startswith(".") or path.suffix.lower() != ".md" or path.is_symlink():
+                    if name.startswith(".") or path.suffix.lower() != ".md" or is_link_path(path):
                         continue
                     relative = path.relative_to(self.vault).as_posix()
                     try:

@@ -75,17 +75,10 @@ def _reject_constant(_value):
     raise ValueError("non-finite number")
 
 
-class LayaProvider:
-    """Use the explicit multilingual checkpoint over HTTP.
+class _HTTPClient:
+    """Shared bounded JSON transport; providers own their wire contracts."""
 
-    ``Decision.confidence`` preserves Laya's entropy-based choice confidence;
-    ``answer_confidence`` separately preserves its answer probability metadata.
-    ``Decision.model`` identifies ``routing.repo`` when present, otherwise the
-    verified ``routing.model``. Laya's root model is only a generic agent name.
-    """
-
-    def __init__(self, base_url="http://127.0.0.1:8000", api_key=None,
-                 timeout=10.0, max_tokens=1024):
+    def __init__(self, base_url, api_key, timeout, retry_statuses=()):
         if not isinstance(base_url, str) or any(c.isspace() or ord(c) < 32 for c in base_url) or "\\" in base_url:
             raise ProviderError("invalid_configuration")
         try:
@@ -99,19 +92,17 @@ class LayaProvider:
             raise ProviderError("invalid_configuration") from None
         if not valid or not _number(timeout) or timeout <= 0:
             raise ProviderError("invalid_configuration")
-        if type(max_tokens) is not int or not 1 <= max_tokens <= 8192:
-            raise ProviderError("invalid_configuration")
         if api_key is not None and (not isinstance(api_key, str)
                                     or any(not 33 <= ord(c) <= 126 for c in api_key)):
             raise ProviderError("invalid_configuration")
         self.base_url = urlunsplit((parsed.scheme, parsed.netloc, parsed.path.rstrip("/"), "", ""))
         self.timeout = float(timeout)
-        self.max_tokens = max_tokens
+        self._retry_statuses = retry_statuses
         self._api_key = api_key
         # A direct connection keeps local note traffic out of ambient proxy settings.
         self._opener = build_opener(ProxyHandler({}), _NoRedirect())
 
-    def _request(self, path, payload=None):
+    def request(self, path, payload=None):
         data = None
         if payload is not None:
             try:
@@ -126,7 +117,7 @@ class LayaProvider:
         if self._api_key:
             headers["Authorization"] = "Bearer " + self._api_key
         request = Request(self.base_url + path, data=data, headers=headers)
-        for attempt in range(2):
+        for attempt in range(2 if self._retry_statuses else 1):
             try:
                 with self._opener.open(request, timeout=self.timeout) as response:
                     body = response.read(MAX_RESPONSE_BYTES + 1)
@@ -140,7 +131,7 @@ class LayaProvider:
             except HTTPError as error:
                 status = error.code
                 error.close()
-                if status in (502, 503, 504) and attempt == 0:
+                if status in self._retry_statuses and attempt == 0:
                     # Exactly one short retry; server-controlled Retry-After cannot
                     # turn a CLI invocation into an unbounded wait.
                     time.sleep(0.05)
@@ -149,6 +140,30 @@ class LayaProvider:
             except (URLError, OSError, HTTPException):
                 raise ProviderError("connection_failed") from None
         raise ProviderError("connection_failed")
+
+
+class LayaProvider:
+    """Use the explicit multilingual checkpoint over HTTP.
+
+    ``Decision.confidence`` preserves Laya's entropy-based choice confidence;
+    ``answer_confidence`` separately preserves its answer probability metadata.
+    ``Decision.model`` identifies ``routing.repo`` when present, otherwise the
+    verified ``routing.model``. Laya's root model is only a generic agent name.
+    """
+
+    name = "laya"
+
+    def __init__(self, base_url="http://127.0.0.1:8000", api_key=None,
+                 timeout=10.0, max_tokens=1024):
+        if type(max_tokens) is not int or not 1 <= max_tokens <= 8192:
+            raise ProviderError("invalid_configuration")
+        self._http = _HTTPClient(base_url, api_key, timeout, retry_statuses=(502, 503, 504))
+        self.base_url = self._http.base_url
+        self.timeout = self._http.timeout
+        self.max_tokens = max_tokens
+
+    def _request(self, path, payload=None):
+        return self._http.request(path, payload)
 
     def health(self) -> dict:
         """Check server liveness without asking it to load or run a checkpoint."""

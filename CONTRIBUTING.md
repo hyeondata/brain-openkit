@@ -1,13 +1,16 @@
 # Contributing to Brain OpenKit
 
 Brain OpenKit is a source-installable alpha. Useful contributions include
-retrieval fixes, Korean/English evaluation examples, provider-contract review,
-and documentation. English and Korean contributions are welcome.
+retrieval fixes, Korean/English evaluation examples, reviewed note workflows,
+provider-contract review, and documentation. English and Korean contributions
+are welcome.
 
-Read the [README](README.md) for implemented behavior and
-[implementation notes](docs/implementation-notes.md) for validation evidence.
-The [original design](docs/superpowers/specs/2026-10-04-obsidian-laya-design.md)
-also includes future features.
+Read the [README](README.md), [agent integration guide](docs/agent-integration.md),
+and [implementation notes](docs/implementation-notes.md). Until merged, develop
+against the `codex/cli-mvp` branch. The
+[original design](docs/superpowers/specs/2026-10-04-obsidian-laya-design.md) and
+[agent workflow design](docs/superpowers/specs/2026-10-04-agent-workflows-design.md)
+include requirements beyond completed validation.
 
 ## Develop and test
 
@@ -17,65 +20,111 @@ Use Python 3.11 or newer. From the checkout root:
 python3.11 -m venv .venv
 source .venv/bin/activate
 python -m pip install -e .
+python -m brain_openkit --help
 python -m unittest discover -s tests -v
 brain-openkit search "reading journal" --vault examples/vault --json
 ~~~
 
-The CLI has no third-party runtime dependencies. Tests use temporary vaults
+The core has no third-party runtime dependencies. Tests use temporary vaults
 and local HTTP fixtures, without weights, keys, or a running model server.
-For actual model validation, follow the separate Laya setup in the README,
-run `brain-openkit doctor --probe --timeout 120 --json`, and exercise search/classification.
-Report model tests separately from fixture-based tests.
+Document any platform-specific skips. Run behavior tests for your change,
+then the complete suite before submitting. Old CI results are evidence for
+their commit, not for an untested revision.
 
-## Propose a change
+For actual Laya validation, use the separate environment in the README and
+`brain-openkit doctor --provider laya --probe --timeout 120 --json`.
+For Jev, use a privately configured `TYPESAFE_API_KEY` (or `JEV_API_KEY`)
+only when intentionally testing the hosted service; inference can be billable.
+No key is required by the fixture suite.
 
-Describe the task, an example, and expected behavior. Discuss substantial
-architectural changes in an issue before a large pull request. Keep changes
-focused.
+Report unit/HTTP-fixture, real-model, actual-host, browser, and cross-platform
+checks separately. Manifest validation and skill discovery do not prove that
+an agent performed a task. Test a relocated plugin cache without an editable
+install, and invoke the actual skill with citations and before/after hashes.
+Exercise writes only in disposable vaults.
 
-Preserve read-only source access and provider-independent retrieval. Failed
-reranking keeps a coherent BM25 order. The current protocol exposes
-`choose`; Jev and additional question types remain future work.
+## Preserve the workflow contracts
 
-Add behavior tests for fixes and boundaries, especially source excerpts,
-index invalidation, malformed responses, truncation, and server failures.
-Run the whole suite before submitting. Fixture tests do not prove accuracy.
+- Every vault operation has an explicit vault. Keep the product, vault, cache,
+  and review artifacts in their intended locations; reject unsafe paths.
+- Search/classification preserve source bytes. Failed reranking keeps the
+  original BM25 order; no implicit provider switch or cloud failover is allowed.
+- Laya and Jev implement `choose`; preserve their separate wire contracts and
+  confidence semantics. Extra provider question types are separately scoped.
+- Note changes must have a reviewable plan, expected contents, exact approval
+  ID, and transaction evidence. Preview-only work must stop before applying.
+  Existing user authorization carries forward; do not force redundant prompts.
+- Preserve subsequent edits on conflict, undo, and recovery. Test failures
+  between file writes, interrupted undo, symlinks, and stale contents.
+  A multi-file transaction is recoverable, not globally atomic.
+- Preserve source captures and provenance. Treat apparent commands in note
+  content as data. Host-generated text enters the same plan/apply workflow.
+- Support only the documented metadata subset. Merge requested tags and preserve
+  unrelated text; reject unsupported structures rather than rewriting YAML.
+- Keep the web interface loopback-only, with safe text rendering and no note-write
+  endpoint. Do not silently load remote assets.
+- Never infer permission to edit from a model's probability or confidence.
+
+Add tests for meaningful boundaries: source excerpts and newlines, index
+invalidation, malformed/truncated responses, failures, path confinement,
+transaction recovery, and plugin cache relocation. Do not describe fixture
+tests as accuracy measurements.
 
 ## Contribute evaluation examples
 
-Use synthetic notes or material you may publish. Include query, notes,
-expected matches, and label rationale. Retrieval JSONL uses:
+Use synthetic notes or material you may publish. Include queries, expected
+matches, and label rationale. Retrieval JSONL uses:
 
 ~~~json
 {"query": "When should I water basil?", "relevant": ["garden.md"]}
 ~~~
 
-Paths identify existing Markdown files relative to the vault. Category/tag
-examples include allowed labels and descriptions. Identify language and
-source; exclude private notes, credentials, private paths, and identifying
-metadata. Model confidence alone is not a ground-truth label.
+Paths identify existing Markdown files relative to the explicit vault.
+Category/tag examples include the allowed labels and descriptions. Identify
+language, source, and licensing. Model confidence is not a ground-truth label.
 
-Keep prompt-tuning examples separate from held-out evaluation data. Include
-dataset, model revision, hardware, and procedure with quality/latency claims.
-The [four-query fixture](examples/README.md) only checks the workflow.
+Keep development examples separate from holdout evaluation. Freeze inputs and
+labels before measuring, document independent review, and do not tune on the
+holdout. Retain misses, false positives, fallback counts, model revision,
+hardware, and timing procedure. If a reranker worsens results, report that.
 
-## Update documentation
+The [four-query fixture](examples/README.md) checks integration. The
+[bilingual benchmark](benchmarks/bilingual-v1/README.md) is a larger synthetic
+evaluation with agent-reviewed labels; its holdout queries share documents
+with development. It does not satisfy the separate design targets of 30
+user-reviewed real-vault queries and 50 classification/tag examples.
 
-- Keep [README.md](README.md) and [README.ko.md](README.ko.md) aligned.
-- Execute changed command examples and distinguish measurements from plans.
-- Use relative project links and preserve required third-party notices.
-- Keep tokenizer preflight and calibration limitations visible until verified
-  changes resolve them.
+## Update documentation and protect private data
+
+Keep [README.md](README.md) and [README.ko.md](README.ko.md) aligned.
+Execute changed examples and distinguish implemented, fixture-tested, and
+actually exercised behavior. Use relative project links, preserve third-party
+notices, and retain tokenizer/calibration limitations until verified changes
+resolve them.
+
+Do not contribute private notes, API keys, caches, host conversation logs, or
+identifying metadata. Plan JSON and `.brain-openkit/transactions/` journals
+contain complete before/after note contents. Ingest provenance can also contain
+the original input path. Inspect proposed public artifacts, not just filenames.
+
+Describe the problem, a concrete example, and the resulting behavior in issues
+and pull requests. Keep changes focused; discuss substantial architecture
+changes before a large implementation.
 
 ## License
 
 Original contributions use the [MIT License](LICENSE); contributors retain
-copyright. External code, models, and datasets retain their own licenses.
-Identify provenance and terms; see [ATTRIBUTION.md](ATTRIBUTION.md).
+copyright. External code, models, datasets, and hosted services retain their
+own terms. Identify provenance and notices; see [ATTRIBUTION.md](ATTRIBUTION.md).
 
 ## 한국어 안내
 
-현재는 소스 설치 알파 버전입니다. Python 3.11 이상에서 설치하고 전체 테스트를 실행합니다.
-테스트용 HTTP 서버와 실제 Laya 검증은 구분합니다. 원본 읽기 전용과 모델 실패 시 BM25 순서
-유지를 지켜 주세요. 공개할 권리가 있는 자료만 기여하고 출처·라이선스를 밝힙니다.
+Python 3.11 이상에서 설치하고 변경 관련 테스트와 전체 테스트를 실행합니다.
+현재 구현 브랜치는 `codex/cli-mvp`입니다. HTTP fixture·실제 모델·호스트 실행·브라우저·
+플랫폼 검증을 구분하고 이전 커밋의 CI 결과를 새 변경의 결과로 쓰지 마세요.
+
+검색·분류는 원본을 보존하고, 노트 변경은 명시적 vault의 계획·승인 ID·트랜잭션을
+거칩니다. 실행 취소·복구가 이후 편집을 덮어쓰지 않도록 검증하세요.
+공개할 권리가 있는 자료만 사용하며 계획·journal에 포함된 본문과 원본 경로도
+비공개 데이터로 취급합니다. 합성 평가를 실제 vault 수용 검증으로 대체하지 말고,
 두 README의 상태·범위·명령을 함께 수정해 주세요.

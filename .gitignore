@@ -1,7 +1,10 @@
 # Local contributor and editor state
 .serena/
 .codex/
-.agents/
+.agents/*
+!.agents/plugins/
+.agents/plugins/*
+!.agents/plugins/marketplace.json
 .DS_Store
 .idea/
 .vscode/
@@ -14,6 +17,7 @@ brain-openkit.local.*
 
 # Runtime indexes, virtual environments, and Python build output
 .cache/
+.brain-openkit/
 .venv/
 .venv-laya/
 venv/

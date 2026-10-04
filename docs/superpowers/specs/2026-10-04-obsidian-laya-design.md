@@ -1,7 +1,7 @@
 # Brain OpenKit — Laya 기반 Obsidian 지식 관리 도구 설계 초안
 
 작성일: 2026-10-04
-상태: 최초 CLI alpha 구현 완료. 아래는 확장 방향을 포함한 설계이며, 실제 구현 범위와 검증 결과는 [구현 기록](../../implementation-notes.md)을 기준으로 한다.
+상태: 최초 CLI 설계 기록. 후속 구현은 [Claude·Codex 워크플로 설계](2026-10-04-agent-workflows-design.md)와 [로드맵 검증표](../../roadmap-evidence.md)로 확장했다. 실제 구현 범위와 검증 결과는 [구현 기록](../../implementation-notes.md)을 기준으로 한다.
 
 프로젝트 표시명은 **Brain OpenKit**, 저장소와 CLI 명칭은 `brain-openkit`으로 확정했다.
 [영문 README](../../../README.md), [한국어 README](../../../README.ko.md),
@@ -98,7 +98,7 @@ CLI / 추후 UI
 - 공식 Python `laya[serve]` 패키지를 별도 가상 환경에서 실행한다.
 - 서버는 `LAYA_HOST=127.0.0.1`로 설정한다. 앱 기본 주소는 `http://127.0.0.1:8000`이다.
 - 앱은 `POST /v1/systemone`으로 요청한다.
-- 모델은 명시적으로 `multilingual`을 사용한다. 서버도 다국어 체크포인트만 적재하도록 설정해 영어 모델의 추가 로딩을 줄인다.
+- 클라이언트는 명시적으로 `multilingual`을 요청한다. 서버의 기본 모델과 사전 적재 목록도 다국어로 설정한다. `LAYA_MODELS`는 사전 적재 목록이며 다른 모델의 요청을 차단하는 설정은 아니다.
 - 실행 장치는 별도 서버의 환경 변수로 설정한다. 검증한 README 예시는 CPU를 사용하며 MPS는 별도 검증이 필요하다. 서버가 제공하는 상태는 `doctor`에서 확인한다.
 - 입력 한도는 명시적으로 설정한다. 최대 8,192토큰 지원을 활용하되, 전체 vault나 여러 긴 노트를 한 요청에 넣지 않는다.
 - 관련성 판단은 질문과 후보 문단 한 쌍을 하나의 state로 보낸다. 많은 문서 ID를 하나의 선택 문제로 넣지 않는다.

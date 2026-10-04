@@ -1,0 +1,19 @@
+{
+  "name": "brain-openkit",
+  "version": "0.2.0a1",
+  "description": "Source-linked Markdown knowledge workflows with local search, optional decision models, and reviewed recoverable changes.",
+  "author": {"name": "Brain OpenKit contributors", "url": "https://github.com/hyeondata/brain-openkit"},
+  "homepage": "https://github.com/hyeondata/brain-openkit",
+  "repository": "https://github.com/hyeondata/brain-openkit",
+  "license": "MIT",
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Brain OpenKit",
+    "shortDescription": "Search and organize a Markdown knowledge vault",
+    "developerName": "Brain OpenKit contributors",
+    "category": "Productivity",
+    "capabilities": ["Interactive", "Read", "Write"],
+    "defaultPrompt": ["Search my vault and cite the source notes.", "Ingest this source into my vault with a reviewed change plan."],
+    "websiteURL": "https://github.com/hyeondata/brain-openkit"
+  }
+}

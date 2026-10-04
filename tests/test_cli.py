@@ -90,6 +90,20 @@ class CLITests(unittest.TestCase):
                 self.assertIn("error", json.loads(out))
                 self.assertEqual(err, "")
 
+    def test_classify_requires_an_explicit_vault_before_connecting(self):
+        status, out, _ = self.run_cli('classify', str(self.vault / 'note.md'),
+                                     '--taxonomy', str(self.root / 'taxonomy.json'), '--json')
+        self.assertEqual(status, 2)
+        self.assertIn('Specify --vault', json.loads(out)['error']['message'])
+
+    def test_overly_nested_json_is_a_structured_error(self):
+        config = self.root / 'deep.json'
+        config.write_text('{"cache_dir":' + '[' * 2000 + '0' + ']' * 2000 + '}')
+        status, out, err = self.run_cli('doctor', '--provider', 'none', '--config', str(config), '--json')
+        self.assertEqual(status, 2)
+        self.assertIn('error', json.loads(out))
+        self.assertEqual(err, '')
+
     def test_redirected_cli_outputs_utf8_under_a_legacy_encoding(self):
         dataset = self.root / "evaluation.jsonl"
         dataset.write_text(json.dumps({"query": "로컬", "relevant": ["note.md"]}, ensure_ascii=False) + "\n", encoding="utf-8")
