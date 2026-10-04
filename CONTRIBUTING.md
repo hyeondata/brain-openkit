@@ -1,64 +1,81 @@
 # Contributing to Brain OpenKit
 
-Brain OpenKit is in the design stage. Contributions that clarify the first CLI
-release are especially useful: realistic retrieval tasks, Korean/English
-examples, provider-contract review, and documentation improvements.
+Brain OpenKit is a source-installable alpha. Useful contributions include
+retrieval fixes, Korean/English evaluation examples, provider-contract review,
+and documentation. English and Korean contributions are welcome.
 
-Read the [README](README.md) and
-[design specification (Korean)](docs/superpowers/specs/2026-10-04-obsidian-laya-design.md)
-before proposing a feature. English and Korean contributions are welcome.
+Read the [README](README.md) for implemented behavior and
+[implementation notes](docs/implementation-notes.md) for validation evidence.
+The [original design](docs/superpowers/specs/2026-10-04-obsidian-laya-design.md)
+also includes future features.
+
+## Develop and test
+
+Use Python 3.11 or newer. From the checkout root:
+
+~~~bash
+python3.11 -m venv .venv
+source .venv/bin/activate
+python -m pip install -e .
+python -m unittest discover -s tests -v
+brain-openkit search "reading journal" --vault examples/vault --json
+~~~
+
+The CLI has no third-party runtime dependencies. Tests use temporary vaults
+and local HTTP fixtures, without weights, keys, or a running model server.
+For actual model validation, follow the separate Laya setup in the README,
+run `brain-openkit doctor --probe --timeout 120 --json`, and exercise search/classification.
+Report model tests separately from fixture-based tests.
 
 ## Propose a change
 
-Describe the task a person is trying to complete, a small concrete example, and
-what a successful result would look like. Explain how it fits the first CLI
-release or why it belongs in a later milestone.
+Describe the task, an example, and expected behavior. Discuss substantial
+architectural changes in an issue before a large pull request. Keep changes
+focused.
 
-For larger architectural changes, discuss the approach in an issue before
-preparing a large pull request. Keep each pull request focused on one change.
+Preserve read-only source access and provider-independent retrieval. Failed
+reranking keeps a coherent BM25 order. The current protocol exposes
+`choose`; Jev and additional question types remain future work.
+
+Add behavior tests for fixes and boundaries, especially source excerpts,
+index invalidation, malformed responses, truncation, and server failures.
+Run the whole suite before submitting. Fixture tests do not prove accuracy.
 
 ## Contribute evaluation examples
 
-Use synthetic notes or material you have permission to publish. A useful
-retrieval example contains a query, a small note collection, the expected
-matching note or passage, and an explanation of that match. Category and tag
-examples should include the allowed labels and their descriptions.
+Use synthetic notes or material you may publish. Include query, notes,
+expected matches, and label rationale. Retrieval JSONL uses:
 
-Identify the example's language and source. Keep personal notes, credentials,
-private paths, and identifying metadata out of submitted fixtures. Do not use
-model confidence alone as the ground-truth label.
+~~~json
+{"query": "When should I water basil?", "relevant": ["garden.md"]}
+~~~
+
+Paths identify existing Markdown files relative to the vault. Category/tag
+examples include allowed labels and descriptions. Identify language and
+source; exclude private notes, credentials, private paths, and identifying
+metadata. Model confidence alone is not a ground-truth label.
+
+Keep prompt-tuning examples separate from held-out evaluation data. Include
+dataset, model revision, hardware, and procedure with quality/latency claims.
+The [four-query fixture](examples/README.md) only checks the workflow.
 
 ## Update documentation
 
-- Keep [README.md](README.md) and [README.ko.md](README.ko.md) aligned on scope,
-  status, commands, and provider support.
-- Label proposed commands and unimplemented capabilities explicitly.
-- Use repository-relative links for project files.
-- Attribute third-party material and preserve required license notices.
-- Describe measured results with the dataset, model version, hardware, and
-  procedure needed to reproduce them.
-
-## Development status
-
-Application code, dependency manifests, and a test runner have not been added.
-There are currently no project installation or test commands to run. The first
-implementation contribution should add reproducible setup and validation
-instructions alongside the feature it introduces.
-
-The planned implementation keeps vault access, retrieval, and provider adapters
-separate. Prefer tests that cover source locations, index updates, malformed
-responses, and model-server failures. Label mock-provider results separately
-from tests against actual model weights.
+- Keep [README.md](README.md) and [README.ko.md](README.ko.md) aligned.
+- Execute changed command examples and distinguish measurements from plans.
+- Use relative project links and preserve required third-party notices.
+- Keep tokenizer preflight and calibration limitations visible until verified
+  changes resolve them.
 
 ## License
 
-By contributing original material, you agree to license it under the project's
-[MIT License](LICENSE). You retain your copyright. Third-party code, model
-weights, and datasets retain their own licenses; identify their provenance and
-terms before including them. See [ATTRIBUTION.md](ATTRIBUTION.md).
+Original contributions use the [MIT License](LICENSE); contributors retain
+copyright. External code, models, and datasets retain their own licenses.
+Identify provenance and terms; see [ATTRIBUTION.md](ATTRIBUTION.md).
 
 ## 한국어 안내
 
-현재는 설계 단계입니다. 검색 사례, 한국어·영어 합성 노트와 정답, 제공자 계약 검토,
-문서 개선을 환영합니다. 큰 구조 변경은 먼저 이슈로 논의하고, 문서 수정 시 두 README의
-상태와 범위를 맞춰 주세요. 공개할 권리가 있는 자료만 기여하고 원문·라이선스를 밝혀 주세요.
+현재는 소스 설치 알파 버전입니다. Python 3.11 이상에서 설치하고 전체 테스트를 실행합니다.
+테스트용 HTTP 서버와 실제 Laya 검증은 구분합니다. 원본 읽기 전용과 모델 실패 시 BM25 순서
+유지를 지켜 주세요. 공개할 권리가 있는 자료만 기여하고 출처·라이선스를 밝힙니다.
+두 README의 상태·범위·명령을 함께 수정해 주세요.

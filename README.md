@@ -2,159 +2,206 @@
 
 <p align="center">
   <strong>An open-source second-brain toolkit for Obsidian.</strong><br>
-  Local search and organization for Obsidian, with interchangeable decision models.
+  Local search and organization for Obsidian, with replaceable decision providers.
 </p>
 
 <p align="center">
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-2563eb" alt="MIT license"></a>
-  <img src="https://img.shields.io/badge/status-design%20stage-d97706" alt="Design stage">
-  <a href="https://huggingface.co/convaiinnovations/laya-multilingual"><img src="https://img.shields.io/badge/planned%20model-Laya-0f766e" alt="Planned model: Laya"></a>
+  <img src="https://img.shields.io/badge/status-alpha-d97706" alt="Alpha">
+  <a href="https://huggingface.co/convaiinnovations/laya-multilingual"><img src="https://img.shields.io/badge/optional%20model-Laya-0f766e" alt="Optional model: Laya"></a>
 </p>
 
 <p align="center">
   English · <a href="README.ko.md">한국어</a><br>
-  <a href="#what-were-building">Overview</a> ·
-  <a href="#planned-workflow">Workflow</a> ·
-  <a href="#roadmap">Roadmap</a> ·
+  <a href="#what-it-does">Overview</a> · <a href="#install-from-source">Install</a> ·
+  <a href="#optional-laya-server">Laya</a> · <a href="#roadmap">Roadmap</a> ·
   <a href="CONTRIBUTING.md">Contribute</a>
 </p>
 
-> **Design stage.** This repository currently contains the design and community
-> documentation. The CLI, search engine, and model adapters are planned; there
-> is no runnable Brain OpenKit application or installable package yet. Command
-> examples below describe the intended interface.
+> **Source-installable alpha (0.1.0a1).** The read-only CLI, BM25 search, Laya
+> adapter, and tests are implemented. Laya has been exercised on synthetic
+> examples; real-vault retrieval quality is not established. There is no
+> published PyPI package. Use a source checkout containing the CLI.
 
-Brain OpenKit is an open-source project for finding and organizing knowledge in
-Obsidian vaults. Its design combines ordinary local search with focused model
-decisions: retrieve candidate passages, judge their relevance, and suggest
-categories or tags while keeping the original Markdown and source locations
-visible.
+Brain OpenKit finds Markdown passages and returns original paths, line
+numbers, and excerpts. **Search defaults to BM25, without a model or API key.**
+Opt into a local [Laya](https://github.com/NandhaKishorM/laya) server for
+reranking and suggestions from your existing categories and tags.
 
-The first implementation will use [Laya](https://github.com/NandhaKishorM/laya)
-through a local server. A common provider interface will make room for
-[TypeSafe Jev](https://docs.typesafe.ai/introduction/quickstart) later.
+## What it does
 
-## What we're building
+- Refresh changed/deleted notes and search with 1-based, inclusive source lines.
+- Rerank with multilingual Laya; any candidate failure preserves BM25 ordering.
+- Suggest among up to 10 categories and evaluate up to 30 tags independently.
+  Conflicting passage-level categories remain visible.
+- Check server health, optionally probe inference, and evaluate labeled queries.
 
-- **Search with context.** Retrieve passages and return the note path, line
-  numbers, and original excerpt so you can check a result yourself.
-- **Suggest organization.** Choose from your existing categories and evaluate
-  tags independently, allowing multiple tags per note.
-- **Use a local decision model.** Start with Laya's multilingual checkpoint for
-  Korean and English notes; measure quality on actual note-retrieval tasks.
-- **Keep the model replaceable.** Keep indexing, file handling, and workflows
-  independent of a provider's endpoint, authentication, and model settings.
+Source notes are read only; SQLite indexes are written to a separate cache.
+The provider protocol currently exposes **choose only**. Jev, generic score
+and noul questions, note edits, generation, and an Obsidian UI are future work.
 
-The initial CLI will read your selected vault and produce recommendations.
-Applying changes, generating wiki pages, and an Obsidian UI are later milestones.
-
-## Planned workflow
-
-```mermaid
+~~~mermaid
 flowchart LR
-    A[Markdown vault] --> B[Passages and local index]
+    A[Markdown vault] --> B[Local index]
     B --> C[BM25 candidates]
-    C --> D[Decision provider]
-    D --> E[Laya local server]
-    D -. Future adapter .-> F[Jev API]
-    E --> G[Validate results]
-    F -.-> G
-    G --> H[Source excerpts and recommendations]
-```
+    C --> D[Default BM25 results]
+    C -. Opt in .-> E[Laya local server]
+    E --> F[Validate every decision]
+    F --> G[Source excerpts and recommendations]
+    D --> G
+    F -. Model failure .-> D
+~~~
 
-For search, BM25 will find a shortlist before Laya evaluates each query/passage
-pair. The proposed defaults are 20 candidate passages and five result notes.
-For organization, a user-defined taxonomy will supply category and tag choices.
+## Install from source
 
-Laya and Jev provide structured decisions. Free-form summaries and synthesis
-will require a separate generation component if that milestone is implemented.
+Use **Python 3.11 or newer**. From the checkout containing this CLI, run these
+macOS/Linux commands; substitute a newer Python executable if needed:
 
-## Start here
+~~~bash
+python3.11 -m venv .venv
+source .venv/bin/activate
+python -m pip install -e .
+brain-openkit --version
+~~~
 
-The useful entry points today are the
-[design specification (Korean)](docs/superpowers/specs/2026-10-04-obsidian-laya-design.md),
-the [roadmap](#roadmap), and the [contribution guide](CONTRIBUTING.md).
-Installation instructions and a tested quick start will accompany the first
-runnable release.
+On Windows, activate with `.venv\Scripts\Activate.ps1` in PowerShell.
+The CLI has no third-party runtime dependencies; installation may download
+build tooling. Laya is a separate optional runtime.
 
-To explore the upstream model independently, see the
-[Laya repository](https://github.com/NandhaKishorM/laya) and
-[multilingual model card](https://huggingface.co/convaiinnovations/laya-multilingual).
-Running Laya by itself does not install Brain OpenKit.
+## Try the included notes
 
-## Planned CLI
+Run from the checkout root with the CLI environment active:
 
-**Interface preview — these commands are not executable in this repository yet.**
+~~~bash
+brain-openkit index --vault examples/vault
+brain-openkit search "한국어 BM25 검색 후보" --vault examples/vault
+brain-openkit search "reading journal comets" --vault examples/vault --json
+brain-openkit evaluate examples/evaluation.jsonl --vault examples/vault --json
+~~~
 
-```text
+Search and evaluation default to `--provider none` and refresh the index.
+No model server is needed. Cache defaults to `.cache/brain-openkit` under
+the working directory; use `--cache-dir` to change it. The
+[four synthetic notes](examples/README.md) are a smoke fixture, not a benchmark.
+
+## Optional Laya server
+
+Use a **separate environment and terminal**. The tested runtime is Laya
+**0.3.26**, Python **3.12**, and CPU inference:
+
+~~~bash
+python3.12 -m venv .venv-laya
+source .venv-laya/bin/activate
+python -m pip install "laya[serve]==0.3.26"
+LAYA_HOST=127.0.0.1 LAYA_PORT=8000 \
+LAYA_DEVICE=cpu LAYA_THREADS=4 \
+LAYA_MODELS=multilingual LAYA_DEFAULT_MODEL=multilingual LAYA_PRELOAD=0 \
+laya-serve
+~~~
+
+This loads lazily. `LAYA_MODELS` selects preload targets, not access
+restrictions. Brain OpenKit explicitly requests `multilingual`; the first
+inference downloads/loads that checkpoint. Initial dependencies and weights
+need network access, disk space, and model runtime memory.
+
+In the **CLI terminal**, with `.venv` active:
+
+~~~bash
 brain-openkit doctor
-brain-openkit index --vault /path/to/vault
-brain-openkit search "How did I evaluate local search?" --vault /path/to/vault
-brain-openkit classify /path/to/vault/note.md --taxonomy taxonomy.json
-brain-openkit evaluate evaluation.jsonl --vault /path/to/vault
-```
+brain-openkit doctor --probe --timeout 120 --json
+brain-openkit search "한국어 BM25 검색 후보" --vault examples/vault --provider laya --json
+brain-openkit classify local-search.md --vault examples/vault --taxonomy examples/taxonomy.json --json
+brain-openkit evaluate examples/evaluation.jsonl --vault examples/vault --provider laya --json
+~~~
 
-Results are intended to support both readable terminal output and JSON. Search
-results will distinguish ordinary BM25 retrieval from successful model
-reranking, including when the model server is unavailable.
+`doctor` checks health only; `--probe` runs synthetic inference and can
+trigger downloading. Classification defaults to Laya. Its relative note path
+resolves **inside --vault**: use `local-search.md` above. Taxonomy and dataset
+arguments resolve from the working directory.
 
-## Model providers
+If first loading exceeds the default 10-second timeout, wait for loading to
+finish and retry, or pass `--timeout 120`. Use `--base-url` for another
+address. If server authentication is enabled, set the same `LAYA_API_KEY`
+in both terminals. These public weights need no Hugging Face token or Jev key.
 
-Both integrations below are planned.
+## Configuration and output
 
-| Provider | Role | Connection | Authentication |
-| --- | --- | --- | --- |
-| Laya | First implementation; local decisions | Local HTTP server, default `127.0.0.1:8000` | Optional server key via `LAYA_API_KEY` |
-| Jev | Later provider option | TypeSafe API | User key via `TYPESAFE_API_KEY` |
+Each subcommand accepts `--config settings.json` and `--json`.
+Example configuration saved at the checkout root:
 
-The initial Laya model will be
-[`convaiinnovations/laya-multilingual`](https://huggingface.co/convaiinnovations/laya-multilingual).
-The base `laya` checkpoint is intended for English; the multilingual checkpoint
-is the planned starting point for Korean and mixed-language vaults.
+~~~json
+{
+  "vault": "examples/vault",
+  "cache_dir": ".cache/brain-openkit",
+  "provider": "none",
+  "base_url": "http://127.0.0.1:8000",
+  "timeout": 10,
+  "max_tokens": 1024,
+  "limit": 5,
+  "candidates": 20
+}
+~~~
 
-Provider adapters will validate input limits and preserve provider-specific
-confidence information. A shared response shape does not make confidence
-thresholds interchangeable. See the [provider contract in the design](docs/superpowers/specs/2026-10-04-obsidian-laya-design.md).
+~~~bash
+brain-openkit search "reading journal" --config settings.json --json
+brain-openkit classify local-search.md --config settings.json --provider laya --taxonomy examples/taxonomy.json --json
+~~~
 
-## Data and evaluation
+Flags override JSON settings, which override defaults. JSON `vault` and
+`cache_dir` paths resolve from the configuration file. Keep keys in
+`LAYA_API_KEY`, not JSON or the vault. Providers are `none` and `laya`;
+the adapter fixes its route to `multilingual`.
 
-The planned default keeps indexing and Laya inference on your machine when
-connected to the local server. Initial dependency and model downloads require
-network access. Choosing a remote server or the future Jev adapter sends the
-selected inference input to that endpoint.
+Reranking status is `disabled`, `not_needed`, `complete`, or
+`unavailable`. Unavailable reranking returns BM25 with a fallback reason;
+classification failures do not fabricate suggestions. JSON preserves source
+locations, decisions, and handled runtime errors. See
+`brain-openkit <command> --help` for options.
 
-Brain OpenKit has no published retrieval, classification, latency, or cost results
-yet. The first evaluation will compare BM25 alone with Laya reranking and report
-Korean/English performance, warm and cold latency, and the exact model version.
-Local inference avoids a hosted model's per-request charge, while still using
-hardware, memory, and electricity.
+## Limits and evaluation
+
+- Model probabilities are ranking signals, not guaranteed calibrated
+  probabilities. No confidence threshold automatically changes notes.
+- Requests have byte limits and a sequence budget (`--max-tokens`, default
+  1024). **Exact tokenizer preflight is not implemented.** Responses reporting
+  dropped state, truncated questions, or collapsed options are rejected.
+- The default endpoint keeps inference on a local server. A remote
+  `--base-url` sends selected passages there. There is no cloud failover.
+- Evaluation JSONL uses `{"query": "...", "relevant": ["note.md"]}`.
+  Labels must identify existing vault Markdown files. Reports separate BM25
+  and requested-provider recall@k, MRR within k, timing, and fallback counts.
+  Four bundled queries do not establish Korean/English quality or an
+  improvement over BM25.
+
+See [implementation and validation notes](docs/implementation-notes.md)
+for tested versions and results. The
+[original design](docs/superpowers/specs/2026-10-04-obsidian-laya-design.md)
+also contains future capabilities; this README describes the implemented CLI.
 
 ## Roadmap
 
-- [x] Document the CLI scope and interchangeable-provider design.
-- [ ] Build Markdown indexing and BM25 retrieval with source locations.
-- [ ] Connect Laya for reranking and category/tag recommendations.
-- [ ] Publish a reproducible evaluation and the first runnable CLI release.
-- [ ] Add the Jev adapter and provider-specific configuration.
-- [ ] Add reviewed metadata/link updates with recovery.
-- [ ] Extend to source ingestion, wiki creation, and optional generation.
-- [ ] Explore an Obsidian plugin or local web interface.
+- [x] Read-only indexing and BM25 retrieval with source locations.
+- [x] Optional multilingual Laya reranking and category/tag suggestions.
+- [x] Source-installable CLI, automated tests, and smoke evaluation.
+- [ ] Broader Korean/English evaluation with held-out labels.
+- [ ] Jev adapter and provider-specific configuration.
+- [ ] Reviewed metadata/link updates with recovery.
+- [ ] Source ingestion, wiki creation, and optional generation.
+- [ ] Obsidian plugin or local web interface.
 
 ## Contributing
 
-Help shape the first release with concrete search examples, small synthetic
-Korean/English note sets, provider-contract feedback, and documentation fixes.
-Start with [CONTRIBUTING.md](CONTRIBUTING.md). Keep private vault content and API
-keys out of contributions.
+Run `python -m unittest discover -s tests -v` in the CLI environment.
+Tests use temporary vaults and local HTTP fixtures, without Laya weights.
+Real model checks are separate. See [CONTRIBUTING.md](CONTRIBUTING.md).
+Keep private notes and keys out of contributions.
 
 ## License and acknowledgements
 
-Brain OpenKit's original material is released under the [MIT License](LICENSE).
-Third-party code and model weights retain their own licenses.
+Original code and documentation use the [MIT License](LICENSE).
+External code and weights retain their own licenses.
 
-The project is inspired by
-[`AgriciDaniel/claude-obsidian`](https://github.com/AgriciDaniel/claude-obsidian)'s
-approach to source-linked knowledge workflows. Brain OpenKit is an independent
-project; it is not an official Obsidian, Laya, TypeSafe, or claude-obsidian
-integration. See [ATTRIBUTION.md](ATTRIBUTION.md) for references and license
-boundaries.
+Inspired by [AgriciDaniel/claude-obsidian](https://github.com/AgriciDaniel/claude-obsidian)'s
+source-linked workflows and independently implemented. Brain OpenKit is not
+affiliated with Obsidian, Laya, TypeSafe, or claude-obsidian.
+See [ATTRIBUTION.md](ATTRIBUTION.md) for pinned references and license boundaries.

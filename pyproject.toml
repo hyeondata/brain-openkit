@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "brain-openkit"
+version = "0.1.0a1"
+description = "Read-only local search and decision-model tooling for Obsidian"
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+license-files = ["LICENSE", "ATTRIBUTION.md"]
+authors = [{name = "Brain OpenKit contributors"}]
+dependencies = []
+classifiers = ["Development Status :: 3 - Alpha", "Programming Language :: Python :: 3"]
+
+[project.scripts]
+brain-openkit = "brain_openkit.cli:main"
+
+[project.urls]
+Repository = "https://github.com/hyeondata/brain-openkit"
+
+[tool.setuptools.packages.find]
+where = ["src"]
