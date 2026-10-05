@@ -1,12 +1,17 @@
 # Roadmap implementation and evidence
 
-This matrix tracks the original roadmap rather than treating a plugin manifest
-as the completed product. Release target: **0.2.0a3**, source installation from
-`codex/cli-mvp`. Validation is against synthetic vaults, not private user data.
+This matrix tracks implementation and evidence for the original roadmap.
+The [GitHub prerelease v0.2.0a3](https://github.com/hyeondata/brain-openkit/releases/tag/v0.2.0a3)
+provides a CLI wheel, full source distribution, and `SHA256SUMS`. Use the tagged
+checkout for repeatable installation; development tracks `main`. Host plugins
+require the full source tree rather than the CLI-only wheel. PyPI is not published.
+Validation is against synthetic vaults, not private user data.
 
-Implementation is available in [draft PR #1](https://github.com/hyeondata/brain-openkit/pull/1).
-All six [CI jobs at `33d3a42`](https://github.com/hyeondata/brain-openkit/actions/runs/37210403995)
-passed; actual host and model evidence is recorded in
+The [release verification](release-0.2.0a3.md) records checks on the release
+artifacts. All six historical
+[CI jobs at `33d3a42`](https://github.com/hyeondata/brain-openkit/actions/runs/37210403995)
+passed; these results apply to that earlier implementation revision. Dated
+actual host and model evidence is retained in
 [implementation notes](implementation-notes.md).
 
 The 0.2.0a2 addition makes Laya and Hugging Face Kev checkpoints interchangeable
@@ -51,7 +56,7 @@ for raw evidence, versions, failures, split definitions and timing context.
 - Exact provider-tokenizer preflight and automatic safe re-chunking.
 - Choice is the current common provider operation; score/noul are extension
   ideas rather than exercised interfaces of this release.
-- Native Obsidian UI, MCP transport, public package/directory publication,
+- Native Obsidian plugin UI, MCP transport, PyPI/public host-directory publication,
   full YAML semantics and heading/block-link linting are separate extensions.
 
 The toolkit can be installed and used without these extensions. Production

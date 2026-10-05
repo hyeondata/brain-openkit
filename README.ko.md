@@ -14,14 +14,15 @@
 <p align="center">
   <a href="README.md">English</a> · 한국어<br>
   <a href="#현재-기능">소개</a> · <a href="#소스에서-설치">설치</a> ·
-  <a href="docs/agent-integration.md">Claude Code / Codex</a> ·
+  <a href="docs/agent-integration.ko.md">Claude Code / Codex</a> ·
   <a href="#제공자">제공자</a> · <a href="#로드맵">로드맵</a>
 </p>
 
-> **소스에서 설치하는 알파 버전(0.2.0a3)입니다.** 구현이 `main`에 병합되기 전에는
-> `codex/cli-mvp` 브랜치를 사용하세요. PyPI 배포 패키지는 없습니다.
-> CLI와 에이전트 스킬을 구현했으며, 확인한 내용과 남은 검증은
-> [구현·검증 기록](docs/implementation-notes.md)에 정리했습니다.
+> **알파 버전 [v0.2.0a3](https://github.com/hyeondata/brain-openkit/releases/tag/v0.2.0a3)입니다.**
+> CLI와 호스트 플러그인을 같은 버전으로 설치하려면 태그 체크아웃을 사용하세요.
+> GitHub 릴리스에서 CLI·소스 파일을 제공하며, PyPI에는 배포하지 않았습니다.
+> 검증 근거와 한계는 [릴리스 검증](docs/release-0.2.0a3.ko.md)과
+> [구현·검증 기록](docs/implementation-notes.md)에 있습니다.
 
 Brain OpenKit은 원문 경로, 줄 번호, 발췌와 함께 Markdown 문단을 찾습니다.
 **기본 검색은 모델이나 API 키가 필요 없는 로컬 BM25입니다.** Claude Code와 Codex는
@@ -51,10 +52,11 @@ Obsidian 1.13.4에서 합성 보관함의 저장 결과, 본문·태그 검색, 
 
 ## 소스에서 설치
 
-**Python 3.11 이상**이 필요합니다. 다음은 macOS/Linux 명령입니다.
+**Python 3.11 이상**이 필요합니다. 릴리스 태그로 버전을 고정하며, 계속되는 개발은
+`main`에서 진행합니다. 다음은 macOS/Linux 명령입니다.
 
 ~~~bash
-git clone --branch codex/cli-mvp https://github.com/hyeondata/brain-openkit.git
+git clone --branch v0.2.0a3 --depth 1 https://github.com/hyeondata/brain-openkit.git
 cd brain-openkit
 python3.11 -m venv .venv
 source .venv/bin/activate
@@ -67,13 +69,35 @@ Windows는 PowerShell에서 `.venv\Scripts\Activate.ps1`로 활성화합니다.
 CLI에는 외부 런타임 의존성이 없지만 설치 중 빌드 도구를 다운로드할 수 있습니다.
 로컬 Laya·Kev 서버는 각각 별도 선택적 환경을 사용합니다.
 
+[GitHub 프리릴리스](https://github.com/hyeondata/brain-openkit/releases/tag/v0.2.0a3)에서는
+다음 파일도 제공합니다.
+
+| 파일 | 용도 |
+| --- | --- |
+| [brain_openkit-0.2.0a3-py3-none-any.whl](https://github.com/hyeondata/brain-openkit/releases/download/v0.2.0a3/brain_openkit-0.2.0a3-py3-none-any.whl) | Python 환경에 CLI만 설치합니다. |
+| [brain_openkit-0.2.0a3.tar.gz](https://github.com/hyeondata/brain-openkit/releases/download/v0.2.0a3/brain_openkit-0.2.0a3.tar.gz) | 전체 소스 배포본입니다. 압축을 풀어 CLI 소스와 호스트 플러그인을 사용합니다. |
+| [SHA256SUMS](https://github.com/hyeondata/brain-openkit/releases/download/v0.2.0a3/SHA256SUMS) | 릴리스 파일의 SHA-256 체크섬입니다. |
+
+CLI만 필요하다면 Python 환경을 활성화한 뒤 내려받은 wheel을 설치합니다.
+
+~~~bash
+python -m pip install ./brain_openkit-0.2.0a3-py3-none-any.whl
+~~~
+
+**호스트 플러그인에는 태그 체크아웃이나 압축을 푼 전체 소스 배포본이 필요합니다.**
+`skills/`, `scripts/`, `src/`와 호스트 manifest 파일을 함께 유지하세요.
+wheel이나 소스 압축 파일을 pip로 설치하면 Python CLI가 설치되며,
+Claude·Codex 플러그인이 등록되지는 않습니다. 아래 예제는 합성 예제 vault를 포함한
+전체 체크아웃을 기준으로 합니다. PyPI 패키지는 배포하지 않았습니다.
+
 모든 vault 작업은 **`--vault` 또는 JSON 설정의 `vault`가 필요합니다.**
 노트의 부모 디렉터리에서 vault를 추정하지 않습니다.
 제공자를 확인하는 `doctor`만 vault 없이 실행할 수 있습니다.
 
 ## Claude Code·Codex에서 사용
 
-제품 체크아웃에서 사용할 호스트에 로컬 마켓플레이스를 등록합니다.
+태그 체크아웃이나 압축을 푼 전체 소스 배포본의 루트에서 사용할 호스트에
+로컬 마켓플레이스를 등록합니다.
 
 ~~~bash
 # Claude Code
@@ -88,6 +112,8 @@ codex plugin add brain-openkit@brain-openkit
 설치 후 호스트를 다시 시작합니다. 포함된 Python 실행기는 editable 패키지 설치 없이
 플러그인 캐시에서도 작동합니다. Python 3.11 이상과 호스트의 정상적인 인증·모델 사용
 권한은 별도로 필요합니다.
+이 안내는 로컬 제품 디렉터리를 사용합니다. 릴리스 파일에 대한 확인 결과는
+[릴리스 검증](docs/release-0.2.0a3.ko.md)을 참고하세요.
 
 | 스킬 | 용도 |
 | --- | --- |
@@ -103,7 +129,7 @@ codex plugin add brain-openkit@brain-openkit
 예를 들어 Claude Code에서는 `/brain-openkit:brain-search`, Codex에서는
 `$brain-openkit:brain-search`를 호출하고 vault의 절대 경로를 전달합니다.
 설치·호출·워크스페이스 스킬 대안·검증·제거의 기준 문서는
-[에이전트 통합 안내](docs/agent-integration.md)입니다.
+[에이전트 통합 안내](docs/agent-integration.ko.md)입니다.
 
 요청한 문장 작성과 웹 검색·자료 추출은 호스트가 담당합니다.
 CLI 자체는 로컬 UTF-8 텍스트를 수집하며 웹 탐색·OCR·음성 전사를 하지 않습니다.
@@ -201,7 +227,7 @@ Laya와 Kev는 모두 Hugging Face의 공개 가중치를 내려받아 로컬에
 각 모델의 공식 서버를 사용하되 Brain OpenKit에서는 같은 명령으로 교체합니다.
 이 구성에서 Hugging Face는 다운로드 저장소이며, 추론은 사용자 컴퓨터에서 실행됩니다.
 공개 가중치 다운로드에 Hugging Face 토큰은 필요하지 않습니다.
-고정 버전과 가중치·API 모델 이름의 차이는 [로컬 모델 안내](docs/local-models.md)에 있습니다.
+고정 버전과 가중치·API 모델 이름의 차이는 [로컬 모델 안내](docs/local-models.ko.md)에 있습니다.
 Kev 0.8B의 추론, 검색 재정렬, 분류·태그 추천, 평가, 실패 시 fallback,
 원문 보존을 [실제 CLI로 확인](docs/kev-08-verification-2026-10-05.md)했습니다.
 제공자 옵션 없이 실행한 `doctor`·`classify`도 Kev를 선택했습니다.
@@ -245,7 +271,7 @@ brain-openkit evaluate examples/evaluation.jsonl --vault examples/vault --provid
 
 ### 선택적 Kev 서버
 
-별도 터미널에서 [Kev 0.8B 설정](docs/local-models.md#kev-08b-default)으로 서버를 시작합니다.
+별도 터미널에서 [Kev 0.8B 설정](docs/local-models.ko.md#kev-08b-기본값)으로 서버를 시작합니다.
 런타임 설치 후 `scripts/serve-kev.py`를 실행하면 `--run` 없이 고정된 0.8B 가중치를
 불러옵니다. 이후 CLI 환경에서 실행합니다.
 

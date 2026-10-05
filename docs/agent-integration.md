@@ -1,13 +1,30 @@
 # Use Brain OpenKit from Claude Code and Codex
 
+English | [한국어](agent-integration.ko.md)
+
 The same eight skills invoke a bundled Python CLI in either host. Claude or
 Codex writes requested prose; BM25 retrieves locally, and optionally selected
 Laya/Kev/Jev providers make classification or relevance decisions. No model service
 is required for initialization, capture, saving, organization, lint or folding.
 
-Use a checkout containing version `0.2.0a3` or newer for the Kev 0.8B default. Until the implementation
-is merged, select the `codex/cli-mvp` branch when cloning. Keep the product
-checkout separate from your vault. Python **3.11 or newer** must be available
+Use the `v0.2.0a3` tagged checkout for a repeatable installation:
+
+```bash
+git clone --branch v0.2.0a3 --depth 1 https://github.com/hyeondata/brain-openkit.git
+```
+
+Alternatively, extract the full
+[brain_openkit-0.2.0a3.tar.gz source distribution](https://github.com/hyeondata/brain-openkit/releases/download/v0.2.0a3/brain_openkit-0.2.0a3.tar.gz)
+from the [GitHub prerelease](https://github.com/hyeondata/brain-openkit/releases/tag/v0.2.0a3)
+and use its extracted root wherever the examples say `/absolute/path/to/brain-openkit`.
+Keep `skills/`, `scripts/`, `src/`, `.claude-plugin/`, `.codex-plugin/`, and
+`.agents/plugins/` together. The release wheel installs only the Python CLI;
+it does not contain the complete host-plugin distribution. Installing the
+source archive through pip also does not register a host plugin. PyPI has no
+published package for this release.
+
+Keep the product checkout or extracted source separate from your vault.
+Python **3.11 or newer** must be available
 to the host. Check `python3 --version` or `python --version` on Windows.
 An older macOS system Python is insufficient.
 
@@ -34,7 +51,8 @@ Then send, replacing the vault path with your own:
 /brain-openkit:brain-search Search /absolute/path/to/MyVault for our local search design. Cite the source notes and line numbers.
 ```
 
-For a persistent installation from a local checkout:
+For a persistent installation from the local tagged checkout or extracted
+source distribution:
 
 ```bash
 claude plugin marketplace add /absolute/path/to/brain-openkit
@@ -43,9 +61,8 @@ claude plugin list
 ```
 
 Restart the session after installing. The eight commands have the same
-`/brain-openkit:` prefix. A checkout containing this version can also be fetched
-from GitHub; the marketplace source must select a branch/tag containing the
-plugin manifests. Do not expect an older documentation-only `main` to install.
+`/brain-openkit:` prefix. These instructions register the complete local product
+directory as the marketplace source, using the tagged version above.
 
 These commands and manifests follow the official
 [Claude plugin format](https://code.claude.com/docs/en/plugins-reference) and
@@ -164,15 +181,18 @@ python3 -I -S /absolute/plugin/cache/scripts/brain-openkit.py search "검색" --
 
 Developer tests include a relocated plugin path containing spaces, Korean CRLF
 notes, absent site packages, exact source preservation, and an incomplete-cache
-diagnostic. Packaging was checked with Claude Code `2.1.220` and Codex CLI
+diagnostic. Earlier development packaging was checked with Claude Code `2.1.220` and Codex CLI
 `0.149.0`: Claude discovered all eight skills; Codex installed into an isolated
 cache and its app-server `skills/list` returned all eight enabled skills with
 cache paths. The cached runner completed initialization, ingestion, saving,
 organization, extractive folding, search, lint and undo in a disposable vault,
 without package installation. Checks covered Korean CRLF captures, additive
 tags, read-only previews, source preservation and explicit vault selection.
-Host task execution and other release evidence are recorded in
-[implementation notes](implementation-notes.md).
+Those historical development and host-execution checks are recorded in
+[implementation notes](implementation-notes.md). Checks performed on the
+`v0.2.0a3` release artifacts are recorded separately in the
+[release verification](release-0.2.0a3.md); historical discovery results do not
+prove that a released plugin completed a host task.
 
 ## Update and remove
 

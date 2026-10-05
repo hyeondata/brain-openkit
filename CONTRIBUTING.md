@@ -1,16 +1,24 @@
 # Contributing to Brain OpenKit
 
-Brain OpenKit is a source-installable alpha. Useful contributions include
+Brain OpenKit is an alpha toolkit. Useful contributions include
 retrieval fixes, Korean/English evaluation examples, reviewed note workflows,
 provider-contract review, and documentation. English and Korean contributions
 are welcome.
 
 Read the [README](README.md), [agent integration guide](docs/agent-integration.md),
-and [implementation notes](docs/implementation-notes.md). Until merged, develop
-against the `codex/cli-mvp` branch. The
+and [implementation notes](docs/implementation-notes.md). Base new development
+on `main`; use the `v0.2.0a3` tag to reproduce the
+[GitHub prerelease](https://github.com/hyeondata/brain-openkit/releases/tag/v0.2.0a3).
+The
 [original design](docs/superpowers/specs/2026-10-04-obsidian-laya-design.md) and
 [agent workflow design](docs/superpowers/specs/2026-10-04-agent-workflows-design.md)
 include requirements beyond completed validation.
+
+The release wheel is CLI-only. Host plugins require a tagged checkout or an
+extracted full source distribution with `skills/`, `scripts/`, `src/`, and
+host manifests kept together. Check the
+[release verification](docs/release-0.2.0a3.md) when changing packaging. The
+release assets and `SHA256SUMS` are on GitHub; PyPI is not published.
 
 ## Develop and test
 
@@ -49,7 +57,7 @@ Exercise writes only in disposable vaults.
   and review artifacts in their intended locations; reject unsafe paths.
 - Search/classification preserve source bytes. Failed reranking keeps the
   original BM25 order; no implicit provider switch or cloud failover is allowed.
-- Laya and Jev implement `choose`; preserve their separate wire contracts and
+- Laya, Kev, and Jev implement `choose`; preserve their separate wire contracts and
   confidence semantics. Extra provider question types are separately scoped.
 - Note changes must have a reviewable plan, expected contents, exact approval
   ID, and transaction evidence. Preview-only work must stop before applying.
@@ -120,7 +128,10 @@ own terms. Identify provenance and notices; see [ATTRIBUTION.md](ATTRIBUTION.md)
 ## 한국어 안내
 
 Python 3.11 이상에서 설치하고 변경 관련 테스트와 전체 테스트를 실행합니다.
-현재 구현 브랜치는 `codex/cli-mvp`입니다. HTTP fixture·실제 모델·호스트 실행·브라우저·
+새 개발은 `main`을 기준으로 하고, 릴리스를 재현할 때는 `v0.2.0a3` 태그를 사용합니다.
+GitHub의 wheel은 CLI 전용이며, 호스트 플러그인에는 태그 체크아웃이나 압축을 푼
+전체 소스 배포본이 필요합니다. PyPI에는 배포하지 않았습니다.
+HTTP fixture·실제 모델·호스트 실행·브라우저·
 플랫폼 검증을 구분하고 이전 커밋의 CI 결과를 새 변경의 결과로 쓰지 마세요.
 
 검색·분류는 원본을 보존하고, 노트 변경은 명시적 vault의 계획·승인 ID·트랜잭션을

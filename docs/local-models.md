@@ -1,5 +1,7 @@
 # Local Laya and Kev models
 
+English | [한국어](local-models.ko.md)
+
 Laya and Kev use the same Brain OpenKit search, classification, and evaluation
 commands. Select `--provider laya` or `--provider kev`. Both can download public
 weights from Hugging Face and run inference on your computer without a hosted

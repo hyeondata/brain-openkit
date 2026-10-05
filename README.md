@@ -18,10 +18,11 @@
   <a href="#providers">Providers</a> · <a href="#roadmap">Roadmap</a>
 </p>
 
-> **Source-installable alpha (0.2.0a3).** Use the `codex/cli-mvp` implementation
-> branch until it is merged into `main`. There is no published PyPI package.
-> The CLI and agent skills are implemented; validation and remaining gaps are
-> recorded in [implementation notes](docs/implementation-notes.md).
+> **Alpha [v0.2.0a3](https://github.com/hyeondata/brain-openkit/releases/tag/v0.2.0a3).**
+> Use the tagged checkout for a repeatable CLI and host-plugin installation.
+> The GitHub release includes CLI and source archives; PyPI is not published.
+> See the [release verification](docs/release-0.2.0a3.md) and
+> [implementation notes](docs/implementation-notes.md) for evidence and limits.
 
 Brain OpenKit finds Markdown passages with original paths, line numbers, and
 excerpts. **Search defaults to local BM25, without a model or API key.** Claude
@@ -54,10 +55,11 @@ and the verified scope.
 
 ## Install from source
 
-Use **Python 3.11 or newer**. These commands are for macOS/Linux:
+Use **Python 3.11 or newer**. The release tag fixes the version; ongoing
+development uses `main`. These commands are for macOS/Linux:
 
 ~~~bash
-git clone --branch codex/cli-mvp https://github.com/hyeondata/brain-openkit.git
+git clone --branch v0.2.0a3 --depth 1 https://github.com/hyeondata/brain-openkit.git
 cd brain-openkit
 python3.11 -m venv .venv
 source .venv/bin/activate
@@ -70,13 +72,35 @@ On Windows, activate with `.venv\Scripts\Activate.ps1` in PowerShell.
 The CLI has no third-party runtime dependencies; installation may download
 build tooling. Local Laya and Kev servers use separate optional environments.
 
+The [GitHub prerelease](https://github.com/hyeondata/brain-openkit/releases/tag/v0.2.0a3)
+also provides these downloads:
+
+| Asset | Use |
+| --- | --- |
+| [brain_openkit-0.2.0a3-py3-none-any.whl](https://github.com/hyeondata/brain-openkit/releases/download/v0.2.0a3/brain_openkit-0.2.0a3-py3-none-any.whl) | CLI-only installation into a Python environment. |
+| [brain_openkit-0.2.0a3.tar.gz](https://github.com/hyeondata/brain-openkit/releases/download/v0.2.0a3/brain_openkit-0.2.0a3.tar.gz) | Full source distribution; extract it to use the CLI source and host plugins. |
+| [SHA256SUMS](https://github.com/hyeondata/brain-openkit/releases/download/v0.2.0a3/SHA256SUMS) | SHA-256 checksums for the release files. |
+
+For the CLI alone, install the downloaded wheel in an activated Python environment:
+
+~~~bash
+python -m pip install ./brain_openkit-0.2.0a3-py3-none-any.whl
+~~~
+
+**Host plugins require the tagged checkout or extracted full source distribution.**
+Keep `skills/`, `scripts/`, `src/`, and the host manifests together. Installing
+the wheel, or installing the source archive through pip, installs the Python
+CLI but does not register a Claude/Codex plugin. The examples below use the
+complete checkout, including its synthetic example vault. No PyPI package is published.
+
 Every vault workflow requires **`--vault` or `vault` in a JSON config**.
 The CLI does not infer the vault from a note's parent directory. Only
 `doctor`, which checks the provider, can run without a vault.
 
 ## Use from Claude Code or Codex
 
-From the product checkout, register the local marketplace with your host:
+From the root of the tagged checkout or extracted full source distribution,
+register the local marketplace with your host:
 
 ~~~bash
 # Claude Code
@@ -91,6 +115,8 @@ codex plugin add brain-openkit@brain-openkit
 Restart the host after installation. The bundled Python runner works from the
 plugin cache without an editable package install. Python 3.11+ and the host's
 normal authenticated model access are still required.
+These instructions use a local product directory. See the
+[release verification](docs/release-0.2.0a3.md) for checks on the release artifacts.
 
 | Skill | Purpose |
 | --- | --- |
