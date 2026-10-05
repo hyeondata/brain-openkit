@@ -1,5 +1,7 @@
 # Native Obsidian app verification — 2026-10-05
 
+English · [한국어](obsidian-app-verification-2026-10-05.ko.md)
+
 Brain OpenKit's generated Markdown worked in the actual Obsidian desktop app:
 Korean/English content and properties rendered, native search found the notes,
 links and backlinks navigated correctly, and the graph updated after a CLI

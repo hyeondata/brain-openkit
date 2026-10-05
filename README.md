@@ -46,6 +46,12 @@ The product checkout and your vault are separate directories. Search and
 classification read source notes; indexes are derived cache files. Note
 workflows preview first and write only through an explicitly applied plan.
 
+A synthetic vault was checked in Obsidian 1.13.4 for saved content, native
+content/tag search, links/backlinks, graph updates, and undo. See the app
+verification report in [English](docs/obsidian-app-verification-2026-10-05.md)
+or [한국어](docs/obsidian-app-verification-2026-10-05.ko.md) for nine screenshots
+and the verified scope.
+
 ## Install from source
 
 Use **Python 3.11 or newer**. These commands are for macOS/Linux:
