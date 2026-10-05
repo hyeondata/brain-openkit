@@ -187,6 +187,8 @@ def check(base_url="http://127.0.0.1:8010", timeout=120, python=sys.executable, 
 
 
 def main():
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8")
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--base-url", default="http://127.0.0.1:8010")
     parser.add_argument("--timeout", type=int, default=120, help="Per-request timeout in seconds (1–300)")
