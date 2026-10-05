@@ -35,7 +35,7 @@ inspect the `run` field in `doctor --json` to confirm the loaded checkpoint.
 | `classify`, without `--provider` | Used Kev successfully |
 | Search with `--provider kev` | Completed reranking with model scores and exact source citations |
 | English and Korean category/tag suggestions | Completed for both synthetic example notes |
-| Four-query retrieval evaluation | Four model executions, zero fallbacks |
+| Four-query retrieval evaluation | Four model-backed queries, zero fallbacks |
 | Injected HTTP 503 during search | Complete return to original BM25 order; all model scores cleared |
 | Injected HTTP 503 during classification | Error returned; no fabricated suggestions |
 | Four source Markdown files, including Korean CRLF | All SHA-256 values unchanged |
