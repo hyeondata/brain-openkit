@@ -1,7 +1,7 @@
 # Roadmap implementation and evidence
 
 This matrix tracks the original roadmap rather than treating a plugin manifest
-as the completed product. Release target: **0.2.0a2**, source installation from
+as the completed product. Release target: **0.2.0a3**, source installation from
 `codex/cli-mvp`. Validation is against synthetic vaults, not private user data.
 
 Implementation is available in [draft PR #1](https://github.com/hyeondata/brain-openkit/pull/1).
@@ -13,11 +13,16 @@ The 0.2.0a2 addition makes Laya and Hugging Face Kev checkpoints interchangeable
 through the CLI. See [the actual model checks](model-verification-2026-10-05.md)
 and [pinned local setup](local-models.md).
 
+Version 0.2.0a3 selects Kev for `doctor`/`classify` and provides a pinned Kev
+0.8B launcher. Search/evaluate retain their BM25 default. See the separate
+[0.8B verification](kev-08-verification-2026-10-05.md); earlier model results
+are preserved as historical evidence.
+
 | Original item | Implementation | Verification and remaining limits |
 | --- | --- | --- |
 | Read-only indexing and retrieval | SQLite refresh, BM25, exact path/line/excerpt | Original CLI tests; unchanged source hashes; Korean/English and CRLF checks |
 | Optional Laya decisions | Explicit multilingual choice adapter, whole-query fallback, passage classification/tags | Actual Laya 0.3.26/checkpoint run; 352 successful benchmark requests. Quality limits below |
-| Hugging Face Kev decisions | Optional local Kev adapter, separate endpoint/model/key, shared System One contract | Actual Kev-0.5B and Laya CLI search, category/tag suggestions, evaluation, HTTP outage fallback and unchanged source hashes. Kev-0.8B and other checkpoints remain unmeasured |
+| Hugging Face Kev decisions | Kev is the default for doctor/classify; pinned 0.8B launcher, replaceable endpoint/model/key | Actual Kev-0.8B CLI search, category/tag suggestions, evaluation, HTTP outage fallback and unchanged source hashes. Earlier 0.5B/Laya evidence retained; larger Kev checkpoints remain unmeasured |
 | Installable CLI and tests | Python >=3.11 package and dependency-free plugin runner | Installed CLI, relocated plugin cache, standard-library test suite; CI verification recorded in implementation notes |
 | Broader Korean/English evaluation | Frozen 24-note corpus, 36 retrieval queries, category/tag labels; separate development and query holdout | Labels independently reviewed before measurement; metrics independently recomputed. Same-corpus synthetic holdout only |
 | Jev adapter/configuration | Separate TypeSafe response validation, environment credential, provider-specific endpoints/model | Local HTTP contract/error tests. Live account inference unverified because no key is configured; no silent hosted fallback |

@@ -18,7 +18,7 @@
   <a href="#providers">Providers</a> · <a href="#roadmap">Roadmap</a>
 </p>
 
-> **Source-installable alpha (0.2.0a2).** Use the `codex/cli-mvp` implementation
+> **Source-installable alpha (0.2.0a3).** Use the `codex/cli-mvp` implementation
 > branch until it is merged into `main`. There is no published PyPI package.
 > The CLI and agent skills are implemented; validation and remaining gaps are
 > recorded in [implementation notes](docs/implementation-notes.md).
@@ -187,10 +187,12 @@ Keep the journal for recovery; removing a plugin does not remove it.
 | --- | --- |
 | `none` | Default for search/evaluate; local BM25, no model key or inference. |
 | `laya` | Optional local multilingual decisions; exercised with real weights. |
-| `kev` | Optional local decisions; real Hugging Face Kev 0.5B weights passed the [CLI functional checks](docs/model-verification-2026-10-05.md). |
+| `kev` | Default for classify/doctor; the bundled launcher selects pinned Hugging Face Kev 0.8B weights. [Actual CLI checks passed](docs/kev-08-verification-2026-10-05.md). |
 | `jev` | Hosted TypeSafe adapter; contract fixtures pass, live-key inference remains unverified. |
 
-`classify` and `doctor` default to Laya unless overridden by config or flags.
+`classify` and `doctor` default to Kev unless overridden by config or flags;
+the bundled Kev launcher selects 0.8B. Select Laya with `--provider laya`.
+Search and evaluation continue to default to local BM25 (`--provider none`).
 The common protocol currently implements `choose`; generic `score` and
 `noul` operations are future work. Remote providers receive selected excerpts
 when explicitly selected; there is no automatic cloud failover.
@@ -200,9 +202,12 @@ They use their own official servers behind the same Brain OpenKit commands;
 Hugging Face hosts the downloads, not inference for this setup. No Hugging Face
 token is required for these public weights. See the [local model guide](docs/local-models.md)
 for pinned versions and the distinction between a checkpoint and an API model name.
-Both providers passed [actual CLI checks](docs/model-verification-2026-10-05.md)
-for inference, reranking, category/tag suggestions, evaluation, failure fallback,
-and unchanged source notes. These checks establish execution, not quality parity.
+Kev 0.8B passed [actual CLI checks](docs/kev-08-verification-2026-10-05.md) for
+inference, reranking, category/tag suggestions, evaluation, failure fallback,
+and unchanged source notes. Default `doctor` and `classify` calls also selected
+Kev correctly. [Earlier Laya/0.5B results](docs/model-verification-2026-10-05.md)
+remain separate. Functional checks establish execution; 0.8B still made a tag
+error, so these checks do not establish quality parity or general improvement.
 
 ### Optional Laya server
 
@@ -242,8 +247,10 @@ Hugging Face token.
 
 ### Optional Kev server
 
-Start the server with the [Kev 0.5B setup](docs/local-models.md#kev-05b) in a
-separate terminal, then run these commands from the CLI environment:
+Start the server with the [Kev 0.8B setup](docs/local-models.md#kev-08b-default)
+in a separate terminal. After runtime installation, `scripts/serve-kev.py`
+loads the pinned 0.8B checkpoint without a `--run` argument. Then run these
+commands from the CLI environment:
 
 ~~~bash
 brain-openkit doctor --provider kev --json
@@ -254,11 +261,14 @@ brain-openkit evaluate examples/evaluation.jsonl --vault examples/vault --provid
 ~~~
 
 The default endpoint is `http://127.0.0.1:8009` and API model name is
-`kev-latest`. The server's startup command selects the Hugging Face checkpoint;
+`kev-latest`. The server launcher selects Kev 0.8B by default; its `--run`
+option selects another Hugging Face checkpoint.
 `--model` selects an API model name and does not download or switch weights.
 Local Kev needs no API key unless the server enables authentication; in that
 case set the matching `KEV_API_KEY` in the CLI environment. Kev is a separate
 project from the hosted TypeSafe Jev service.
+The [0.8B verification report](docs/kev-08-verification-2026-10-05.md) records
+its own results separately from the historical 0.5B checks.
 
 ### Optional TypeSafe Jev
 

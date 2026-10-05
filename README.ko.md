@@ -18,7 +18,7 @@
   <a href="#제공자">제공자</a> · <a href="#로드맵">로드맵</a>
 </p>
 
-> **소스에서 설치하는 알파 버전(0.2.0a2)입니다.** 구현이 `main`에 병합되기 전에는
+> **소스에서 설치하는 알파 버전(0.2.0a3)입니다.** 구현이 `main`에 병합되기 전에는
 > `codex/cli-mvp` 브랜치를 사용하세요. PyPI 배포 패키지는 없습니다.
 > CLI와 에이전트 스킬을 구현했으며, 확인한 내용과 남은 검증은
 > [구현·검증 기록](docs/implementation-notes.md)에 정리했습니다.
@@ -184,10 +184,12 @@ brain-openkit recover INTERRUPTED_TRANSACTION_ID --vault ../brain-openkit-demo -
 | --- | --- |
 | `none` | 검색·평가 기본값. 로컬 BM25이며 모델 키·추론이 필요 없습니다. |
 | `laya` | 선택적 로컬 다국어 판단. 실제 가중치로 실행했습니다. |
-| `kev` | Hugging Face의 실제 Kev 0.5B 가중치로 [CLI 기능 검증](docs/model-verification-2026-10-05.md)을 통과한 선택적 로컬 판단. |
+| `kev` | 분류·상태 확인 기본값. 포함된 서버 실행 스크립트가 Hugging Face의 고정된 Kev 0.8B 가중치를 선택하며, [실제 CLI 검증](docs/kev-08-verification-2026-10-05.md)을 통과했습니다. |
 | `jev` | TypeSafe 호스팅 어댑터. 계약 fixture 테스트를 통과했으며 실제 키로 추론은 미검증입니다. |
 
-`classify`·`doctor`는 설정이나 옵션으로 바꾸지 않으면 Laya를 사용합니다.
+`classify`·`doctor`는 설정이나 옵션으로 바꾸지 않으면 Kev를 사용하며, 포함된
+서버 실행 스크립트는 0.8B를 선택합니다. Laya는 `--provider laya`로 지정합니다.
+검색·평가 기본값은 로컬 BM25(`--provider none`)를 유지합니다.
 공통 계약은 현재 `choose`를 구현했으며 일반 `score`·`noul` 연산은 후속 범위입니다.
 원격 제공자를 명시적으로 선택하면 발췌문이 전송되며 클라우드로 자동 전환하지 않습니다.
 
@@ -196,9 +198,11 @@ Laya와 Kev는 모두 Hugging Face의 공개 가중치를 내려받아 로컬에
 이 구성에서 Hugging Face는 다운로드 저장소이며, 추론은 사용자 컴퓨터에서 실행됩니다.
 공개 가중치 다운로드에 Hugging Face 토큰은 필요하지 않습니다.
 고정 버전과 가중치·API 모델 이름의 차이는 [로컬 모델 안내](docs/local-models.md)에 있습니다.
-두 제공자 모두 추론, 검색 재정렬, 분류·태그 추천, 평가, 실패 시 fallback,
-원문 보존을 [실제 CLI로 확인](docs/model-verification-2026-10-05.md)했습니다.
-이는 기능 실행 확인이며 품질이 같다는 의미는 아닙니다.
+Kev 0.8B의 추론, 검색 재정렬, 분류·태그 추천, 평가, 실패 시 fallback,
+원문 보존을 [실제 CLI로 확인](docs/kev-08-verification-2026-10-05.md)했습니다.
+제공자 옵션 없이 실행한 `doctor`·`classify`도 Kev를 선택했습니다.
+[이전 Laya·0.5B 결과](docs/model-verification-2026-10-05.md)는 별도로 보존합니다.
+0.8B에서도 태그 오탐이 있었으므로 기능 실행 성공이 품질 동등성이나 전반적인 개선을 뜻하지는 않습니다.
 
 ### 선택적 Laya 서버
 
@@ -237,8 +241,9 @@ brain-openkit evaluate examples/evaluation.jsonl --vault examples/vault --provid
 
 ### 선택적 Kev 서버
 
-별도 터미널에서 [Kev 0.5B 설정](docs/local-models.md#kev-05b)으로 서버를 시작한 뒤
-CLI 환경에서 실행합니다.
+별도 터미널에서 [Kev 0.8B 설정](docs/local-models.md#kev-08b-default)으로 서버를 시작합니다.
+런타임 설치 후 `scripts/serve-kev.py`를 실행하면 `--run` 없이 고정된 0.8B 가중치를
+불러옵니다. 이후 CLI 환경에서 실행합니다.
 
 ~~~bash
 brain-openkit doctor --provider kev --json
@@ -249,10 +254,12 @@ brain-openkit evaluate examples/evaluation.jsonl --vault examples/vault --provid
 ~~~
 
 기본 주소는 `http://127.0.0.1:8009`, API 모델 이름은 `kev-latest`입니다.
-Hugging Face 가중치는 서버 시작 명령에서 선택합니다. `--model`은 API 모델 이름을
+서버 실행 스크립트는 기본으로 Kev 0.8B를 선택하며 `--run`으로 다른 Hugging Face
+가중치를 지정할 수 있습니다. `--model`은 API 모델 이름을
 선택하며 가중치를 다운로드하거나 교체하지 않습니다. 로컬 Kev는 서버 인증을 켠
 경우에만 키가 필요하며, 이때 CLI 환경의 `KEV_API_KEY`에 같은 키를 설정합니다.
 Kev는 TypeSafe의 호스팅 서비스 Jev와 별개 프로젝트입니다.
+[0.8B 검증 기록](docs/kev-08-verification-2026-10-05.md)은 이전 0.5B 결과와 구분합니다.
 
 ### 선택적 TypeSafe Jev
 

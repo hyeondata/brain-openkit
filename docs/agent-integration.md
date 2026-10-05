@@ -5,7 +5,7 @@ Codex writes requested prose; BM25 retrieves locally, and optionally selected
 Laya/Kev/Jev providers make classification or relevance decisions. No model service
 is required for initialization, capture, saving, organization, lint or folding.
 
-Use a checkout containing version `0.2.0a2` or newer for Kev support. Until the implementation
+Use a checkout containing version `0.2.0a3` or newer for the Kev 0.8B default. Until the implementation
 is merged, select the `codex/cli-mvp` branch when cloning. Keep the product
 checkout separate from your vault. Python **3.11 or newer** must be available
 to the host. Check `python3 --version` or `python --version` on Windows.

@@ -49,7 +49,7 @@ def hashes(vault):
             for p in sorted(vault.rglob("*.md"))}
 
 
-def check(laya_url, kev_url):
+def check(laya_url, kev_url, providers=("laya", "kev")):
     report = {"checked_at": datetime.now(timezone.utc).isoformat(),
               "scope": "Synthetic functional smoke, not a quality or cost comparison",
               "providers": {}}
@@ -77,7 +77,7 @@ def check(laya_url, kev_url):
         cli("index")
         baseline = cli("search", "검색", "--provider", "none")
         assert baseline["results"], "Fixture must produce BM25 candidates"
-        for provider in ("laya", "kev"):
+        for provider in providers:
             checked = {}
             health = cli("doctor", "--provider", provider)
             assert health["provider"] == provider and health["inference_verified"] is False
@@ -129,9 +129,12 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--laya-url", default="http://127.0.0.1:8000")
     parser.add_argument("--kev-url", default="http://127.0.0.1:8009")
+    parser.add_argument("--provider", choices=("both", "laya", "kev"), default="both",
+                        help="Check both servers, or only the selected provider")
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
-    report = check(args.laya_url, args.kev_url)
+    providers = ("laya", "kev") if args.provider == "both" else (args.provider,)
+    report = check(args.laya_url, args.kev_url, providers)
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(args.output)

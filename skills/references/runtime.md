@@ -47,6 +47,10 @@ checkpoint. Server setup selects the weights. Do not silently install runtimes,
 download models, or start services as part of a search skill. Reuse the user's
 configured server and report unavailable inference or BM25 fallback accurately.
 
+From 0.2.0a3, `doctor` and `classify` default to Kev; the separate
+`scripts/serve-kev.py` launcher defaults to pinned Kev 0.8B weights. Existing
+configuration can override the provider. Search/evaluate still default to BM25.
+
 ## Write sequence
 
 1. Match the requested content and paths; read relevant existing notes first.

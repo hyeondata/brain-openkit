@@ -107,7 +107,7 @@ def _read_json(path: Path, max_bytes: int = 1024 * 1024) -> dict:
 
 def _settings(args: argparse.Namespace) -> dict:
     result = {"vault": None, "cache_dir": Path(".cache/brain-openkit"),
-              "provider": "laya" if args.command in ("classify", "doctor") else "none",
+              "provider": "kev" if args.command in ("classify", "doctor") else "none",
               "base_url": None, "laya_base_url": "http://127.0.0.1:8000",
               "jev_base_url": "https://api.typesafe.ai", "jev_model": "jev-latest",
               "kev_base_url": "http://127.0.0.1:8009", "kev_model": "kev-latest", "model": None,

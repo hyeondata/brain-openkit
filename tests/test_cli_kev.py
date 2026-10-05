@@ -85,6 +85,33 @@ class KevCLITests(unittest.TestCase):
                 self.assertEqual(code, 2, report)
                 self.assertIn("error", report)
 
+    def test_decision_commands_default_to_kev_while_search_stays_local(self):
+        vault = self.root / "vault"
+        vault.mkdir()
+        (vault / "note.md").write_text("# Search\n\nLocal Markdown search.\n", encoding="utf-8")
+        taxonomy = self.root / "taxonomy.json"
+        taxonomy.write_text('{"categories":{"software":"Software notes","cooking":"Recipes"}}', encoding="utf-8")
+        answer = jev_prediction()
+        answer["model"] = "kev-latest"
+        with patch.dict(os.environ, {}, clear=True), \
+                server([{"body": CATALOG}, {"body": answer}]) as (url, requests):
+            config = self.root / "defaults.json"
+            config.write_text(json.dumps({"kev_base_url": url, "vault": str(vault),
+                                          "cache_dir": str(self.root / "cache")}), encoding="utf-8")
+            code, health = self.run_cli("doctor", "--config", str(config))
+            self.assertEqual(code, 0, health)
+            self.assertEqual(health["provider"], "kev")
+            code, classified = self.run_cli("classify", "note.md", "--taxonomy", str(taxonomy),
+                                            "--config", str(config))
+            self.assertEqual(code, 0, classified)
+            self.assertEqual(classified["provider"], "kev")
+            self.assertEqual(classified["category"], "software")
+            code, found = self.run_cli("search", "search", "--config", str(config))
+            self.assertEqual(code, 0, found)
+            self.assertEqual(found["provider"], "none")
+            self.assertEqual(found["rerank_status"], "disabled")
+            self.assertEqual(len(requests), 2)
+
 
 if __name__ == "__main__":
     unittest.main()

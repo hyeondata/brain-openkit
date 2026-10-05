@@ -7,15 +7,16 @@ Read the [runtime contract](../references/runtime.md) first. Read the selected
 note and preserve its original content and existing frontmatter conventions.
 
 For model suggestions, use classify with the user's taxonomy and explicitly
-selected provider; this does not modify notes:
+selected provider; this does not modify notes. Set `BRAIN_PROVIDER` to `kev`
+for the default Kev 0.8B setup, or the user's selected `laya`/`jev` service:
 
 ```bash
-python3 "$BRAIN_RUNNER" classify "$BRAIN_NOTE" --vault "$BRAIN_VAULT" --taxonomy "$BRAIN_TAXONOMY" --provider laya --json
+python3 "$BRAIN_RUNNER" classify "$BRAIN_NOTE" --vault "$BRAIN_VAULT" --taxonomy "$BRAIN_TAXONOMY" --provider "$BRAIN_PROVIDER" --json
 ```
 
 Classification needs a running chosen provider. If none is configured, use
 user-specified category/tags or offer host suggestions identified as such. Do
-not claim Laya results. Preserve model conflicts and uncertainty. Search
+not claim provider results. Preserve model conflicts and uncertainty. Search
 potential link targets and verify they exist.
 
 Preview only the chosen changes, repeating --tag or --link as needed and
