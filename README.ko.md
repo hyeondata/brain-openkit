@@ -15,14 +15,16 @@
   <a href="README.md">English</a> · 한국어<br>
   <a href="#현재-기능">소개</a> · <a href="#소스에서-설치">설치</a> ·
   <a href="docs/agent-integration.ko.md">Claude Code / Codex</a> ·
+  <a href="docs/conversation-archive.ko.md">대화 아카이브</a> ·
   <a href="#제공자">제공자</a> · <a href="#로드맵">로드맵</a>
 </p>
 
-> **알파 버전 [v0.2.0a3](https://github.com/hyeondata/brain-openkit/releases/tag/v0.2.0a3)입니다.**
+> **알파 버전 [v0.2.0a4](https://github.com/hyeondata/brain-openkit/releases/tag/v0.2.0a4)입니다.**
 > CLI와 호스트 플러그인을 같은 버전으로 설치하려면 태그 체크아웃을 사용하세요.
-> GitHub 릴리스에서 CLI·소스 파일을 제공하며, PyPI에는 배포하지 않았습니다.
-> 검증 근거와 한계는 [릴리스 검증](docs/release-0.2.0a3.ko.md)과
-> [구현·검증 기록](docs/implementation-notes.md)에 있습니다.
+> GitHub 릴리스 파일로 CLI와 전체 소스를 제공하며, PyPI에는 배포하지 않았습니다.
+> 각 버전의 검증 근거와 한계는 [0.2.0a4 검증](docs/release-0.2.0a4.ko.md),
+> [이전 0.2.0a3 검증](docs/release-0.2.0a3.ko.md),
+> [구현·검증 기록](docs/implementation-notes.md)을 참고하세요.
 
 Brain OpenKit은 원문 경로, 줄 번호, 발췌와 함께 Markdown 문단을 찾습니다.
 **기본 검색은 모델이나 API 키가 필요 없는 로컬 BM25입니다.** Claude Code와 Codex는
@@ -41,10 +43,21 @@ Brain OpenKit은 원문 경로, 줄 번호, 발췌와 함께 Markdown 문단을 
   일치할 때 실행 취소·중단 복구를 수행합니다.
 - 링크·지원 메타데이터 검사, 정답이 있는 질문 평가,
   `127.0.0.1`의 읽기 전용 BM25 검색 화면을 제공합니다.
+- 선택적으로 로컬 Markdown 대화 아카이브를 `Inbox/Conversations/`에
+  보관합니다. 아카이브는 기본적으로 꺼져 있습니다.
 
 제품 체크아웃과 실제 vault는 별도 디렉터리입니다. 검색·분류는 원본 노트를 읽고
-인덱스는 파생 캐시에 저장합니다. 노트 작업은 먼저 변경 계획을 만들며,
+인덱스는 파생 캐시에 저장합니다. 선별한 지식을 노트로 정리하는 작업은 먼저 변경 계획을 만들며,
 명시적으로 적용한 계획을 통해서만 노트를 씁니다.
+
+**대화 아카이브는 기본적으로 꺼져 있습니다.** 보관함을 명시적으로 선택해
+활성화하면 로컬 Markdown 아카이브의 갱신을 허용하게 됩니다. 아카이브 작업은
+모델을 사용하거나 네트워크 요청을 하지 않지만, 호스트 대화는 유료 호스팅 모델을
+사용할 수 있습니다. 상태 확인, 활성화·비활성화 명령, 호스트 설정과 현재 검증의
+한계는 [대화 아카이브 가이드](docs/conversation-archive.ko.md)를 참고하세요.
+Claude Code와 Codex CLI는 작업 중인 소스로 OFF·ON·세션 재개 검사를 통과했습니다.
+Codex Desktop의 수집 동작은 미검증입니다. 최종 배포 파일과 CI 결과는
+[릴리스 증거](docs/release-0.2.0a4.ko.md)에 별도로 기록합니다.
 
 Obsidian 1.13.4에서 합성 보관함의 저장 결과, 본문·태그 검색, 링크·백링크,
 그래프와 되돌리기 반영을 확인했습니다. 화면 9장과 검증 범위는
@@ -52,11 +65,11 @@ Obsidian 1.13.4에서 합성 보관함의 저장 결과, 본문·태그 검색, 
 
 ## 소스에서 설치
 
-**Python 3.11 이상**이 필요합니다. 릴리스 태그로 버전을 고정하며, 계속되는 개발은
-`main`에서 진행합니다. 다음은 macOS/Linux 명령입니다.
+**Python 3.11 이상**이 필요합니다. 다음 macOS/Linux 명령은 `v0.2.0a4` 태그로
+버전을 고정합니다. 계속되는 개발은 `main`에서 진행합니다.
 
 ~~~bash
-git clone --branch v0.2.0a3 --depth 1 https://github.com/hyeondata/brain-openkit.git
+git clone --branch v0.2.0a4 --depth 1 https://github.com/hyeondata/brain-openkit.git
 cd brain-openkit
 python3.11 -m venv .venv
 source .venv/bin/activate
@@ -69,28 +82,30 @@ Windows는 PowerShell에서 `.venv\Scripts\Activate.ps1`로 활성화합니다.
 CLI에는 외부 런타임 의존성이 없지만 설치 중 빌드 도구를 다운로드할 수 있습니다.
 로컬 Laya·Kev 서버는 각각 별도 선택적 환경을 사용합니다.
 
-[GitHub 프리릴리스](https://github.com/hyeondata/brain-openkit/releases/tag/v0.2.0a3)에서는
-다음 파일도 제공합니다.
+[GitHub 프리릴리스](https://github.com/hyeondata/brain-openkit/releases/tag/v0.2.0a4)에서
+다음 릴리스 파일을 내려받을 수 있습니다.
 
 | 파일 | 용도 |
 | --- | --- |
-| [brain_openkit-0.2.0a3-py3-none-any.whl](https://github.com/hyeondata/brain-openkit/releases/download/v0.2.0a3/brain_openkit-0.2.0a3-py3-none-any.whl) | Python 환경에 CLI만 설치합니다. |
-| [brain_openkit-0.2.0a3.tar.gz](https://github.com/hyeondata/brain-openkit/releases/download/v0.2.0a3/brain_openkit-0.2.0a3.tar.gz) | 전체 소스 배포본입니다. 압축을 풀어 CLI 소스와 호스트 플러그인을 사용합니다. |
-| [SHA256SUMS](https://github.com/hyeondata/brain-openkit/releases/download/v0.2.0a3/SHA256SUMS) | 릴리스 파일의 SHA-256 체크섬입니다. |
+| [brain_openkit-0.2.0a4-py3-none-any.whl](https://github.com/hyeondata/brain-openkit/releases/download/v0.2.0a4/brain_openkit-0.2.0a4-py3-none-any.whl) | Python 환경에 CLI만 설치합니다. |
+| [brain_openkit-0.2.0a4.tar.gz](https://github.com/hyeondata/brain-openkit/releases/download/v0.2.0a4/brain_openkit-0.2.0a4.tar.gz) | 전체 소스 배포본입니다. 압축을 풀어 CLI 소스와 호스트 플러그인을 사용합니다. |
+| [SHA256SUMS](https://github.com/hyeondata/brain-openkit/releases/download/v0.2.0a4/SHA256SUMS) | 릴리스 파일의 SHA-256 체크섬입니다. |
 
-CLI만 필요하다면 Python 환경을 활성화한 뒤 내려받은 wheel을 설치합니다.
+CLI만 필요하다면 내려받은 wheel을 활성화한 Python 환경에 설치합니다.
 
 ~~~bash
-python -m pip install ./brain_openkit-0.2.0a3-py3-none-any.whl
+python -m pip install ./brain_openkit-0.2.0a4-py3-none-any.whl
 ~~~
 
 **호스트 플러그인에는 태그 체크아웃이나 압축을 푼 전체 소스 배포본이 필요합니다.**
-`skills/`, `scripts/`, `src/`와 호스트 manifest 파일을 함께 유지하세요.
+`skills/`, `scripts/`, `src/`, `hooks/`와 호스트 manifest 파일을 함께 유지하세요.
 wheel이나 소스 압축 파일을 pip로 설치하면 Python CLI가 설치되며,
 Claude·Codex 플러그인이 등록되지는 않습니다. 아래 예제는 합성 예제 vault를 포함한
 전체 체크아웃을 기준으로 합니다. PyPI 패키지는 배포하지 않았습니다.
 
-모든 vault 작업은 **`--vault` 또는 JSON 설정의 `vault`가 필요합니다.**
+모든 vault 작업에는 명시적으로 지정한 vault가 필요합니다. 기존 노트 작업은
+**`--vault` 또는 JSON 설정의 `vault`를 받으며**, `conversations` 명령에는
+`--vault`를 직접 지정해야 합니다.
 노트의 부모 디렉터리에서 vault를 추정하지 않습니다.
 제공자를 확인하는 `doctor`만 vault 없이 실행할 수 있습니다.
 
@@ -112,8 +127,10 @@ codex plugin add brain-openkit@brain-openkit
 설치 후 호스트를 다시 시작합니다. 포함된 Python 실행기는 editable 패키지 설치 없이
 플러그인 캐시에서도 작동합니다. Python 3.11 이상과 호스트의 정상적인 인증·모델 사용
 권한은 별도로 필요합니다.
-이 안내는 로컬 제품 디렉터리를 사용합니다. 릴리스 파일에 대한 확인 결과는
-[릴리스 검증](docs/release-0.2.0a3.ko.md)을 참고하세요.
+이 안내는 로컬 제품 디렉터리를 사용합니다. 현재 검증 범위는
+[0.2.0a4 검증](docs/release-0.2.0a4.ko.md)을 참고하세요.
+[0.2.0a3 검증](docs/release-0.2.0a3.ko.md)은 이전 릴리스의 기록이며
+대화 아카이브 기능을 검증하지 않습니다.
 
 | 스킬 | 용도 |
 | --- | --- |
@@ -309,8 +326,10 @@ brain-openkit classify local-search.md --vault examples/vault --taxonomy example
 
 ## 설정과 출력
 
-각 하위 명령은 `--config settings.json`과 `--json`을 받습니다.
-체크아웃 루트에 저장할 설정 예시입니다.
+노트·제공자 명령은 `--config settings.json`과 `--json`을 받습니다.
+`conversations` 명령에는 `--vault`를 직접 지정하며 `--json`을 사용할 수 있습니다.
+이 명령은 해당 보관함의 `.brain-openkit/conversations.json`을 별도로 관리합니다.
+다음은 체크아웃 루트에 저장할 노트·제공자 설정 예시입니다.
 
 ~~~json
 {

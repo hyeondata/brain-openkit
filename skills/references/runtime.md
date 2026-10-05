@@ -81,3 +81,10 @@ Use planners and apply for vault changes, rather than writing notes directly
 with host tools. Host file tools may write drafts and plans outside the vault.
 Never edit immutable source captures. No automatic transcript saves, Git
 commits, uploads, or changes to host configuration are part of these skills.
+
+The separate conversation recorder is disabled by default. Only an explicit
+`conversations configure --enable --vault VAULT` opts that vault into local
+hook-driven text recording. This bounded archive uses its own checked atomic
+snapshot path, with disk limits and user-edit protection; it does not call a
+model or authorize other note changes. Never enable it as a side effect of a
+skill. See `docs/conversation-archive.md` in the product root for configuration.

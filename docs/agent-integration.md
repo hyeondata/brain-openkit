@@ -7,17 +7,17 @@ Codex writes requested prose; BM25 retrieves locally, and optionally selected
 Laya/Kev/Jev providers make classification or relevance decisions. No model service
 is required for initialization, capture, saving, organization, lint or folding.
 
-Use the `v0.2.0a3` tagged checkout for a repeatable installation:
+Use the `v0.2.0a4` tagged checkout for a repeatable installation:
 
 ```bash
-git clone --branch v0.2.0a3 --depth 1 https://github.com/hyeondata/brain-openkit.git
+git clone --branch v0.2.0a4 --depth 1 https://github.com/hyeondata/brain-openkit.git
 ```
 
 Alternatively, extract the full
-[brain_openkit-0.2.0a3.tar.gz source distribution](https://github.com/hyeondata/brain-openkit/releases/download/v0.2.0a3/brain_openkit-0.2.0a3.tar.gz)
-from the [GitHub prerelease](https://github.com/hyeondata/brain-openkit/releases/tag/v0.2.0a3)
+[brain_openkit-0.2.0a4.tar.gz source distribution](https://github.com/hyeondata/brain-openkit/releases/download/v0.2.0a4/brain_openkit-0.2.0a4.tar.gz)
+from the [GitHub prerelease](https://github.com/hyeondata/brain-openkit/releases/tag/v0.2.0a4)
 and use its extracted root wherever the examples say `/absolute/path/to/brain-openkit`.
-Keep `skills/`, `scripts/`, `src/`, `.claude-plugin/`, `.codex-plugin/`, and
+Keep `skills/`, `scripts/`, `src/`, `hooks/`, `.claude-plugin/`, `.codex-plugin/`, and
 `.agents/plugins/` together. The release wheel installs only the Python CLI;
 it does not contain the complete host-plugin distribution. Installing the
 source archive through pip also does not register a host plugin. PyPI has no
@@ -27,6 +27,9 @@ Keep the product checkout or extracted source separate from your vault.
 Python **3.11 or newer** must be available
 to the host. Check `python3 --version` or `python --version` on Windows.
 An older macOS system Python is insufficient.
+For archive hooks, an optional `BRAIN_OPENKIT_PYTHON` environment variable can
+select an absolute Python 3.11+ interpreter path; see the
+[archive setup example](conversation-archive.md). This does not install Python.
 
 The plugin includes `src/brain_openkit/` and `scripts/brain-openkit.py`.
 Installing the Python package is optional: the runner resolves its own product
@@ -67,7 +70,10 @@ directory as the marketplace source, using the tagged version above.
 These commands and manifests follow the official
 [Claude plugin format](https://code.claude.com/docs/en/plugins-reference) and
 [installation commands](https://code.claude.com/docs/en/plugins/cli-reference).
-No hooks or MCP server run automatically with this plugin.
+The plugin includes `Stop` and `SessionEnd` hooks for the optional
+[conversation archive](conversation-archive.md). Recording is off by default
+and requires enabling an explicit vault. The recorder uses no model or network
+requests; no MCP server is installed by this plugin.
 
 ## Codex
 
@@ -92,6 +98,12 @@ directory, and install it. The manifest points at the complete product root;
 it does not duplicate the skills or use the project as the selected vault.
 See the official [Codex plugin packaging guide](https://developers.openai.com/plugins/build/plugins).
 
+The optional archive uses a `Stop` hook. In Codex CLI, review and trust its
+definition through `/hooks`; installing the plugin alone does not grant hook
+trust. A changed hook definition requires another review. Archive setup and
+verification are documented in the [conversation archive guide](conversation-archive.md).
+Automatic capture in Codex Desktop has not been verified.
+
 On a host that supports Agent Skills but has no plugin installer, use
 workspace-local skill discovery. Copy the complete `skills/`, `scripts/`, and
 `src/` directories from this product into a **separate agent workspace's**
@@ -114,6 +126,8 @@ directories together when updating. Copying an individual `SKILL.md` without
 the shared reference and bundled core will not work. For symlink installations,
 link each skill directory, preserve the full product tree, and resolve the
 skill's real path before locating the runner. Copying is more portable on Windows.
+This fallback installs the eight reviewed skills; copying the three
+directories does not register automatic archive hooks.
 
 ## Available workflows
 
@@ -147,6 +161,15 @@ includes a transaction ID; use `undo TRANSACTION_ID --vault VAULT` when you
 request reversal of a completed transaction. Use
 `recover TRANSACTION_ID --vault VAULT` to finish an interrupted rollback or undo.
 Conflicting later edits are preserved rather than overwritten.
+
+Explicitly enabled conversation recording is a separate, bounded write path.
+Its recorder updates only managed files under `Inbox/Conversations/` using
+its own ownership, hash and atomic-write checks; it does not create a plan or
+request approval for every message. Disabling recording retains existing
+archives. Automatic pruning requires a separate retention opt-in. These
+archive permissions do not authorize edits to other notes. See
+[conversation archiving](conversation-archive.md) for limits, included text
+and configuration.
 
 For research, URLs, PDFs or other media, the host must have the appropriate
 search/extraction capability. The CLI itself ingests local UTF-8 text and does
@@ -193,6 +216,9 @@ Those historical development and host-execution checks are recorded in
 `v0.2.0a3` release artifacts are recorded separately in the
 [release verification](release-0.2.0a3.md); historical discovery results do not
 prove that a released plugin completed a host task.
+The `v0.2.0a4` archive-specific evidence is tracked separately in
+[its release verification](release-0.2.0a4.md). Earlier reports do not establish
+automatic archive behavior in the current version.
 
 ## Update and remove
 
@@ -210,4 +236,5 @@ codex plugin remove brain-openkit@brain-openkit
 Removing the integration does not remove your vault. For a workspace copy,
 remove only the Brain OpenKit directories you installed, preserving unrelated
 skills and configuration. Do not delete the vault or its journals as part of
-plugin removal.
+plugin removal. Existing conversation archives and their vault configuration
+also remain when a host plugin is removed.
