@@ -187,7 +187,7 @@ class ConversationArchiveTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             conversations.capture(self.vault, '../escape', 'session', self.first)
         safe = self.capture(session='../../outside')
-        self.assertEqual('Inbox/Conversations', str(Path(safe['path']).parent))
+        self.assertEqual('Inbox/Conversations', Path(safe['path']).parent.as_posix())
 
     def test_symlink_config_and_archive_entries_are_rejected(self):
         outside = Path(self.tmp.name) / 'outside.json'
