@@ -2,10 +2,10 @@
 
 The same eight skills invoke a bundled Python CLI in either host. Claude or
 Codex writes requested prose; BM25 retrieves locally, and optionally selected
-Laya/Jev providers make classification or relevance decisions. No model service
+Laya/Kev/Jev providers make classification or relevance decisions. No model service
 is required for initialization, capture, saving, organization, lint or folding.
 
-Use a checkout containing version `0.2.0a1` or newer. Until the implementation
+Use a checkout containing version `0.2.0a2` or newer for Kev support. Until the implementation
 is merged, select the `codex/cli-mvp` branch when cloning. Keep the product
 checkout separate from your vault. Python **3.11 or newer** must be available
 to the host. Check `python3 --version` or `python --version` on Windows.
@@ -118,7 +118,7 @@ Search and classification leave source notes unchanged. Search caches, drafts,
 and plans live outside both the vault and product directory. A remote provider
 receives selected excerpts only when the user selects that provider; there is no
 automatic cloud failover. Hosted agent sessions themselves still process the
-content you ask Claude/Codex to read. Local Laya does not make the whole host
+content you ask Claude/Codex to read. Local Laya/Kev does not make the whole host
 conversation offline.
 
 Mutation skills use two steps: a planner writes a preview plan outside the

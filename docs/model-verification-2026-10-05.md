@@ -76,8 +76,10 @@ independent review found no actionable issue. A separately installed 0.2.0a2
 wheel completed six further actual-server checks: doctor probe, search and
 classification for each provider. The dependency-free runner and wheel both
 include the new Kev adapter. Cross-platform CI status is available in
-[PR #1 checks](https://github.com/hyeondata/brain-openkit/pull/1/checks);
-live model inference was tested on the Mac described above.
+[PR #1 checks](https://github.com/hyeondata/brain-openkit/pull/1/checks).
+All six [CI jobs for implementation commit `df7b307`](https://github.com/hyeondata/brain-openkit/actions/runs/37287883237)
+passed on Ubuntu/macOS/Windows × Python 3.11/3.13. Live model inference was
+tested on the Mac described above; CI uses synthetic vaults and HTTP fixtures.
 
 Follow [the pinned runtime instructions](local-models.md), then run:
 
