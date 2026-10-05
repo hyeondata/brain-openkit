@@ -1,0 +1,293 @@
+{
+  "recorded_at": "2026-10-05T09:55:16.476162+00:00",
+  "version": "0.2.0a3",
+  "implementation_commit": "129143902919a6960cbd817f0582ee633bf55991",
+  "environment": {
+    "os": "macOS 15.3.2 (24D81)",
+    "architecture": "arm64",
+    "obsidian": "1.13.4",
+    "python": "3.13.1",
+    "ui_tool": "computer-use / cua_repl native app controls"
+  },
+  "vault": "Brain OpenKit Verification",
+  "data": "Synthetic Korean/English fixture only; no personal-vault notes changed.",
+  "normalization": "Public JSON replaces local repository/fixture roots with $REPO/$FIXTURE and executable path with python3.13. SHA-256 and byte counts refer to original files before normalization. JPEGs are unmodified native test-window captures.",
+  "summary": {
+    "cli_commands": 16,
+    "cli_commands_passed": 16,
+    "ui_checks_passed": 11,
+    "filesystem_checks_passed": true
+  },
+  "ui_checks": [
+    {
+      "id": "saved-note-render",
+      "status": "passed",
+      "observed": "Korean and English decision body rendered with category=research and tags brain-openkit/app-verification.",
+      "screenshot": "screenshots/native-saved-note.jpg"
+    },
+    {
+      "id": "content-search-before-undo",
+      "status": "passed",
+      "observed": "Exact phrase 청록나침반 검증 결정 showed four occurrences across decision and fold (two files); clicking result opened decision.",
+      "screenshot": "screenshots/native-content-search.jpg"
+    },
+    {
+      "id": "tag-search",
+      "status": "passed",
+      "observed": "tag:#app-verification showed one match in the decision note.",
+      "screenshot": "screenshots/native-tag-search.jpg"
+    },
+    {
+      "id": "related-link",
+      "status": "passed",
+      "observed": "Clicked Related on decision; opened Notes/별빛도서관-검증-기록, showing provenance properties and original extract.",
+      "screenshot": null
+    },
+    {
+      "id": "source-link",
+      "status": "passed",
+      "observed": "Clicked Sources link; opened captured original with Korean/English text.",
+      "screenshot": "screenshots/native-source-backlinks.jpg"
+    },
+    {
+      "id": "backlinks",
+      "status": "passed",
+      "observed": "Source backlinks panel listed decision and ingested note. Clicking decision backlink opened decision.",
+      "screenshot": "screenshots/native-source-backlinks.jpg"
+    },
+    {
+      "id": "graph-before-undo",
+      "status": "passed",
+      "observed": "Graph displayed six nodes and connecting edges: Index, decision, ingested note, captured source, seed, fold.",
+      "screenshot": "screenshots/native-graph-before-undo.jpg"
+    },
+    {
+      "id": "fold-created",
+      "status": "passed",
+      "observed": "Quick switcher found fold. Reading view rendered extractive blocks and source line references; Index backlink appeared.",
+      "screenshot": "screenshots/native-fold-before-undo.jpg"
+    },
+    {
+      "id": "undo-live-refresh",
+      "status": "passed",
+      "observed": "After CLI undo, open fold tab automatically returned to graph without restarting Obsidian; five nodes remained and fold node disappeared.",
+      "screenshot": "screenshots/native-graph-after-undo.jpg"
+    },
+    {
+      "id": "undo-index-and-search",
+      "status": "passed",
+      "observed": "file:\"되돌림 검증\" returned zero matches; restored Index had only seed, ingested and decision links. Index→decision navigation still worked.",
+      "screenshot": "screenshots/native-index-after-undo.jpg"
+    },
+    {
+      "id": "post-undo-search",
+      "status": "passed",
+      "observed": "Exact phrase showed two occurrences in decision only; category/tags/body remained visible; decision backlinks dropped from six to one (Index).",
+      "screenshot": "screenshots/native-final-decision.jpg"
+    }
+  ],
+  "transactions": {
+    "init": {
+      "transaction_id": "490c2122d34f494cb1e33a1d6ebc3fef",
+      "status": "applied",
+      "paths": [
+        "Index.md"
+      ]
+    },
+    "ingest": {
+      "transaction_id": "793d42bc2ea341bdb81f07f5c284f6f7",
+      "status": "applied",
+      "paths": [
+        "Sources/174f06b011a4242d-별빛도서관-검증-기록.md",
+        "Notes/별빛도서관-검증-기록.md",
+        "Index.md"
+      ]
+    },
+    "save": {
+      "transaction_id": "eead8df8ade64b21be6877463171383c",
+      "status": "applied",
+      "paths": [
+        "Notes/검증 결정.md",
+        "Index.md"
+      ]
+    },
+    "organize": {
+      "transaction_id": "645c43d4343d42f090d3e915d50c7082",
+      "status": "applied",
+      "paths": [
+        "Notes/검증 결정.md"
+      ]
+    },
+    "fold_apply": {
+      "transaction_id": "0028e59180864735aa88c6a6ee8e5794",
+      "status": "applied",
+      "paths": [
+        "Notes/되돌림 검증.md",
+        "Index.md"
+      ]
+    },
+    "fold_undo": {
+      "transaction_id": "0028e59180864735aa88c6a6ee8e5794",
+      "status": "undone",
+      "paths": [
+        "Notes/되돌림 검증.md",
+        "Index.md"
+      ]
+    }
+  },
+  "final_lint": {
+    "notes": 5,
+    "broken_links": [],
+    "ambiguous_links": [],
+    "orphans": [],
+    "metadata_errors": []
+  },
+  "final_search": {
+    "query": "청록나침반 검증 결정",
+    "provider": "none",
+    "model": null,
+    "rerank_status": "disabled",
+    "fallback_reason": null,
+    "candidate_count": 14,
+    "results": [
+      {
+        "path": "Notes/검증 결정.md",
+        "title": "청록나침반 검증 결정",
+        "start_line": 1,
+        "end_line": 4,
+        "text": "---\ncategory: \"research\"\ntags: [\"brain-openkit\", \"app-verification\"]\n---\n",
+        "bm25_score": 7.251672387286098,
+        "model_score": null,
+        "decision": null
+      },
+      {
+        "path": "Sources/174f06b011a4242d-별빛도서관-검증-기록.md",
+        "title": "별빛도서관 검증 기록",
+        "start_line": 1,
+        "end_line": 5,
+        "text": "# 별빛도서관 검증 기록\n\n이 자료는 Brain OpenKit의 Obsidian 앱 연동을 확인하는 합성 기록입니다.\n별빛도서관은 화요일과 목요일에 청록나침반 독서 모임을 엽니다.\n\n",
+        "bm25_score": 2.8824889624561356,
+        "model_score": null,
+        "decision": null
+      },
+      {
+        "path": "Notes/별빛도서관-검증-기록.md",
+        "title": "별빛도서관 검증 기록",
+        "start_line": 10,
+        "end_line": 24,
+        "text": "## Source extract\n\n```markdown\n# 별빛도서관 검증 기록\n\n이 자료는 Brain OpenKit의 Obsidian 앱 연동을 확인하는 합성 기록입니다.\n별빛도서관은 화요일과 목요일에 청록나침반 독서 모임을 엽니다.\n\n## English verification\n\nThis synthetic library record verifies source preservation, links, and local search.\nThe reading group meets on Tuesdays and Thursdays.\n```\n\n\n",
+        "bm25_score": 2.4037020897959325,
+        "model_score": null,
+        "decision": null
+      },
+      {
+        "path": "Index.md",
+        "title": "Brain OpenKit",
+        "start_line": 11,
+        "end_line": 13,
+        "text": "## Notes\n\n- [[Notes/검증 결정]]\n",
+        "bm25_score": 1.7010948345622614,
+        "model_score": null,
+        "decision": null
+      },
+      {
+        "path": "기존 보존 노트.md",
+        "title": "CRLF Preservation Seed",
+        "start_line": 1,
+        "end_line": 3,
+        "text": "# CRLF Preservation Seed\r\n\r\n기존 보존 노트: 이 문장은 검증 후에도 바이트 단위로 그대로 남아야 합니다.\r\n",
+        "bm25_score": 0.15308568758622543,
+        "model_score": null,
+        "decision": null
+      }
+    ],
+    "index": {
+      "indexed": 0,
+      "unchanged": 5,
+      "deleted": 0,
+      "errors": []
+    },
+    "elapsed_ms": 2.223
+  },
+  "pre_fold_files": {
+    "Index.md": {
+      "bytes": 144,
+      "sha256": "3182a475d31068fc646aac4b6075f8e02106b14e0ac5532b06759091c1b08170"
+    },
+    "Notes/검증 결정.md": {
+      "bytes": 579,
+      "sha256": "2bcad658d28d27a9b1c14e7aabdd2cb0138033076b57e3ec94768b4c7ea67eca"
+    },
+    "Notes/별빛도서관-검증-기록.md": {
+      "bytes": 815,
+      "sha256": "343e9b43b63ff5d577cf9e47272d15634c95c3bff8ed5bcc67a4b8c216553d9e"
+    },
+    "Sources/174f06b011a4242d-별빛도서관-검증-기록.md": {
+      "bytes": 375,
+      "sha256": "174f06b011a4242dac7c8ba117a013c06875e060e03842a9292584eb9dc04462"
+    },
+    "기존 보존 노트.md": {
+      "bytes": 133,
+      "sha256": "9ec55b520c7d169fe8c9637f4c7b4f61bf481d3d587f8a45f3ea4647f95e36ee"
+    }
+  },
+  "post_undo_checks": {
+    "five_baseline_files_present_in_report": true,
+    "all_five_pre_fold_hashes_restored": true,
+    "source_input_hash_unchanged": true,
+    "source_capture_hash_unchanged": true,
+    "source_input_and_capture_byte_identical": true,
+    "seed_hash_unchanged": true,
+    "seed_crlf_preserved": true,
+    "fold_removed": true,
+    "index_restored": true
+  },
+  "screenshots": {
+    "native-content-search.jpg": {
+      "bytes": 149032,
+      "sha256": "961ba2045beda918ea639256ee09472e9ee6cf825042b972160194fc666701b5"
+    },
+    "native-final-decision.jpg": {
+      "bytes": 157431,
+      "sha256": "608fae54eb14f95e02bbb3564170b3d16a6419aaa1e6a6d33194675d836f7e93"
+    },
+    "native-fold-before-undo.jpg": {
+      "bytes": 193414,
+      "sha256": "3e76e6945aba491fb7b03f93750fc166b5b564d346d4f399150d5d4d144e4a8c"
+    },
+    "native-graph-after-undo.jpg": {
+      "bytes": 110264,
+      "sha256": "84273c2748d2aad261c930eea621733c946c13defc73fc89bdee619cce6abad3"
+    },
+    "native-graph-before-undo.jpg": {
+      "bytes": 113896,
+      "sha256": "e985dca88bbefe4b0244b2b978d8381a844f7d90a615ef861e1c091cc610057d"
+    },
+    "native-index-after-undo.jpg": {
+      "bytes": 104414,
+      "sha256": "8424c787c66cd6a206be4b1448a1ac3d0ef9ca6d4326bed8065397faaa185a8f"
+    },
+    "native-saved-note.jpg": {
+      "bytes": 157640,
+      "sha256": "ca8be9fefce19ee4b5502b6779912beb70fe43351515ce155c25a5caaa71493c"
+    },
+    "native-source-backlinks.jpg": {
+      "bytes": 152422,
+      "sha256": "da0e61dbfaa8877b5655ca6c76c9f24cbe2a02d54b42420bffb93ff1aa5f7548"
+    },
+    "native-tag-search.jpg": {
+      "bytes": 142356,
+      "sha256": "af69ba50905396771d4bc0c9e01de9f9b64ba5a6528919318aeb0e4fdd63cf6c"
+    }
+  },
+  "observations": [
+    "Index.md repeats the Notes heading for appended sections; navigation and undo are correct, but presentation could be consolidated.",
+    "The initial locked Mac caused noWindowsAvailable/frozen UI; user unlocked it and live native checks then completed. Korean key injection dropped text; clipboard paste entered the exact query successfully. These were UI automation issues, not a Brain OpenKit failure."
+  ],
+  "boundaries": [
+    "Current source runner 0.2.0a3 was exercised; paid Claude/Codex hosts and model servers were not rerun for this app check.",
+    "Category/tags were explicitly supplied to organize; this run checks persistence and app interpretation, not model suggestion accuracy.",
+    "No Windows/Linux native app, Obsidian mobile, Sync, Canvas/Bases, or native Brain OpenKit plugin verification.",
+    "Historical host and model verification remain separate records."
+  ]
+}

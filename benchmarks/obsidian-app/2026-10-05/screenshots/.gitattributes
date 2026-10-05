@@ -1,0 +1,2 @@
+# Preserve native screenshot bytes regardless of machine-wide text normalization.
+*.jpg binary

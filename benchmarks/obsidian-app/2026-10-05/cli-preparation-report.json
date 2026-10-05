@@ -1,0 +1,402 @@
+{
+  "created_at": "2026-10-05T09:42:11.252114+00:00",
+  "version": "0.2.0a3",
+  "commit": "129143902919a6960cbd817f0582ee633bf55991",
+  "repository": "$REPO",
+  "vault": "$FIXTURE/Brain OpenKit Verification",
+  "fixture": {
+    "vault": "$FIXTURE/Brain OpenKit Verification",
+    "seed_path": "기존 보존 노트.md",
+    "seed_sha256": "9ec55b520c7d169fe8c9637f4c7b4f61bf481d3d587f8a45f3ea4647f95e36ee",
+    "source_path": "$FIXTURE/inputs/synthetic-source.md",
+    "source_sha256": "174f06b011a4242dac7c8ba117a013c06875e060e03842a9292584eb9dc04462",
+    "draft_path": "$FIXTURE/inputs/selected-decision.md",
+    "draft_sha256": "4252f36947fadcf78b40e2fe2a81492e1b7c74a597c2513aa8189faad78c36af"
+  },
+  "commands": [
+    {
+      "label": "01-init-plan",
+      "command": [
+        "python3.13",
+        "$REPO/scripts/brain-openkit.py",
+        "init",
+        "--plan",
+        "$FIXTURE/plans/01-init.json",
+        "--vault",
+        "$FIXTURE/Brain OpenKit Verification",
+        "--cache-dir",
+        "$FIXTURE/cache",
+        "--json"
+      ],
+      "returncode": 0,
+      "stdout": "{\n  \"version\": 1,\n  \"vault\": \"$FIXTURE/Brain OpenKit Verification\",\n  \"label\": \"Initialize wiki index\",\n  \"changes\": [\n    {\n      \"path\": \"Index.md\",\n      \"before\": null,\n      \"before_sha256\": null,\n      \"content\": \"# Brain OpenKit\\n\\n## Notes\\n\\n- [[기존 보존 노트]]\\n\",\n      \"after_sha256\": \"af0352b0a3f82c1c21f18b93ea85fb3fd179a5e2136af351fe700d7be48cdb88\",\n      \"diff\": \"--- /dev/null\\n+++ Index.md\\n@@ -0,0 +1,5 @@\\n+# Brain OpenKit\\n+\\n+## Notes\\n+\\n+- [[기존 보존 노트]]\\n\"\n    }\n  ],\n  \"id\": \"339d37e1564a9a323fcdb7515e2389f0039443c65d6f1f681c4520269be056ac\"\n}\n",
+      "stderr": "",
+      "timestamp": "2026-10-05T09:40:50.953364+00:00"
+    },
+    {
+      "label": "02-init-apply",
+      "command": [
+        "python3.13",
+        "$REPO/scripts/brain-openkit.py",
+        "apply",
+        "$FIXTURE/plans/01-init.json",
+        "--approve",
+        "339d37e1564a9a323fcdb7515e2389f0039443c65d6f1f681c4520269be056ac",
+        "--vault",
+        "$FIXTURE/Brain OpenKit Verification",
+        "--cache-dir",
+        "$FIXTURE/cache",
+        "--json"
+      ],
+      "returncode": 0,
+      "stdout": "{\n  \"transaction_id\": \"490c2122d34f494cb1e33a1d6ebc3fef\",\n  \"status\": \"applied\",\n  \"paths\": [\n    \"Index.md\"\n  ]\n}\n",
+      "stderr": "",
+      "timestamp": "2026-10-05T09:40:57.069640+00:00"
+    },
+    {
+      "label": "03-ingest-plan",
+      "command": [
+        "python3.13",
+        "$REPO/scripts/brain-openkit.py",
+        "ingest",
+        "$FIXTURE/inputs/synthetic-source.md",
+        "--title",
+        "별빛도서관 검증 기록",
+        "--plan",
+        "$FIXTURE/plans/03-ingest.json",
+        "--vault",
+        "$FIXTURE/Brain OpenKit Verification",
+        "--cache-dir",
+        "$FIXTURE/cache",
+        "--json"
+      ],
+      "returncode": 0,
+      "stdout": "{\n  \"version\": 1,\n  \"vault\": \"$FIXTURE/Brain OpenKit Verification\",\n  \"label\": \"Ingest source\",\n  \"changes\": [\n    {\n      \"path\": \"Sources/174f06b011a4242d-별빛도서관-검증-기록.md\",\n      \"before\": null,\n      \"before_sha256\": null,\n      \"content\": \"# 별빛도서관 검증 기록\\n\\n이 자료는 Brain OpenKit의 Obsidian 앱 연동을 확인하는 합성 기록입니다.\\n별빛도서관은 화요일과 목요일에 청록나침반 독서 모임을 엽니다.\\n\\n## English verification\\n\\nThis synthetic library record verifies source preservation, links, and local search.\\nThe reading group meets on Tuesdays and Thursdays.\\n\",\n      \"after_sha256\": \"174f06b011a4242dac7c8ba117a013c06875e060e03842a9292584eb9dc04462\",\n      \"diff\": \"--- /dev/null\\n+++ Sources/174f06b011a4242d-별빛도서관-검증-기록.md\\n@@ -0,0 +1,9 @@\\n+# 별빛도서관 검증 기록\\n+\\n+이 자료는 Brain OpenKit의 Obsidian 앱 연동을 확인하는 합성 기록입니다.\\n+별빛도서관은 화요일과 목요일에 청록나침반 독서 모임을 엽니다.\\n+\\n+## English verification\\n+\\n+This synthetic library record verifies source preservation, links, and local search.\\n+The reading group meets on Tuesdays and Thursdays.\\n\"\n    },\n    {\n      \"path\": \"Notes/별빛도서관-검증-기록.md\",\n      \"before\": null,\n      \"before_sha256\": null,\n      \"content\": \"---\\ntitle: \\\"별빛도서관 검증 기록\\\"\\nsource_path: \\\"$FIXTURE/inputs/synthetic-source.md\\\"\\nsource_sha256: \\\"174f06b011a4242dac7c8ba117a013c06875e060e03842a9292584eb9dc04462\\\"\\nsource_capture: \\\"Sources/174f06b011a4242d-별빛도서관-검증-기록.md\\\"\\n---\\n\\n# 별빛도서관 검증 기록\\n\\n## Source extract\\n\\n```markdown\\n# 별빛도서관 검증 기록\\n\\n이 자료는 Brain OpenKit의 Obsidian 앱 연동을 확인하는 합성 기록입니다.\\n별빛도서관은 화요일과 목요일에 청록나침반 독서 모임을 엽니다.\\n\\n## English verification\\n\\nThis synthetic library record verifies source preservation, links, and local search.\\nThe reading group meets on Tuesdays and Thursdays.\\n```\\n\\n\\n## Sources\\n\\n- [[Sources/174f06b011a4242d-별빛도서관-검증-기록]]\\n\",\n      \"after_sha256\": \"343e9b43b63ff5d577cf9e47272d15634c95c3bff8ed5bcc67a4b8c216553d9e\",\n      \"diff\": \"--- /dev/null\\n+++ Notes/별빛도서관-검증-기록.md\\n@@ -0,0 +1,27 @@\\n+---\\n+title: \\\"별빛도서관 검증 기록\\\"\\n+source_path: \\\"$FIXTURE/inputs/synthetic-source.md\\\"\\n+source_sha256: \\\"174f06b011a4242dac7c8ba117a013c06875e060e03842a9292584eb9dc04462\\\"\\n+source_capture: \\\"Sources/174f06b011a4242d-별빛도서관-검증-기록.md\\\"\\n+---\\n+\\n+# 별빛도서관 검증 기록\\n+\\n+## Source extract\\n+\\n+```markdown\\n+# 별빛도서관 검증 기록\\n+\\n+이 자료는 Brain OpenKit의 Obsidian 앱 연동을 확인하는 합성 기록입니다.\\n+별빛도서관은 화요일과 목요일에 청록나침반 독서 모임을 엽니다.\\n+\\n+## English verification\\n+\\n+This synthetic library record verifies source preservation, links, and local search.\\n+The reading group meets on Tuesdays and Thursdays.\\n+```\\n+\\n+\\n+## Sources\\n+\\n+- [[Sources/174f06b011a4242d-별빛도서관-검증-기록]]\\n\"\n    },\n    {\n      \"path\": \"Index.md\",\n      \"before\": \"# Brain OpenKit\\n\\n## Notes\\n\\n- [[기존 보존 노트]]\\n\",\n      \"before_sha256\": \"af0352b0a3f82c1c21f18b93ea85fb3fd179a5e2136af351fe700d7be48cdb88\",\n      \"content\": \"# Brain OpenKit\\n\\n## Notes\\n\\n- [[기존 보존 노트]]\\n\\n## Notes\\n\\n- [[Notes/별빛도서관-검증-기록]]\\n\",\n      \"after_sha256\": \"ba1243534aea3e288f6f4a23dabbaefb2fc9d0e3c842c77b9dccff49699556a6\",\n      \"diff\": \"--- Index.md\\n+++ Index.md\\n@@ -3,3 +3,7 @@\\n ## Notes\\n \\n - [[기존 보존 노트]]\\n+\\n+## Notes\\n+\\n+- [[Notes/별빛도서관-검증-기록]]\\n\"\n    }\n  ],\n  \"id\": \"48b8c32ab211ea9714f55af5776f7a5b23911ffe6b0e723e65cddacf5dbbcbac\"\n}\n",
+      "stderr": "",
+      "timestamp": "2026-10-05T09:41:01.960191+00:00"
+    },
+    {
+      "label": "04-ingest-apply",
+      "command": [
+        "python3.13",
+        "$REPO/scripts/brain-openkit.py",
+        "apply",
+        "$FIXTURE/plans/03-ingest.json",
+        "--approve",
+        "48b8c32ab211ea9714f55af5776f7a5b23911ffe6b0e723e65cddacf5dbbcbac",
+        "--vault",
+        "$FIXTURE/Brain OpenKit Verification",
+        "--cache-dir",
+        "$FIXTURE/cache",
+        "--json"
+      ],
+      "returncode": 0,
+      "stdout": "{\n  \"transaction_id\": \"793d42bc2ea341bdb81f07f5c284f6f7\",\n  \"status\": \"applied\",\n  \"paths\": [\n    \"Sources/174f06b011a4242d-별빛도서관-검증-기록.md\",\n    \"Notes/별빛도서관-검증-기록.md\",\n    \"Index.md\"\n  ]\n}\n",
+      "stderr": "",
+      "timestamp": "2026-10-05T09:41:08.277986+00:00"
+    },
+    {
+      "label": "05-save-plan",
+      "command": [
+        "python3.13",
+        "$REPO/scripts/brain-openkit.py",
+        "save",
+        "$FIXTURE/inputs/selected-decision.md",
+        "--path",
+        "Notes/검증 결정.md",
+        "--source",
+        "Sources/174f06b011a4242d-별빛도서관-검증-기록.md",
+        "--plan",
+        "$FIXTURE/plans/05-save.json",
+        "--vault",
+        "$FIXTURE/Brain OpenKit Verification",
+        "--cache-dir",
+        "$FIXTURE/cache",
+        "--json"
+      ],
+      "returncode": 0,
+      "stdout": "{\n  \"version\": 1,\n  \"vault\": \"$FIXTURE/Brain OpenKit Verification\",\n  \"label\": \"Save note\",\n  \"changes\": [\n    {\n      \"path\": \"Notes/검증 결정.md\",\n      \"before\": null,\n      \"before_sha256\": null,\n      \"content\": \"# 청록나침반 검증 결정\\n\\n청록나침반 검증 결정: 별빛도서관 독서 모임의 운영 기록을 research 범주로 보관합니다.\\n\\n이 결정은 합성 자료에만 근거하며, 개인 데이터나 실제 일정은 포함하지 않습니다.\\n\\n## Decision in English\\n\\nKeep this synthetic decision linked to its original library record for traceable review.\\n\\n## Sources\\n\\n- [[Sources/174f06b011a4242d-별빛도서관-검증-기록]]\\n\",\n      \"after_sha256\": \"3dbd67afd55fd5e087e5e1c47ff2bc9faee9ed14bab4922dbe14c49c190d5271\",\n      \"diff\": \"--- /dev/null\\n+++ Notes/검증 결정.md\\n@@ -0,0 +1,13 @@\\n+# 청록나침반 검증 결정\\n+\\n+청록나침반 검증 결정: 별빛도서관 독서 모임의 운영 기록을 research 범주로 보관합니다.\\n+\\n+이 결정은 합성 자료에만 근거하며, 개인 데이터나 실제 일정은 포함하지 않습니다.\\n+\\n+## Decision in English\\n+\\n+Keep this synthetic decision linked to its original library record for traceable review.\\n+\\n+## Sources\\n+\\n+- [[Sources/174f06b011a4242d-별빛도서관-검증-기록]]\\n\"\n    },\n    {\n      \"path\": \"Index.md\",\n      \"before\": \"# Brain OpenKit\\n\\n## Notes\\n\\n- [[기존 보존 노트]]\\n\\n## Notes\\n\\n- [[Notes/별빛도서관-검증-기록]]\\n\",\n      \"before_sha256\": \"ba1243534aea3e288f6f4a23dabbaefb2fc9d0e3c842c77b9dccff49699556a6\",\n      \"content\": \"# Brain OpenKit\\n\\n## Notes\\n\\n- [[기존 보존 노트]]\\n\\n## Notes\\n\\n- [[Notes/별빛도서관-검증-기록]]\\n\\n## Notes\\n\\n- [[Notes/검증 결정]]\\n\",\n      \"after_sha256\": \"3182a475d31068fc646aac4b6075f8e02106b14e0ac5532b06759091c1b08170\",\n      \"diff\": \"--- Index.md\\n+++ Index.md\\n@@ -7,3 +7,7 @@\\n ## Notes\\n \\n - [[Notes/별빛도서관-검증-기록]]\\n+\\n+## Notes\\n+\\n+- [[Notes/검증 결정]]\\n\"\n    }\n  ],\n  \"id\": \"9578a15be4d27c10779dcf40c5751ccab661fd19e06dd2a010c4801ced8a362b\"\n}\n",
+      "stderr": "",
+      "timestamp": "2026-10-05T09:41:14.356285+00:00"
+    },
+    {
+      "label": "06-save-apply",
+      "command": [
+        "python3.13",
+        "$REPO/scripts/brain-openkit.py",
+        "apply",
+        "$FIXTURE/plans/05-save.json",
+        "--approve",
+        "9578a15be4d27c10779dcf40c5751ccab661fd19e06dd2a010c4801ced8a362b",
+        "--vault",
+        "$FIXTURE/Brain OpenKit Verification",
+        "--cache-dir",
+        "$FIXTURE/cache",
+        "--json"
+      ],
+      "returncode": 0,
+      "stdout": "{\n  \"transaction_id\": \"eead8df8ade64b21be6877463171383c\",\n  \"status\": \"applied\",\n  \"paths\": [\n    \"Notes/검증 결정.md\",\n    \"Index.md\"\n  ]\n}\n",
+      "stderr": "",
+      "timestamp": "2026-10-05T09:41:19.264898+00:00"
+    },
+    {
+      "label": "07-organize-plan",
+      "command": [
+        "python3.13",
+        "$REPO/scripts/brain-openkit.py",
+        "organize",
+        "Notes/검증 결정.md",
+        "--category",
+        "research",
+        "--tag",
+        "brain-openkit",
+        "--tag",
+        "app-verification",
+        "--link",
+        "Notes/별빛도서관-검증-기록.md",
+        "--plan",
+        "$FIXTURE/plans/07-organize.json",
+        "--vault",
+        "$FIXTURE/Brain OpenKit Verification",
+        "--cache-dir",
+        "$FIXTURE/cache",
+        "--json"
+      ],
+      "returncode": 0,
+      "stdout": "{\n  \"version\": 1,\n  \"vault\": \"$FIXTURE/Brain OpenKit Verification\",\n  \"label\": \"Organize note\",\n  \"changes\": [\n    {\n      \"path\": \"Notes/검증 결정.md\",\n      \"before\": \"# 청록나침반 검증 결정\\n\\n청록나침반 검증 결정: 별빛도서관 독서 모임의 운영 기록을 research 범주로 보관합니다.\\n\\n이 결정은 합성 자료에만 근거하며, 개인 데이터나 실제 일정은 포함하지 않습니다.\\n\\n## Decision in English\\n\\nKeep this synthetic decision linked to its original library record for traceable review.\\n\\n## Sources\\n\\n- [[Sources/174f06b011a4242d-별빛도서관-검증-기록]]\\n\",\n      \"before_sha256\": \"3dbd67afd55fd5e087e5e1c47ff2bc9faee9ed14bab4922dbe14c49c190d5271\",\n      \"content\": \"---\\ncategory: \\\"research\\\"\\ntags: [\\\"brain-openkit\\\", \\\"app-verification\\\"]\\n---\\n# 청록나침반 검증 결정\\n\\n청록나침반 검증 결정: 별빛도서관 독서 모임의 운영 기록을 research 범주로 보관합니다.\\n\\n이 결정은 합성 자료에만 근거하며, 개인 데이터나 실제 일정은 포함하지 않습니다.\\n\\n## Decision in English\\n\\nKeep this synthetic decision linked to its original library record for traceable review.\\n\\n## Sources\\n\\n- [[Sources/174f06b011a4242d-별빛도서관-검증-기록]]\\n\\n## Related\\n\\n- [[Notes/별빛도서관-검증-기록]]\\n\",\n      \"after_sha256\": \"2bcad658d28d27a9b1c14e7aabdd2cb0138033076b57e3ec94768b4c7ea67eca\",\n      \"diff\": \"--- Notes/검증 결정.md\\n+++ Notes/검증 결정.md\\n@@ -1,3 +1,7 @@\\n+---\\n+category: \\\"research\\\"\\n+tags: [\\\"brain-openkit\\\", \\\"app-verification\\\"]\\n+---\\n # 청록나침반 검증 결정\\n \\n 청록나침반 검증 결정: 별빛도서관 독서 모임의 운영 기록을 research 범주로 보관합니다.\\n@@ -11,3 +15,7 @@\\n ## Sources\\n \\n - [[Sources/174f06b011a4242d-별빛도서관-검증-기록]]\\n+\\n+## Related\\n+\\n+- [[Notes/별빛도서관-검증-기록]]\\n\"\n    }\n  ],\n  \"id\": \"2d75aaccbeefcc34541926a7f180ff5c80d56f335e5e7c13cd21bce684a6beb1\"\n}\n",
+      "stderr": "",
+      "timestamp": "2026-10-05T09:41:23.203008+00:00"
+    },
+    {
+      "label": "08-organize-apply",
+      "command": [
+        "python3.13",
+        "$REPO/scripts/brain-openkit.py",
+        "apply",
+        "$FIXTURE/plans/07-organize.json",
+        "--approve",
+        "2d75aaccbeefcc34541926a7f180ff5c80d56f335e5e7c13cd21bce684a6beb1",
+        "--vault",
+        "$FIXTURE/Brain OpenKit Verification",
+        "--cache-dir",
+        "$FIXTURE/cache",
+        "--json"
+      ],
+      "returncode": 0,
+      "stdout": "{\n  \"transaction_id\": \"645c43d4343d42f090d3e915d50c7082\",\n  \"status\": \"applied\",\n  \"paths\": [\n    \"Notes/검증 결정.md\"\n  ]\n}\n",
+      "stderr": "",
+      "timestamp": "2026-10-05T09:41:30.299264+00:00"
+    },
+    {
+      "label": "09-search",
+      "command": [
+        "python3.13",
+        "$REPO/scripts/brain-openkit.py",
+        "search",
+        "청록나침반 검증 결정",
+        "--provider",
+        "none",
+        "--limit",
+        "3",
+        "--vault",
+        "$FIXTURE/Brain OpenKit Verification",
+        "--cache-dir",
+        "$FIXTURE/cache",
+        "--json"
+      ],
+      "returncode": 0,
+      "stdout": "{\n  \"query\": \"청록나침반 검증 결정\",\n  \"provider\": \"none\",\n  \"model\": null,\n  \"rerank_status\": \"disabled\",\n  \"fallback_reason\": null,\n  \"candidate_count\": 14,\n  \"results\": [\n    {\n      \"path\": \"Notes/검증 결정.md\",\n      \"title\": \"청록나침반 검증 결정\",\n      \"start_line\": 1,\n      \"end_line\": 4,\n      \"text\": \"---\\ncategory: \\\"research\\\"\\ntags: [\\\"brain-openkit\\\", \\\"app-verification\\\"]\\n---\\n\",\n      \"bm25_score\": 7.251672387286098,\n      \"model_score\": null,\n      \"decision\": null\n    },\n    {\n      \"path\": \"Sources/174f06b011a4242d-별빛도서관-검증-기록.md\",\n      \"title\": \"별빛도서관 검증 기록\",\n      \"start_line\": 1,\n      \"end_line\": 5,\n      \"text\": \"# 별빛도서관 검증 기록\\n\\n이 자료는 Brain OpenKit의 Obsidian 앱 연동을 확인하는 합성 기록입니다.\\n별빛도서관은 화요일과 목요일에 청록나침반 독서 모임을 엽니다.\\n\\n\",\n      \"bm25_score\": 2.8824889624561356,\n      \"model_score\": null,\n      \"decision\": null\n    },\n    {\n      \"path\": \"Notes/별빛도서관-검증-기록.md\",\n      \"title\": \"별빛도서관 검증 기록\",\n      \"start_line\": 10,\n      \"end_line\": 24,\n      \"text\": \"## Source extract\\n\\n```markdown\\n# 별빛도서관 검증 기록\\n\\n이 자료는 Brain OpenKit의 Obsidian 앱 연동을 확인하는 합성 기록입니다.\\n별빛도서관은 화요일과 목요일에 청록나침반 독서 모임을 엽니다.\\n\\n## English verification\\n\\nThis synthetic library record verifies source preservation, links, and local search.\\nThe reading group meets on Tuesdays and Thursdays.\\n```\\n\\n\\n\",\n      \"bm25_score\": 2.4037020897959325,\n      \"model_score\": null,\n      \"decision\": null\n    }\n  ],\n  \"index\": {\n    \"indexed\": 5,\n    \"unchanged\": 0,\n    \"deleted\": 0,\n    \"errors\": []\n  },\n  \"elapsed_ms\": 5.751\n}\n",
+      "stderr": "",
+      "timestamp": "2026-10-05T09:41:47.130537+00:00"
+    },
+    {
+      "label": "10-lint",
+      "command": [
+        "python3.13",
+        "$REPO/scripts/brain-openkit.py",
+        "lint",
+        "--vault",
+        "$FIXTURE/Brain OpenKit Verification",
+        "--cache-dir",
+        "$FIXTURE/cache",
+        "--json"
+      ],
+      "returncode": 0,
+      "stdout": "{\n  \"notes\": 5,\n  \"broken_links\": [],\n  \"ambiguous_links\": [],\n  \"orphans\": [],\n  \"metadata_errors\": []\n}\n",
+      "stderr": "",
+      "timestamp": "2026-10-05T09:41:47.299603+00:00"
+    },
+    {
+      "label": "11-fold-plan",
+      "command": [
+        "python3.13",
+        "$REPO/scripts/brain-openkit.py",
+        "fold",
+        "Notes/검증 결정.md",
+        "Notes/별빛도서관-검증-기록.md",
+        "--path",
+        "Notes/되돌림 검증.md",
+        "--title",
+        "되돌림 검증",
+        "--plan",
+        "$FIXTURE/plans/11-fold.json",
+        "--vault",
+        "$FIXTURE/Brain OpenKit Verification",
+        "--cache-dir",
+        "$FIXTURE/cache",
+        "--json"
+      ],
+      "returncode": 0,
+      "stdout": "{\n  \"version\": 1,\n  \"vault\": \"$FIXTURE/Brain OpenKit Verification\",\n  \"label\": \"Save note\",\n  \"changes\": [\n    {\n      \"path\": \"Notes/되돌림 검증.md\",\n      \"before\": null,\n      \"before_sha256\": null,\n      \"content\": \"# 되돌림 검증\\n\\n## [[Notes/검증 결정]] — lines 1–4\\n\\n```markdown\\n---\\ncategory: \\\"research\\\"\\ntags: [\\\"brain-openkit\\\", \\\"app-verification\\\"]\\n---\\n```\\n\\n## [[Notes/검증 결정]] — lines 5–10\\n\\n```markdown\\n# 청록나침반 검증 결정\\n\\n청록나침반 검증 결정: 별빛도서관 독서 모임의 운영 기록을 research 범주로 보관합니다.\\n\\n이 결정은 합성 자료에만 근거하며, 개인 데이터나 실제 일정은 포함하지 않습니다.\\n\\n```\\n\\n## [[Notes/검증 결정]] — lines 11–14\\n\\n```markdown\\n## Decision in English\\n\\nKeep this synthetic decision linked to its original library record for traceable review.\\n\\n```\\n\\n## [[Notes/검증 결정]] — lines 15–18\\n\\n```markdown\\n## Sources\\n\\n- [[Sources/174f06b011a4242d-별빛도서관-검증-기록]]\\n\\n```\\n\\n## [[Notes/검증 결정]] — lines 19–21\\n\\n```markdown\\n## Related\\n\\n- [[Notes/별빛도서관-검증-기록]]\\n```\\n\\n## [[Notes/별빛도서관-검증-기록]] — lines 1–7\\n\\n```markdown\\n---\\ntitle: \\\"별빛도서관 검증 기록\\\"\\nsource_path: \\\"$FIXTURE/inputs/synthetic-source.md\\\"\\nsource_sha256: \\\"174f06b011a4242dac7c8ba117a013c06875e060e03842a9292584eb9dc04462\\\"\\nsource_capture: \\\"Sources/174f06b011a4242d-별빛도서관-검증-기록.md\\\"\\n---\\n\\n```\\n\\n## [[Notes/별빛도서관-검증-기록]] — lines 8–9\\n\\n```markdown\\n# 별빛도서관 검증 기록\\n\\n```\\n\\n## [[Notes/별빛도서관-검증-기록]] — lines 10–24\\n\\n````markdown\\n## Source extract\\n\\n```markdown\\n# 별빛도서관 검증 기록\\n\\n이 자료는 Brain OpenKit의 Obsidian 앱 연동을 확인하는 합성 기록입니다.\\n별빛도서관은 화요일과 목요일에 청록나침반 독서 모임을 엽니다.\\n\\n## English verification\\n\\nThis synthetic library record verifies source preservation, links, and local search.\\nThe reading group meets on Tuesdays and Thursdays.\\n```\\n\\n\\n````\\n\\n## [[Notes/별빛도서관-검증-기록]] — lines 25–27\\n\\n```markdown\\n## Sources\\n\\n- [[Sources/174f06b011a4242d-별빛도서관-검증-기록]]\\n```\\n\",\n      \"after_sha256\": \"2c034c5eca9e1ed9f57e52c5de2503103e77a17b7b268d32252b9cf389dffd5b\",\n      \"diff\": \"--- /dev/null\\n+++ Notes/되돌림 검증.md\\n@@ -0,0 +1,94 @@\\n+# 되돌림 검증\\n+\\n+## [[Notes/검증 결정]] — lines 1–4\\n+\\n+```markdown\\n+---\\n+category: \\\"research\\\"\\n+tags: [\\\"brain-openkit\\\", \\\"app-verification\\\"]\\n+---\\n+```\\n+\\n+## [[Notes/검증 결정]] — lines 5–10\\n+\\n+```markdown\\n+# 청록나침반 검증 결정\\n+\\n+청록나침반 검증 결정: 별빛도서관 독서 모임의 운영 기록을 research 범주로 보관합니다.\\n+\\n+이 결정은 합성 자료에만 근거하며, 개인 데이터나 실제 일정은 포함하지 않습니다.\\n+\\n+```\\n+\\n+## [[Notes/검증 결정]] — lines 11–14\\n+\\n+```markdown\\n+## Decision in English\\n+\\n+Keep this synthetic decision linked to its original library record for traceable review.\\n+\\n+```\\n+\\n+## [[Notes/검증 결정]] — lines 15–18\\n+\\n+```markdown\\n+## Sources\\n+\\n+- [[Sources/174f06b011a4242d-별빛도서관-검증-기록]]\\n+\\n+```\\n+\\n+## [[Notes/검증 결정]] — lines 19–21\\n+\\n+```markdown\\n+## Related\\n+\\n+- [[Notes/별빛도서관-검증-기록]]\\n+```\\n+\\n+## [[Notes/별빛도서관-검증-기록]] — lines 1–7\\n+\\n+```markdown\\n+---\\n+title: \\\"별빛도서관 검증 기록\\\"\\n+source_path: \\\"$FIXTURE/inputs/synthetic-source.md\\\"\\n+source_sha256: \\\"174f06b011a4242dac7c8ba117a013c06875e060e03842a9292584eb9dc04462\\\"\\n+source_capture: \\\"Sources/174f06b011a4242d-별빛도서관-검증-기록.md\\\"\\n+---\\n+\\n+```\\n+\\n+## [[Notes/별빛도서관-검증-기록]] — lines 8–9\\n+\\n+```markdown\\n+# 별빛도서관 검증 기록\\n+\\n+```\\n+\\n+## [[Notes/별빛도서관-검증-기록]] — lines 10–24\\n+\\n+````markdown\\n+## Source extract\\n+\\n+```markdown\\n+# 별빛도서관 검증 기록\\n+\\n+이 자료는 Brain OpenKit의 Obsidian 앱 연동을 확인하는 합성 기록입니다.\\n+별빛도서관은 화요일과 목요일에 청록나침반 독서 모임을 엽니다.\\n+\\n+## English verification\\n+\\n+This synthetic library record verifies source preservation, links, and local search.\\n+The reading group meets on Tuesdays and Thursdays.\\n+```\\n+\\n+\\n+````\\n+\\n+## [[Notes/별빛도서관-검증-기록]] — lines 25–27\\n+\\n+```markdown\\n+## Sources\\n+\\n+- [[Sources/174f06b011a4242d-별빛도서관-검증-기록]]\\n+```\\n\"\n    },\n    {\n      \"path\": \"Index.md\",\n      \"before\": \"# Brain OpenKit\\n\\n## Notes\\n\\n- [[기존 보존 노트]]\\n\\n## Notes\\n\\n- [[Notes/별빛도서관-검증-기록]]\\n\\n## Notes\\n\\n- [[Notes/검증 결정]]\\n\",\n      \"before_sha256\": \"3182a475d31068fc646aac4b6075f8e02106b14e0ac5532b06759091c1b08170\",\n      \"content\": \"# Brain OpenKit\\n\\n## Notes\\n\\n- [[기존 보존 노트]]\\n\\n## Notes\\n\\n- [[Notes/별빛도서관-검증-기록]]\\n\\n## Notes\\n\\n- [[Notes/검증 결정]]\\n\\n## Notes\\n\\n- [[Notes/되돌림 검증]]\\n\",\n      \"after_sha256\": \"4cdcc9368ca8af5d3c467939626fa588f3a857ea74c334d8d4ef9a4537e1afef\",\n      \"diff\": \"--- Index.md\\n+++ Index.md\\n@@ -11,3 +11,7 @@\\n ## Notes\\n \\n - [[Notes/검증 결정]]\\n+\\n+## Notes\\n+\\n+- [[Notes/되돌림 검증]]\\n\"\n    }\n  ],\n  \"id\": \"e1cab2bfbf1340404dff0f9c6d7fd06c17297178cfe3c742f03e8166cd0c5b1e\"\n}\n",
+      "stderr": "",
+      "timestamp": "2026-10-05T09:41:47.468844+00:00"
+    },
+    {
+      "label": "12-version",
+      "command": [
+        "python3.13",
+        "$REPO/scripts/brain-openkit.py",
+        "--version"
+      ],
+      "returncode": 0,
+      "stdout": "0.2.0a3\n",
+      "stderr": "",
+      "timestamp": "2026-10-05T09:42:11.162326+00:00"
+    }
+  ],
+  "transactions": {
+    "init": {
+      "transaction_id": "490c2122d34f494cb1e33a1d6ebc3fef",
+      "status": "applied",
+      "paths": [
+        "Index.md"
+      ]
+    },
+    "ingest": {
+      "transaction_id": "793d42bc2ea341bdb81f07f5c284f6f7",
+      "status": "applied",
+      "paths": [
+        "Sources/174f06b011a4242d-별빛도서관-검증-기록.md",
+        "Notes/별빛도서관-검증-기록.md",
+        "Index.md"
+      ]
+    },
+    "save": {
+      "transaction_id": "eead8df8ade64b21be6877463171383c",
+      "status": "applied",
+      "paths": [
+        "Notes/검증 결정.md",
+        "Index.md"
+      ]
+    },
+    "organize": {
+      "transaction_id": "645c43d4343d42f090d3e915d50c7082",
+      "status": "applied",
+      "paths": [
+        "Notes/검증 결정.md"
+      ]
+    }
+  },
+  "files": {
+    "Index.md": {
+      "bytes": 144,
+      "sha256": "3182a475d31068fc646aac4b6075f8e02106b14e0ac5532b06759091c1b08170"
+    },
+    "Notes/검증 결정.md": {
+      "bytes": 579,
+      "sha256": "2bcad658d28d27a9b1c14e7aabdd2cb0138033076b57e3ec94768b4c7ea67eca"
+    },
+    "Notes/별빛도서관-검증-기록.md": {
+      "bytes": 815,
+      "sha256": "343e9b43b63ff5d577cf9e47272d15634c95c3bff8ed5bcc67a4b8c216553d9e"
+    },
+    "Sources/174f06b011a4242d-별빛도서관-검증-기록.md": {
+      "bytes": 375,
+      "sha256": "174f06b011a4242dac7c8ba117a013c06875e060e03842a9292584eb9dc04462"
+    },
+    "기존 보존 노트.md": {
+      "bytes": 133,
+      "sha256": "9ec55b520c7d169fe8c9637f4c7b4f61bf481d3d587f8a45f3ea4647f95e36ee"
+    }
+  },
+  "checks": {
+    "all_commands_succeeded": true,
+    "source_input_unchanged": true,
+    "source_capture_exact": true,
+    "seed_unchanged": true,
+    "seed_crlf_preserved": true,
+    "selected_decision_top_search": true,
+    "lint_clean": true,
+    "category_added": true,
+    "tags_added": true,
+    "source_and_related_links_present": true,
+    "fold_not_applied": true
+  },
+  "search": {
+    "query": "청록나침반 검증 결정",
+    "provider": "none",
+    "model": null,
+    "rerank_status": "disabled",
+    "fallback_reason": null,
+    "candidate_count": 14,
+    "results": [
+      {
+        "path": "Notes/검증 결정.md",
+        "title": "청록나침반 검증 결정",
+        "start_line": 1,
+        "end_line": 4,
+        "text": "---\ncategory: \"research\"\ntags: [\"brain-openkit\", \"app-verification\"]\n---\n",
+        "bm25_score": 7.251672387286098,
+        "model_score": null,
+        "decision": null
+      },
+      {
+        "path": "Sources/174f06b011a4242d-별빛도서관-검증-기록.md",
+        "title": "별빛도서관 검증 기록",
+        "start_line": 1,
+        "end_line": 5,
+        "text": "# 별빛도서관 검증 기록\n\n이 자료는 Brain OpenKit의 Obsidian 앱 연동을 확인하는 합성 기록입니다.\n별빛도서관은 화요일과 목요일에 청록나침반 독서 모임을 엽니다.\n\n",
+        "bm25_score": 2.8824889624561356,
+        "model_score": null,
+        "decision": null
+      },
+      {
+        "path": "Notes/별빛도서관-검증-기록.md",
+        "title": "별빛도서관 검증 기록",
+        "start_line": 10,
+        "end_line": 24,
+        "text": "## Source extract\n\n```markdown\n# 별빛도서관 검증 기록\n\n이 자료는 Brain OpenKit의 Obsidian 앱 연동을 확인하는 합성 기록입니다.\n별빛도서관은 화요일과 목요일에 청록나침반 독서 모임을 엽니다.\n\n## English verification\n\nThis synthetic library record verifies source preservation, links, and local search.\nThe reading group meets on Tuesdays and Thursdays.\n```\n\n\n",
+        "bm25_score": 2.4037020897959325,
+        "model_score": null,
+        "decision": null
+      }
+    ],
+    "index": {
+      "indexed": 5,
+      "unchanged": 0,
+      "deleted": 0,
+      "errors": []
+    },
+    "elapsed_ms": 5.751
+  },
+  "lint": {
+    "notes": 5,
+    "broken_links": [],
+    "ambiguous_links": [],
+    "orphans": [],
+    "metadata_errors": []
+  },
+  "fold_pending": {
+    "plan_path": "$FIXTURE/plans/11-fold.json",
+    "id": "e1cab2bfbf1340404dff0f9c6d7fd06c17297178cfe3c742f03e8166cd0c5b1e",
+    "destination": "Notes/되돌림 검증.md",
+    "changes": [
+      "Notes/되돌림 검증.md",
+      "Index.md"
+    ],
+    "applied": false,
+    "reviewed": true
+  },
+  "gui_actions_by_this_agent": false,
+  "undo_performed": false
+}

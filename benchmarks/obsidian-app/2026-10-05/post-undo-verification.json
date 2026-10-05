@@ -1,0 +1,72 @@
+{
+  "checked_at": "2026-10-05T09:52:32.980964+00:00",
+  "verification": "Read-only filesystem verification after fold undo",
+  "vault": "$FIXTURE/Brain OpenKit Verification",
+  "baseline_path": "$FIXTURE/cli-preparation-report.json",
+  "baseline_sha256": "4fcdb699f25a9e4903a7c74fe26a325d2aaf1d2a7b8d0cf97d47461205b0f9c8",
+  "fold_transaction_id": "0028e59180864735aa88c6a6ee8e5794",
+  "checks": {
+    "five_baseline_files_present_in_report": true,
+    "all_five_pre_fold_hashes_restored": true,
+    "source_input_hash_unchanged": true,
+    "source_capture_hash_unchanged": true,
+    "source_input_and_capture_byte_identical": true,
+    "seed_hash_unchanged": true,
+    "seed_crlf_preserved": true,
+    "fold_removed": true,
+    "index_restored": true
+  },
+  "passed": true,
+  "files": {
+    "Index.md": {
+      "expected_sha256": "3182a475d31068fc646aac4b6075f8e02106b14e0ac5532b06759091c1b08170",
+      "actual_sha256": "3182a475d31068fc646aac4b6075f8e02106b14e0ac5532b06759091c1b08170",
+      "expected_bytes": 144,
+      "actual_bytes": 144,
+      "unchanged": true,
+      "error": null
+    },
+    "Notes/검증 결정.md": {
+      "expected_sha256": "2bcad658d28d27a9b1c14e7aabdd2cb0138033076b57e3ec94768b4c7ea67eca",
+      "actual_sha256": "2bcad658d28d27a9b1c14e7aabdd2cb0138033076b57e3ec94768b4c7ea67eca",
+      "expected_bytes": 579,
+      "actual_bytes": 579,
+      "unchanged": true,
+      "error": null
+    },
+    "Notes/별빛도서관-검증-기록.md": {
+      "expected_sha256": "343e9b43b63ff5d577cf9e47272d15634c95c3bff8ed5bcc67a4b8c216553d9e",
+      "actual_sha256": "343e9b43b63ff5d577cf9e47272d15634c95c3bff8ed5bcc67a4b8c216553d9e",
+      "expected_bytes": 815,
+      "actual_bytes": 815,
+      "unchanged": true,
+      "error": null
+    },
+    "Sources/174f06b011a4242d-별빛도서관-검증-기록.md": {
+      "expected_sha256": "174f06b011a4242dac7c8ba117a013c06875e060e03842a9292584eb9dc04462",
+      "actual_sha256": "174f06b011a4242dac7c8ba117a013c06875e060e03842a9292584eb9dc04462",
+      "expected_bytes": 375,
+      "actual_bytes": 375,
+      "unchanged": true,
+      "error": null
+    },
+    "기존 보존 노트.md": {
+      "expected_sha256": "9ec55b520c7d169fe8c9637f4c7b4f61bf481d3d587f8a45f3ea4647f95e36ee",
+      "actual_sha256": "9ec55b520c7d169fe8c9637f4c7b4f61bf481d3d587f8a45f3ea4647f95e36ee",
+      "expected_bytes": 133,
+      "actual_bytes": 133,
+      "unchanged": true,
+      "error": null
+    }
+  },
+  "source_input_path": "$FIXTURE/inputs/synthetic-source.md",
+  "source_capture_path": "$FIXTURE/Brain OpenKit Verification/Sources/174f06b011a4242d-별빛도서관-검증-기록.md",
+  "source_errors": {
+    "input": null,
+    "capture": null,
+    "seed": null
+  },
+  "fold_path": "$FIXTURE/Brain OpenKit Verification/Notes/되돌림 검증.md",
+  "vault_writes_performed": false,
+  "undo_performed_by_script": false
+}

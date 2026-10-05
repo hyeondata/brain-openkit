@@ -3,6 +3,11 @@
 For the subsequent 0.2.0a2 Laya/Kev integration and actual model checks, see
 [the 2026-10-05 verification](model-verification-2026-10-05.md).
 For the 0.2.0a3 Kev 0.8B default, see [its verification](kev-08-verification-2026-10-05.md).
+For the subsequent 0.2.0a3 native Obsidian app run at `1291439`, see
+[the app verification](obsidian-app-verification-2026-10-05.md): actual rendering,
+native search, tags, link/backlink navigation, graph updates, and fold undo were
+checked in Obsidian 1.13.4 on macOS. All five pre-fold file hashes were restored;
+this app run did not repeat model inference or paid host execution.
 The dated 0.2.0a1 evidence below is retained as a historical snapshot.
 
 Snapshot: 2026-10-04. Version: `0.2.0a1`, source installation from the
