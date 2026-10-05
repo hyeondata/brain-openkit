@@ -1,0 +1,602 @@
+{
+  "checked_at": "2026-10-05T12:00:28.183161+00:00",
+  "scope": "Synthetic functional smoke, not a quality or cost comparison",
+  "prompt_language": "ko",
+  "providers": {
+    "ko-decision": {
+      "health": {
+        "version": "0.2.0a4",
+        "provider": "ko-decision",
+        "health": {
+          "status": "ok",
+          "models": [
+            {
+              "name": "mmetamong/ko-decision-roberta-large",
+              "description": "Korean typed decisions; uncalibrated option probabilities",
+              "release_date": "2026-10-05",
+              "revision": "dfd606fff30d52963c0073659ff9a8f6bf1fce6d",
+              "max_length": 512,
+              "truncate_states": false,
+              "license": "cc-by-sa-4.0"
+            }
+          ]
+        },
+        "inference_verified": false
+      },
+      "probe": {
+        "version": "0.2.0a4",
+        "provider": "ko-decision",
+        "health": {
+          "status": "ok",
+          "models": [
+            {
+              "name": "mmetamong/ko-decision-roberta-large",
+              "description": "Korean typed decisions; uncalibrated option probabilities",
+              "release_date": "2026-10-05",
+              "revision": "dfd606fff30d52963c0073659ff9a8f6bf1fce6d",
+              "max_length": 512,
+              "truncate_states": false,
+              "license": "cc-by-sa-4.0"
+            }
+          ]
+        },
+        "inference_verified": true,
+        "probe": {
+          "choice": "A",
+          "probabilities": {
+            "A": 0.9999904790506694,
+            "B": 9.520949330561096e-06
+          },
+          "confidence": 0.9999809581013388,
+          "model": "mmetamong/ko-decision-roberta-large",
+          "usage": {
+            "input_tokens": 56,
+            "output_tokens": 0,
+            "state_tokens": 15,
+            "state_tokens_dropped": 0,
+            "truncated": false,
+            "truncated_questions": [],
+            "max_pair_tokens": 28,
+            "model_revision": "dfd606fff30d52963c0073659ff9a8f6bf1fce6d"
+          },
+          "elapsed_ms": 173.86612499831244,
+          "answer_confidence": null
+        },
+        "prompt_language": "ko"
+      },
+      "probe_matches_expected_A": true,
+      "search": {
+        "query": "검색",
+        "provider": "ko-decision",
+        "model": "mmetamong/ko-decision-roberta-large",
+        "prompt_language": "ko",
+        "rerank_status": "complete",
+        "fallback_reason": null,
+        "candidate_count": 2,
+        "results": [
+          {
+            "path": "local-search.md",
+            "title": "로컬 검색 실험",
+            "start_line": 1,
+            "end_line": 7,
+            "text": "# 로컬 검색 실험\r\n\r\n한국어 Markdown 노트를 문단으로 나누고 BM25로 검색 후보를 찾는다.\r\n검색 결과에는 원문 경로와 줄 번호를 함께 표시한다.\r\n\r\nLaya 재정렬은 질문과 후보 문단의 관련성을 평가한다.\r\nBM25 단독 검색과 비교해 검색 품질이 개선되는지 확인한다.\r\n",
+            "bm25_score": 1.3046267792680704,
+            "model_score": 0.5316607858994336,
+            "decision": {
+              "choice": "A",
+              "probabilities": {
+                "A": 0.5316607858994336,
+                "B": 0.46833921410056645
+              },
+              "confidence": 0.0633215717988671,
+              "model": "mmetamong/ko-decision-roberta-large",
+              "usage": {
+                "input_tokens": 250,
+                "output_tokens": 0,
+                "state_tokens": 95,
+                "state_tokens_dropped": 0,
+                "truncated": false,
+                "truncated_questions": [],
+                "max_pair_tokens": 126,
+                "model_revision": "dfd606fff30d52963c0073659ff9a8f6bf1fce6d"
+              },
+              "elapsed_ms": 178.26866700488608,
+              "answer_confidence": null
+            }
+          },
+          {
+            "path": "garden.md",
+            "title": "베란다 바질 관리",
+            "start_line": 1,
+            "end_line": 6,
+            "text": "# 베란다 바질 관리\n\n바질 화분은 햇빛이 드는 베란다에 놓는다.\n흙 표면이 마르면 물을 주고 잎의 상태를 관찰한다.\n\n이번 주에는 새 잎이 두 장 자랐다. 이 기록은 문서 검색 예제를 위한 가상 관찰이다.\n",
+            "bm25_score": 0.6626247040354766,
+            "model_score": 0.5149657192014426,
+            "decision": {
+              "choice": "A",
+              "probabilities": {
+                "A": 0.5149657192014426,
+                "B": 0.48503428079855737
+              },
+              "confidence": 0.029931438402885258,
+              "model": "mmetamong/ko-decision-roberta-large",
+              "usage": {
+                "input_tokens": 212,
+                "output_tokens": 0,
+                "state_tokens": 76,
+                "state_tokens_dropped": 0,
+                "truncated": false,
+                "truncated_questions": [],
+                "max_pair_tokens": 107,
+                "model_revision": "dfd606fff30d52963c0073659ff9a8f6bf1fce6d"
+              },
+              "elapsed_ms": 133.25150000309804,
+              "answer_confidence": null
+            }
+          }
+        ],
+        "index": {
+          "indexed": 0,
+          "unchanged": 4,
+          "deleted": 0,
+          "errors": []
+        },
+        "elapsed_ms": 313.916
+      },
+      "classify": {
+        "local-search.md": {
+          "path": "local-search.md",
+          "provider": "ko-decision",
+          "prompt_language": "ko",
+          "model": "mmetamong/ko-decision-roberta-large",
+          "status": "complete",
+          "review_required": false,
+          "category": "research",
+          "category_candidates": [
+            "research"
+          ],
+          "tags": [
+            "evaluation",
+            "local",
+            "plants"
+          ],
+          "passages": [
+            {
+              "path": "local-search.md",
+              "title": "로컬 검색 실험",
+              "start_line": 1,
+              "end_line": 7,
+              "text": "# 로컬 검색 실험\r\n\r\n한국어 Markdown 노트를 문단으로 나누고 BM25로 검색 후보를 찾는다.\r\n검색 결과에는 원문 경로와 줄 번호를 함께 표시한다.\r\n\r\nLaya 재정렬은 질문과 후보 문단의 관련성을 평가한다.\r\nBM25 단독 검색과 비교해 검색 품질이 개선되는지 확인한다.\r\n",
+              "category": "research",
+              "category_decision": {
+                "choice": "A",
+                "probabilities": {
+                  "A": 0.6510243438592449,
+                  "B": 0.0016276909422332374,
+                  "C": 0.34734796519852185
+                },
+                "confidence": 0.47653651578886735,
+                "model": "mmetamong/ko-decision-roberta-large",
+                "usage": {
+                  "input_tokens": 389,
+                  "output_tokens": 0,
+                  "state_tokens": 91,
+                  "state_tokens_dropped": 0,
+                  "truncated": false,
+                  "truncated_questions": [],
+                  "max_pair_tokens": 137,
+                  "model_revision": "dfd606fff30d52963c0073659ff9a8f6bf1fce6d"
+                },
+                "elapsed_ms": 212.25054199749138,
+                "answer_confidence": null
+              },
+              "tags": {
+                "local": {
+                  "suggested": true,
+                  "choice": "A",
+                  "probabilities": {
+                    "A": 0.7078463362023723,
+                    "B": 0.2921536637976277
+                  },
+                  "confidence": 0.4156926724047445,
+                  "model": "mmetamong/ko-decision-roberta-large",
+                  "usage": {
+                    "input_tokens": 278,
+                    "output_tokens": 0,
+                    "state_tokens": 91,
+                    "state_tokens_dropped": 0,
+                    "truncated": false,
+                    "truncated_questions": [],
+                    "max_pair_tokens": 141,
+                    "model_revision": "dfd606fff30d52963c0073659ff9a8f6bf1fce6d"
+                  },
+                  "elapsed_ms": 148.92991699889535,
+                  "answer_confidence": null
+                },
+                "evaluation": {
+                  "suggested": true,
+                  "choice": "A",
+                  "probabilities": {
+                    "A": 0.7822194397464244,
+                    "B": 0.2177805602535756
+                  },
+                  "confidence": 0.5644388794928488,
+                  "model": "mmetamong/ko-decision-roberta-large",
+                  "usage": {
+                    "input_tokens": 274,
+                    "output_tokens": 0,
+                    "state_tokens": 91,
+                    "state_tokens_dropped": 0,
+                    "truncated": false,
+                    "truncated_questions": [],
+                    "max_pair_tokens": 139,
+                    "model_revision": "dfd606fff30d52963c0073659ff9a8f6bf1fce6d"
+                  },
+                  "elapsed_ms": 114.73691699939081,
+                  "answer_confidence": null
+                },
+                "plants": {
+                  "suggested": true,
+                  "choice": "A",
+                  "probabilities": {
+                    "A": 0.5872036858448715,
+                    "B": 0.41279631415512863
+                  },
+                  "confidence": 0.17440737168974296,
+                  "model": "mmetamong/ko-decision-roberta-large",
+                  "usage": {
+                    "input_tokens": 252,
+                    "output_tokens": 0,
+                    "state_tokens": 91,
+                    "state_tokens_dropped": 0,
+                    "truncated": false,
+                    "truncated_questions": [],
+                    "max_pair_tokens": 128,
+                    "model_revision": "dfd606fff30d52963c0073659ff9a8f6bf1fce6d"
+                  },
+                  "elapsed_ms": 180.2027910016477,
+                  "answer_confidence": null
+                }
+              }
+            }
+          ],
+          "note_modified": false
+        },
+        "reading.md": {
+          "path": "reading.md",
+          "provider": "ko-decision",
+          "prompt_language": "ko",
+          "model": "mmetamong/ko-decision-roberta-large",
+          "status": "complete",
+          "review_required": false,
+          "category": "reading",
+          "category_candidates": [
+            "reading"
+          ],
+          "tags": [
+            "evaluation",
+            "local",
+            "plants"
+          ],
+          "passages": [
+            {
+              "path": "reading.md",
+              "title": "Reading journal",
+              "start_line": 1,
+              "end_line": 6,
+              "text": "# Reading journal\n\nThe fictional book The Patient Observatory follows a group studying comets.\nMy reading notes compare their patient observations with hasty conclusions.\n\nThis invented journal entry provides a small English retrieval example.\n",
+              "category": "reading",
+              "category_decision": {
+                "choice": "C",
+                "probabilities": {
+                  "A": 0.06336049444894648,
+                  "B": 4.071917700135463e-05,
+                  "C": 0.9365987863740523
+                },
+                "confidence": 0.9048981795610782,
+                "model": "mmetamong/ko-decision-roberta-large",
+                "usage": {
+                  "input_tokens": 422,
+                  "output_tokens": 0,
+                  "state_tokens": 102,
+                  "state_tokens_dropped": 0,
+                  "truncated": false,
+                  "truncated_questions": [],
+                  "max_pair_tokens": 148,
+                  "model_revision": "dfd606fff30d52963c0073659ff9a8f6bf1fce6d"
+                },
+                "elapsed_ms": 131.44850000389852,
+                "answer_confidence": null
+              },
+              "tags": {
+                "local": {
+                  "suggested": true,
+                  "choice": "A",
+                  "probabilities": {
+                    "A": 0.6452042920228273,
+                    "B": 0.3547957079771727
+                  },
+                  "confidence": 0.2904085840456545,
+                  "model": "mmetamong/ko-decision-roberta-large",
+                  "usage": {
+                    "input_tokens": 300,
+                    "output_tokens": 0,
+                    "state_tokens": 102,
+                    "state_tokens_dropped": 0,
+                    "truncated": false,
+                    "truncated_questions": [],
+                    "max_pair_tokens": 152,
+                    "model_revision": "dfd606fff30d52963c0073659ff9a8f6bf1fce6d"
+                  },
+                  "elapsed_ms": 141.5477499976987,
+                  "answer_confidence": null
+                },
+                "evaluation": {
+                  "suggested": true,
+                  "choice": "A",
+                  "probabilities": {
+                    "A": 0.7749494444340979,
+                    "B": 0.2250505555659022
+                  },
+                  "confidence": 0.5498988888681957,
+                  "model": "mmetamong/ko-decision-roberta-large",
+                  "usage": {
+                    "input_tokens": 296,
+                    "output_tokens": 0,
+                    "state_tokens": 102,
+                    "state_tokens_dropped": 0,
+                    "truncated": false,
+                    "truncated_questions": [],
+                    "max_pair_tokens": 150,
+                    "model_revision": "dfd606fff30d52963c0073659ff9a8f6bf1fce6d"
+                  },
+                  "elapsed_ms": 188.42179200146347,
+                  "answer_confidence": null
+                },
+                "plants": {
+                  "suggested": true,
+                  "choice": "A",
+                  "probabilities": {
+                    "A": 0.5740695073645244,
+                    "B": 0.4259304926354756
+                  },
+                  "confidence": 0.1481390147290489,
+                  "model": "mmetamong/ko-decision-roberta-large",
+                  "usage": {
+                    "input_tokens": 274,
+                    "output_tokens": 0,
+                    "state_tokens": 102,
+                    "state_tokens_dropped": 0,
+                    "truncated": false,
+                    "truncated_questions": [],
+                    "max_pair_tokens": 139,
+                    "model_revision": "dfd606fff30d52963c0073659ff9a8f6bf1fce6d"
+                  },
+                  "elapsed_ms": 116.6938750029658,
+                  "answer_confidence": null
+                }
+              }
+            }
+          ],
+          "note_modified": false
+        }
+      },
+      "evaluate": {
+        "dataset": "<checkout>/examples/evaluation.jsonl",
+        "prompt_language": "ko",
+        "query_count": 4,
+        "limit": 3,
+        "candidates": 6,
+        "requested_provider": "KoDecisionProvider",
+        "baseline": {
+          "query_count": 4,
+          "recall_at_k": 1.0,
+          "mrr": 1.0,
+          "elapsed_ms": 5.299250005919021,
+          "model_query_count": 0,
+          "fallback_query_count": 0,
+          "rerank_status_counts": {
+            "disabled": 4
+          }
+        },
+        "requested": {
+          "query_count": 4,
+          "recall_at_k": 1.0,
+          "mrr": 1.0,
+          "elapsed_ms": 789.9474580044625,
+          "model_query_count": 4,
+          "fallback_query_count": 0,
+          "rerank_status_counts": {
+            "complete": 4
+          }
+        },
+        "queries": [
+          {
+            "query": "한국어 BM25 검색 후보와 원문 줄 번호",
+            "relevant": [
+              "local-search.md"
+            ],
+            "baseline": {
+              "paths": [
+                "local-search.md",
+                "garden.md"
+              ],
+              "recall_at_k": 1.0,
+              "reciprocal_rank": 1.0,
+              "elapsed_ms": 1.4909160017850809,
+              "rerank_status": "disabled",
+              "model_used": false,
+              "fallback_reason": null,
+              "provider": "none",
+              "model": null
+            },
+            "requested": {
+              "paths": [
+                "local-search.md",
+                "garden.md"
+              ],
+              "recall_at_k": 1.0,
+              "reciprocal_rank": 1.0,
+              "elapsed_ms": 309.7870830024476,
+              "rerank_status": "complete",
+              "model_used": true,
+              "fallback_reason": null,
+              "provider": "ko-decision",
+              "model": "mmetamong/ko-decision-roberta-large"
+            }
+          },
+          {
+            "query": "바질 화분에 물을 주는 시점",
+            "relevant": [
+              "garden.md"
+            ],
+            "baseline": {
+              "paths": [
+                "garden.md"
+              ],
+              "recall_at_k": 1.0,
+              "reciprocal_rank": 1.0,
+              "elapsed_ms": 1.3456250017043203,
+              "rerank_status": "disabled",
+              "model_used": false,
+              "fallback_reason": null,
+              "provider": "none",
+              "model": null
+            },
+            "requested": {
+              "paths": [
+                "garden.md"
+              ],
+              "recall_at_k": 1.0,
+              "reciprocal_rank": 1.0,
+              "elapsed_ms": 103.55583299678983,
+              "rerank_status": "complete",
+              "model_used": true,
+              "fallback_reason": null,
+              "provider": "ko-decision",
+              "model": "mmetamong/ko-decision-roberta-large"
+            }
+          },
+          {
+            "query": "hosted decision provider credentials",
+            "relevant": [
+              "provider-notes.md"
+            ],
+            "baseline": {
+              "paths": [
+                "provider-notes.md"
+              ],
+              "recall_at_k": 1.0,
+              "reciprocal_rank": 1.0,
+              "elapsed_ms": 1.2422090003383346,
+              "rerank_status": "disabled",
+              "model_used": false,
+              "fallback_reason": null,
+              "provider": "none",
+              "model": null
+            },
+            "requested": {
+              "paths": [
+                "provider-notes.md"
+              ],
+              "recall_at_k": 1.0,
+              "reciprocal_rank": 1.0,
+              "elapsed_ms": 192.23491700540762,
+              "rerank_status": "complete",
+              "model_used": true,
+              "fallback_reason": null,
+              "provider": "ko-decision",
+              "model": "mmetamong/ko-decision-roberta-large"
+            }
+          },
+          {
+            "query": "fictional book comets reading journal",
+            "relevant": [
+              "reading.md"
+            ],
+            "baseline": {
+              "paths": [
+                "reading.md"
+              ],
+              "recall_at_k": 1.0,
+              "reciprocal_rank": 1.0,
+              "elapsed_ms": 1.2205000020912848,
+              "rerank_status": "disabled",
+              "model_used": false,
+              "fallback_reason": null,
+              "provider": "none",
+              "model": null
+            },
+            "requested": {
+              "paths": [
+                "reading.md"
+              ],
+              "recall_at_k": 1.0,
+              "reciprocal_rank": 1.0,
+              "elapsed_ms": 184.36962499981746,
+              "rerank_status": "complete",
+              "model_used": true,
+              "fallback_reason": null,
+              "provider": "ko-decision",
+              "model": "mmetamong/ko-decision-roberta-large"
+            }
+          }
+        ]
+      },
+      "injected_outage": {
+        "search": {
+          "query": "검색",
+          "provider": "ko-decision",
+          "model": null,
+          "prompt_language": "ko",
+          "rerank_status": "unavailable",
+          "fallback_reason": "http_503",
+          "candidate_count": 2,
+          "results": [
+            {
+              "path": "local-search.md",
+              "title": "로컬 검색 실험",
+              "start_line": 1,
+              "end_line": 7,
+              "text": "# 로컬 검색 실험\r\n\r\n한국어 Markdown 노트를 문단으로 나누고 BM25로 검색 후보를 찾는다.\r\n검색 결과에는 원문 경로와 줄 번호를 함께 표시한다.\r\n\r\nLaya 재정렬은 질문과 후보 문단의 관련성을 평가한다.\r\nBM25 단독 검색과 비교해 검색 품질이 개선되는지 확인한다.\r\n",
+              "bm25_score": 1.3046267792680704,
+              "model_score": null,
+              "decision": null
+            },
+            {
+              "path": "garden.md",
+              "title": "베란다 바질 관리",
+              "start_line": 1,
+              "end_line": 6,
+              "text": "# 베란다 바질 관리\n\n바질 화분은 햇빛이 드는 베란다에 놓는다.\n흙 표면이 마르면 물을 주고 잎의 상태를 관찰한다.\n\n이번 주에는 새 잎이 두 장 자랐다. 이 기록은 문서 검색 예제를 위한 가상 관찰이다.\n",
+              "bm25_score": 0.6626247040354766,
+              "model_score": null,
+              "decision": null
+            }
+          ],
+          "index": {
+            "indexed": 0,
+            "unchanged": 4,
+            "deleted": 0,
+            "errors": []
+          },
+          "elapsed_ms": 4.32
+        },
+        "classify": {
+          "error": {
+            "code": "ProviderError",
+            "message": "http_503"
+          }
+        }
+      },
+      "source_hashes_unchanged": true
+    }
+  },
+  "source_sha256": {
+    "garden.md": "40558251ab366ccd8540b6e563b221ac97c90367399227ddc24507c74e6faa7d",
+    "local-search.md": "1e7fd050d9b9914cc9bd18109602ecbd12b30c6db0dedcdebe9de6ed069e49d4",
+    "provider-notes.md": "1826879deeb848c0965b0f5b653bc171b44b8f1adf3e6f0a391930c957487884",
+    "reading.md": "d746f9d7faf125204527882dc053e335d0be737627e32b995f2341ca207aa2ce"
+  },
+  "functional_checks_passed": true
+}

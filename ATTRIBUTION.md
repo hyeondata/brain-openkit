@@ -42,6 +42,18 @@ remain separate from this project's license.
   These references are also recorded in [the adapter](src/brain_openkit/jev.py).
   Contract fixtures do not establish live-service compatibility; actual-key
   inference remains unverified. API terms and charges are separate from MIT.
+- [ko-decision-roberta-large](https://huggingface.co/mmetamong/ko-decision-roberta-large/tree/dfd606fff30d52963c0073659ff9a8f6bf1fce6d),
+  published by **mmetamong**, is an optional external checkpoint pinned to
+  `dfd606fff30d52963c0073659ff9a8f6bf1fce6d`. Its
+  [model card](https://huggingface.co/mmetamong/ko-decision-roberta-large/blob/dfd606fff30d52963c0073659ff9a8f6bf1fce6d/README.md)
+  identifies the weights as **CC BY-SA 4.0**. The weights are downloaded separately
+  from Hugging Face when the optional local server is started; this repository
+  neither redistributes nor modifies them. Brain OpenKit's adapter and server
+  are independently implemented under MIT, with no copied model implementation.
+  The checkpoint's license remains separate from the repository license; consult
+  the publisher's notices and [CC BY-SA 4.0 terms](https://creativecommons.org/licenses/by-sa/4.0/)
+  when using or redistributing the model. The integration is an unreleased source
+  feature, not part of the `v0.2.0a4` release assets.
 
 MIT does not relicense external components. Distributions containing external
 material must preserve applicable notices. Publisher metadata is not an audit

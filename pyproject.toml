@@ -14,8 +14,12 @@ authors = [{name = "Brain OpenKit contributors"}]
 dependencies = []
 classifiers = ["Development Status :: 3 - Alpha", "Programming Language :: Python :: 3"]
 
+[project.optional-dependencies]
+ko-decision = ["torch>=2.6,<3", "transformers>=4.57,<6"]
+
 [project.scripts]
 brain-openkit = "brain_openkit.cli:main"
+brain-openkit-serve-ko-decision = "brain_openkit.ko_decision_server:main"
 
 [project.urls]
 Repository = "https://github.com/hyeondata/brain-openkit"

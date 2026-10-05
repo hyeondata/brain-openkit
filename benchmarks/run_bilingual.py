@@ -19,6 +19,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
 from brain_openkit.evaluation import evaluate
+from brain_openkit.kev import KevProvider
 from brain_openkit.providers import LayaProvider, ProviderError
 from brain_openkit.workflows import classify, validate_taxonomy
 
@@ -81,7 +82,7 @@ def _f1(tp: int, fp: int, fn: int) -> float:
     return 2 * tp / (2 * tp + fp + fn) if 2 * tp + fp + fn else 0.0
 
 
-def classification_metrics(rows: list[dict], taxonomy: dict) -> dict:
+def _classification_metrics(rows: list[dict], taxonomy: dict) -> dict:
     if not rows:
         raise ValueError("Cannot evaluate an empty classification split")
     categories, tags = taxonomy["categories"], taxonomy["tags"]
@@ -115,6 +116,9 @@ def classification_metrics(rows: list[dict], taxonomy: dict) -> dict:
         "category_macro_f1": statistics.mean(c["f1"] for c in category_counts.values()),
         "category_per_class": category_counts,
         "tag_micro_f1": _f1(**totals),
+        "tag_micro_precision": totals["tp"] / (totals["tp"] + totals["fp"]) if totals["tp"] + totals["fp"] else 0.0,
+        "tag_micro_recall": totals["tp"] / (totals["tp"] + totals["fn"]) if totals["tp"] + totals["fn"] else 0.0,
+        "tag_false_positives": totals["fp"], "tag_false_negatives": totals["fn"],
         "tag_macro_f1": statistics.mean(c["f1"] for c in tag_counts.values()) if tags else 0.0,
         "tag_sample_f1": statistics.mean(sample_f1), "tag_exact_match": exact_tags / len(rows),
         "tag_per_class": tag_counts,
@@ -122,12 +126,24 @@ def classification_metrics(rows: list[dict], taxonomy: dict) -> dict:
     }
 
 
-class RecordingProvider:
-    name = "laya"
+def classification_metrics(rows: list[dict], taxonomy: dict) -> dict:
+    result = _classification_metrics(rows, taxonomy)
+    result["by_language"] = {}
+    for language in ("ko", "en"):
+        selected = [row for row in rows if row.get("language") == language]
+        if selected:
+            result["by_language"][language] = _classification_metrics(selected, taxonomy)
+    return result
 
+
+class RecordingProvider:
     def __init__(self, provider, stream):
         self.provider, self.stream, self.phase = provider, stream, "warmup"
+        self.name = getattr(provider, "name", type(provider).__name__)
         self.timings: list[float] = []
+        self.measured_timings: list[float] = []
+        self.warmup_timings: list[float] = []
+        self.models: set[str] = set()
         self.errors = 0
 
     def choose(self, state, question, choices):
@@ -136,6 +152,7 @@ class RecordingProvider:
         try:
             decision = self.provider.choose(state, question, choices)
             record["decision"] = asdict(decision)
+            self.models.add(decision.model)
             return decision
         except ProviderError as exc:
             self.errors += 1
@@ -144,6 +161,8 @@ class RecordingProvider:
         finally:
             record["wall_elapsed_ms"] = (perf_counter() - started) * 1000
             self.timings.append(record["wall_elapsed_ms"])
+            phase_timings = self.warmup_timings if self.phase == "warmup" else self.measured_timings
+            phase_timings.append(record["wall_elapsed_ms"])
             self.stream.write(json.dumps(record, ensure_ascii=False) + "\n")
             self.stream.flush()
 
@@ -170,10 +189,20 @@ def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--suite", type=Path, default=ROOT / "benchmarks" / "bilingual-v1")
     parser.add_argument("--output", type=Path, required=True, help="New directory, refuses overwrite")
-    parser.add_argument("--provider", choices=("none", "laya"), default="none")
-    parser.add_argument("--base-url", default="http://127.0.0.1:18080")
+    parser.add_argument("--provider", choices=("none", "laya", "kev", "ko-decision"), default="none")
+    parser.add_argument("--base-url", help="Defaults to localhost port 8000 (Laya), 8009 (Kev), or 8010 (KoDecision)")
+    parser.add_argument("--model", help="Server model identifier; Laya supports only multilingual")
+    parser.add_argument("--timeout", type=float, default=120.0)
+    parser.add_argument("--prompt-language", choices=("en", "ko"), default="en")
     parser.add_argument("--runtime-metadata", type=Path)
     args = parser.parse_args(argv)
+    if args.provider == "laya" and args.model not in (None, "multilingual"):
+        parser.error("Laya supports only --model multilingual")
+    ports = {"laya": 8000, "kev": 8009, "ko-decision": 8010}
+    models = {"laya": "multilingual", "kev": "kev-latest",
+              "ko-decision": "mmetamong/ko-decision-roberta-large"}
+    model = args.model or models.get(args.provider)
+    base_url = args.base_url or (f"http://127.0.0.1:{ports[args.provider]}" if args.provider in ports else None)
     suite = args.suite.resolve()
     manifest = validate_suite(suite)
     before = digest_inputs(suite)
@@ -184,24 +213,38 @@ def main(argv=None) -> int:
         "platform": platform.platform(), "machine": platform.machine(),
         "ranking": {"limit": 3, "candidates": 8, "tuned_on_this_suite": False},
         "provider": args.provider,
+        "requested_model": model, "observed_models": [],
+        "base_url": base_url, "timeout_seconds": args.timeout,
+        "prompt_language": args.prompt_language,
         "limitations": ["Authored synthetic corpus, not a random population sample or user-reviewed real vault",
                         "Query holdout shares the corpus; classification holdout has different notes",
                         "One run, one machine, warm inference; no statistical superiority claim"],
     }
+    if args.runtime_metadata:
+        report["server_runtime"] = json.loads(args.runtime_metadata.read_text(encoding="utf-8"))
     taxonomy = json.loads((suite / "taxonomy.json").read_text(encoding="utf-8"))
     with (args.output / "decisions.jsonl").open("w", encoding="utf-8") as raw:
         provider = None
-        if args.provider == "laya":
-            underlying = LayaProvider(base_url=args.base_url, timeout=120)
+        if args.provider != "none":
+            if args.provider == "laya":
+                underlying = LayaProvider(base_url=base_url, timeout=args.timeout)
+            elif args.provider == "kev":
+                underlying = KevProvider(base_url=base_url, model=model, timeout=args.timeout)
+            else:
+                from brain_openkit.ko_decision import KoDecisionProvider
+                underlying = KoDecisionProvider(base_url=base_url, model=model, timeout=args.timeout)
             report["health_before"] = underlying.health()
-            if args.runtime_metadata:
-                report["server_runtime"] = json.loads(args.runtime_metadata.read_text(encoding="utf-8"))
             provider = RecordingProvider(underlying, raw)
-            provider.choose("A local smoke note about Markdown search.", "Does it describe note search?",
-                            {"A": "Yes", "B": "No"})
+            if args.prompt_language == "ko":
+                provider.choose("마크다운 노트 검색에 관한 로컬 검증 메모입니다.", "노트 검색을 설명합니까?",
+                                {"A": "예", "B": "아니요"})
+            else:
+                provider.choose("A local smoke note about Markdown search.", "Does it describe note search?",
+                                {"A": "Yes", "B": "No"})
             report["first_request_ms"] = provider.timings[-1]
             report["health_after_warmup"] = underlying.health()
-            if report["health_after_warmup"].get("revisions", {}).get("multilingual") != REVISION:
+            if (args.provider == "laya"
+                    and report["health_after_warmup"].get("revisions", {}).get("multilingual") != REVISION):
                 raise ValueError("Actual multilingual checkpoint differs from the frozen evaluation revision")
         with tempfile.TemporaryDirectory(prefix="brain-openkit-benchmark-cache-") as cache:
             report["retrieval"] = {}
@@ -210,7 +253,7 @@ def main(argv=None) -> int:
                     provider.phase = f"retrieval-{split}"
                 dataset = suite / f"retrieval-{split}.jsonl"
                 measured = evaluate(suite / "vault", dataset, cache_dir=Path(cache), provider=provider,
-                                    limit=3, candidates=8)
+                                    limit=3, candidates=8, prompt_language=args.prompt_language)
                 measured["dataset"] = dataset.name
                 annotate_retrieval(measured, read_jsonl(dataset))
                 report["retrieval"][split] = measured
@@ -223,7 +266,8 @@ def main(argv=None) -> int:
                     started = perf_counter()
                     measured = dict(row)
                     try:
-                        measured["result"] = classify(suite / "vault", Path(row["path"]), taxonomy, provider)
+                        measured["result"] = classify(suite / "vault", Path(row["path"]), taxonomy, provider,
+                                                      prompt_language=args.prompt_language)
                     except (ProviderError, ValueError) as exc:
                         measured["result"], measured["error"] = None, str(exc)
                     measured["elapsed_ms"] = (perf_counter() - started) * 1000
@@ -236,9 +280,14 @@ def main(argv=None) -> int:
                 }
                 report["requests"] = {
                     "count_including_warmup": len(provider.timings), "error_count": provider.errors,
-                    "warm_median_ms": statistics.median(provider.timings[1:]),
-                    "warm_min_ms": min(provider.timings[1:]), "warm_max_ms": max(provider.timings[1:]),
+                    "count_excluding_warmup": len(provider.measured_timings),
+                    "warmup_count": len(provider.warmup_timings),
+                    "warm_median_ms": statistics.median(provider.measured_timings) if provider.measured_timings else None,
+                    "warm_min_ms": min(provider.measured_timings, default=None),
+                    "warm_max_ms": max(provider.measured_timings, default=None),
+                    "latency_scope": "Client wall time for decision calls, including failed calls; warmups excluded",
                 }
+                report["observed_models"] = sorted(provider.models)
                 report["health_after"] = underlying.health()
     after = digest_inputs(suite)
     report["source_preservation"] = {"unchanged": before == after, "sha256_before": before, "sha256_after": after}

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Functional checks against running Laya/Kev servers using only synthetic notes.
+"""Functional checks against local decision servers using only synthetic notes.
 
 Run from a source checkout with Python 3.11+. This is not a quality benchmark.
 Server/model setup and pinned revisions are documented in docs/local-models.md.
@@ -49,10 +49,11 @@ def hashes(vault):
             for p in sorted(vault.rglob("*.md"))}
 
 
-def check(laya_url, kev_url, providers=("laya", "kev")):
+def check(laya_url, kev_url, providers=("laya", "kev"), *,
+          ko_decision_url="http://127.0.0.1:8010", prompt_language="en"):
     report = {"checked_at": datetime.now(timezone.utc).isoformat(),
               "scope": "Synthetic functional smoke, not a quality or cost comparison",
-              "providers": {}}
+              "prompt_language": prompt_language, "providers": {}}
     with tempfile.TemporaryDirectory(prefix="brain-openkit-provider-smoke-") as directory:
         temp = Path(directory)
         vault = temp / "vault"
@@ -64,6 +65,7 @@ def check(laya_url, kev_url, providers=("laya", "kev")):
         config = temp / "providers.json"
         config.write_text(json.dumps({"vault": str(vault), "cache_dir": str(temp / "cache"),
                                      "laya_base_url": laya_url, "kev_base_url": kev_url,
+                                     "ko_decision_base_url": ko_decision_url, "prompt_language": prompt_language,
                                      "timeout": 120, "limit": 3, "candidates": 6}), encoding="utf-8")
 
         def cli(*args, expected=0):
@@ -129,12 +131,15 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--laya-url", default="http://127.0.0.1:8000")
     parser.add_argument("--kev-url", default="http://127.0.0.1:8009")
-    parser.add_argument("--provider", choices=("both", "laya", "kev"), default="both",
-                        help="Check both servers, or only the selected provider")
+    parser.add_argument("--ko-decision-url", default="http://127.0.0.1:8010")
+    parser.add_argument("--prompt-language", choices=("en", "ko"), default="en")
+    parser.add_argument("--provider", choices=("both", "laya", "kev", "ko-decision"), default="both",
+                        help="Check Laya and Kev, or only the selected provider")
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
     providers = ("laya", "kev") if args.provider == "both" else (args.provider,)
-    report = check(args.laya_url, args.kev_url, providers)
+    report = check(args.laya_url, args.kev_url, providers,
+                   ko_decision_url=args.ko_decision_url, prompt_language=args.prompt_language)
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(args.output)

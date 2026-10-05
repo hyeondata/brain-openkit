@@ -90,6 +90,23 @@ class EvaluationTests(unittest.TestCase):
         self.assertEqual(report["queries"][0]["requested"]["paths"], ["b.md"])
         self.assertEqual(report["queries"][0]["requested"]["rerank_status"], "complete")
 
+    def test_korean_prompt_language_reaches_evaluated_provider(self):
+        calls = []
+
+        class KoreanProvider(PreferMarkedProvider):
+            def choose(self, state, question, choices):
+                calls.append((state, question))
+                return super().choose(state, question, choices)
+
+        self.write_dataset([{"query": "comet", "relevant": ["b.md"]}])
+        report = evaluate(self.vault, self.dataset, cache_dir=self.cache,
+                          provider=KoreanProvider(), prompt_language="ko", limit=1)
+        self.assertEqual(report["requested"]["mrr"], 1)
+        self.assertEqual(report["prompt_language"], "ko")
+        self.assertTrue(calls)
+        self.assertTrue(all("검색 질문: comet" in state and "유용한" in question
+                            for state, question in calls))
+
     def test_failed_provider_reports_bm25_fallback_without_model_success(self):
         self.write_dataset([{"query": "comet", "relevant": ["a.md"]}])
         report = evaluate(

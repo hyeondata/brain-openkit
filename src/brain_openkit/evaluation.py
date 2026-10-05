@@ -71,11 +71,11 @@ def _read_dataset(vault: Path, dataset: Path, cache_dir: Path) -> list[dict]:
     return rows
 
 
-def _run_query(vault, row, *, cache_dir, provider, limit, candidates):
+def _run_query(vault, row, *, cache_dir, provider, limit, candidates, prompt_language):
     started = perf_counter()
     result = workflows.search(
         vault, row["query"], cache_dir=cache_dir, provider=provider,
-        limit=limit, candidates=candidates,
+        limit=limit, candidates=candidates, prompt_language=prompt_language,
     )
     if result["index"]["errors"]:
         raise ValueError("Indexing failed; evaluation requires a complete readable vault")
@@ -124,6 +124,7 @@ def evaluate(
     provider: DecisionProvider | None = None,
     limit: int = 5,
     candidates: int = 20,
+    prompt_language: str = "en",
 ) -> dict:
     """Compare BM25 with an optional provider; MRR is truncated to ``limit``.
 
@@ -131,6 +132,8 @@ def evaluate(
     before any model request. Provider failures remain visible as BM25 fallback
     results rather than being counted as completed model inference.
     """
+    if prompt_language not in ("en", "ko"):
+        raise ValueError("prompt_language must be en or ko")
     for name, value in (("limit", limit), ("candidates", candidates)):
         if isinstance(value, bool) or not isinstance(value, int) or value <= 0:
             raise ValueError(f"{name} must be a positive integer")
@@ -143,15 +146,18 @@ def evaluate(
     for row in rows:
         baseline = _run_query(
             vault, row, cache_dir=cache_dir, provider=None, limit=limit, candidates=candidates,
+            prompt_language=prompt_language,
         )
         requested = None
         if provider is not None:
             requested = _run_query(
                 vault, row, cache_dir=cache_dir, provider=provider, limit=limit, candidates=candidates,
+                prompt_language=prompt_language,
             )
         queries.append({**row, "baseline": baseline, "requested": requested})
     return {
         "dataset": str(dataset),
+        "prompt_language": prompt_language,
         "query_count": len(rows),
         "limit": limit,
         "candidates": candidates,

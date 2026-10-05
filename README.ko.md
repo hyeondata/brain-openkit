@@ -26,10 +26,14 @@
 > [이전 0.2.0a3 검증](docs/release-0.2.0a3.ko.md),
 > [구현·검증 기록](docs/implementation-notes.md)을 참고하세요.
 
+아래의 선택적 `ko-decision` 제공자와 `--prompt-language` 옵션은 아직 릴리스하지
+않은 소스 변경입니다. `v0.2.0a4` 태그와 릴리스 파일에는 없으며, 이 변경이 포함된
+체크아웃에서 사용할 수 있습니다.
+
 Brain OpenKit은 원문 경로, 줄 번호, 발췌와 함께 Markdown 문단을 찾습니다.
 **기본 검색은 모델이나 API 키가 필요 없는 로컬 BM25입니다.** Claude Code와 Codex는
 동일한 8개 스킬로 근거를 검색하고 노트를 작성하며 검토한 변경을 적용할 수 있습니다.
-선택적 Laya·Kev·TypeSafe Jev 어댑터는 관련성·분류·태그를 판단하고, 문장을 생성하지 않습니다.
+선택적 Laya·Kev·ko-decision·TypeSafe Jev 어댑터는 관련성·분류·태그를 판단하고, 문장을 생성하지 않습니다.
 
 ## 현재 기능
 
@@ -80,7 +84,7 @@ brain-openkit --version
 
 Windows는 PowerShell에서 `.venv\Scripts\Activate.ps1`로 활성화합니다.
 CLI에는 외부 런타임 의존성이 없지만 설치 중 빌드 도구를 다운로드할 수 있습니다.
-로컬 Laya·Kev 서버는 각각 별도 선택적 환경을 사용합니다.
+로컬 Laya·Kev·ko-decision 서버는 각각 별도 선택적 환경을 사용합니다.
 
 [GitHub 프리릴리스](https://github.com/hyeondata/brain-openkit/releases/tag/v0.2.0a4)에서
 다음 릴리스 파일을 내려받을 수 있습니다.
@@ -233,6 +237,7 @@ brain-openkit recover INTERRUPTED_TRANSACTION_ID --vault ../brain-openkit-demo -
 | `laya` | 선택적 로컬 다국어 판단. 실제 가중치로 실행했습니다. |
 | `kev` | 분류·상태 확인 기본값. 포함된 서버 실행 스크립트가 Hugging Face의 고정된 Kev 0.8B 가중치를 선택하며, [실제 CLI 검증](docs/kev-08-verification-2026-10-05.md)을 통과했습니다. |
 | `jev` | TypeSafe 호스팅 어댑터. 계약 fixture 테스트를 통과했으며 실제 키로 추론은 미검증입니다. |
+| `ko-decision` | 미릴리스 소스에서 제공하는 선택적 한국어 RoBERTa 판단. 고정된 외부 체크포인트를 사용합니다. [설정](docs/local-models.ko.md#ko-decision-미릴리스-소스)과 [검증 기록](docs/ko-decision-verification-2026-10-05.ko.md)을 참고하세요. |
 
 `classify`·`doctor`는 설정이나 옵션으로 바꾸지 않으면 Kev를 사용하며, 포함된
 서버 실행 스크립트는 0.8B를 선택합니다. Laya는 `--provider laya`로 지정합니다.
@@ -308,6 +313,33 @@ brain-openkit evaluate examples/evaluation.jsonl --vault examples/vault --provid
 Kev는 TypeSafe의 호스팅 서비스 Jev와 별개 프로젝트입니다.
 [0.8B 검증 기록](docs/kev-08-verification-2026-10-05.md)은 이전 0.5B 결과와 구분합니다.
 
+### 선택적 ko-decision 서버 (미릴리스 소스)
+
+[별도 런타임 설정](docs/local-models.ko.md#ko-decision-미릴리스-소스)에 따라
+`.[ko-decision]`을 설치하고 `brain-openkit-serve-ko-decision`을 실행합니다.
+서버는 `mmetamong/ko-decision-roberta-large`의
+`dfd606fff30d52963c0073659ff9a8f6bf1fce6d` 리비전을 내려받으며
+`127.0.0.1:8010`에서 요청을 받습니다.
+
+~~~bash
+brain-openkit doctor --provider ko-decision --prompt-language ko --probe --timeout 120 --json
+brain-openkit search "한국어 BM25 검색 후보" --vault examples/vault --provider ko-decision --prompt-language ko --timeout 120 --json
+brain-openkit classify local-search.md --vault examples/vault --taxonomy examples/taxonomy.json --provider ko-decision --prompt-language ko --timeout 120 --json
+~~~
+
+`--prompt-language ko`는 내장 지시문과 레이블을 한국어로 바꿉니다. 검색 질문,
+노트, 분류·태그 설명을 번역하지는 않습니다. 모든 제공자의 기본값은 영어입니다.
+지시문·선택지와 문단으로 만든 입력 쌍은 특수 토큰을 포함해 512토큰 이하여야 합니다.
+초과하면 HTTP 413을 반환하며, 검색은 BM25로 복귀하고 분류는 오류를 반환합니다.
+점수는 보정되지 않은 선택지 간 상대 확률이며, 이 모델은 요약문을 생성하지 않습니다.
+실제 동작과 한계는 [검증 기록](docs/ko-decision-verification-2026-10-05.ko.md)에 있습니다.
+기존 Kev·BM25 기본값은 유지합니다.
+
+선택적 가중치는 게시자의
+[CC BY-SA 4.0 라이선스](https://huggingface.co/mmetamong/ko-decision-roberta-large/blob/dfd606fff30d52963c0073659ff9a8f6bf1fce6d/README.md)에
+따라 별도로 내려받습니다. 독립 구현한 Brain OpenKit 연동 코드는 MIT이며,
+저장소에는 가중치를 포함하지 않습니다. [출처·라이선스](ATTRIBUTION.md)를 참고하세요.
+
 ### 선택적 TypeSafe Jev
 
 CLI 환경에 `TYPESAFE_API_KEY`를 비공개로 설정합니다. 기본 변수가 없거나 비었을 때만
@@ -351,9 +383,15 @@ brain-openkit classify local-search.md --vault examples/vault --taxonomy example
 명령 옵션이 JSON 설정보다, JSON 설정이 기본값보다 우선합니다. JSON의 `vault`,
 `cache_dir`는 설정 파일 기준입니다. 선택적인 `base_url` 설정이나 `--base-url`은
 선택한 제공자의 주소를 덮어씁니다. 키는 환경 변수로만 전달합니다.
-`--model`은 선택한 Kev·Jev의 API 모델 이름을 덮어쓰며, Laya는 다국어 모델을 명시적으로 사용합니다.
+`--model`은 선택한 Kev·Jev·ko-decision의 서버 모델 이름을 덮어쓰며, Laya는 다국어 모델을 명시적으로 사용합니다.
 분류·정리·원본 노트 경로는 vault 기준이며, 입력 초안·분류 목록·평가 자료·계획 파일은
 현재 디렉터리 기준입니다.
+
+미릴리스 소스는 JSON에서 `ko_decision_base_url`(기본값
+`http://127.0.0.1:8010`), `ko_decision_model`(기본값
+`mmetamong/ko-decision-roberta-large`), `prompt_language`(`en` 또는 `ko`,
+기본값 `en`)도 받습니다. `--model`은 서버가 이미 제공하는 모델 이름을 선택하며,
+가중치를 내려받거나 교체하지 않습니다.
 
 파일·파이프로 연결할 때도 UTF-8을 출력합니다. 재정렬 상태는 `disabled`,
 `not_needed`, `complete`, `unavailable`이며, 불가능하면 BM25 결과와 이유를 반환합니다.
@@ -380,8 +418,10 @@ Holdout 분류 정확도는 0.6667, 태그 micro F1은 0.4691이며 태그 오�
 - 모델 확률·신뢰도는 보정된 값을 보장하지 않으며 메타데이터 자동 적용을 위한
   보편적인 임계값도 없습니다.
 - Laya 요청에는 바이트 제한과 입력 예산이 있습니다(`--max-tokens`, 기본 1024).
-  **정확한 토크나이저 사전 검증은 미구현입니다.** 보고된 입력 잘림·누락·선택지 충돌은
+  **Laya의 정확한 토크나이저 사전 검증은 미구현입니다.** 보고된 입력 잘림·누락·선택지 충돌은
   거절합니다.
+- ko-decision은 추론 전에 완전한 입력 쌍을 토큰화하고 512토큰 초과 입력을 거절합니다.
+  선택지 간 상대 점수는 보정된 정답 확률이 아닙니다.
 - BM25 후보에 없는 정답 노트는 재정렬로 찾을 수 없습니다.
   대규모 vault 성능과 일반적인 한국어·영어 품질은 아직 입증하지 않았습니다.
 - 검색 평가 JSONL은 `{"query":"...","relevant":["note.md"]}` 형식이며,
@@ -406,7 +446,7 @@ Holdout 분류 정확도는 0.6667, 태그 micro F1은 0.4691이며 태그 오�
 - [x] Holdout 정답을 포함한 더 넓은 한국어·영어 합성 평가
 - [ ] Jev 실제 서비스 검증
 - [ ] 실제 vault의 사용자 검토 검색·분류·태그 수용 검증
-- [ ] 정확한 토크나이저 사전 검증과 추가 제공자 질문 형식
+- [ ] Laya의 정확한 토크나이저 사전 검증과 추가 제공자 질문 형식
 - [ ] Obsidian 플러그인 화면
 
 각 기존 항목의 구현·검증 근거·남은 수용 조건은

@@ -65,10 +65,12 @@ def _parser() -> argparse.ArgumentParser:
         command.add_argument("--cache-dir", type=Path, help="Derived SQLite cache (default: .cache/brain-openkit)")
         command.add_argument("--json", action="store_true", help="Emit one JSON object, including errors")
         if name in ("doctor", "search", "classify", "evaluate"):
-            command.add_argument("--provider", choices=("none", "laya", "kev", "jev"))
+            command.add_argument("--provider", choices=("none", "laya", "kev", "jev", "ko-decision"))
             command.add_argument("--base-url", help="Override the selected provider's endpoint")
-            command.add_argument("--model", help="Jev/Kev server model ID; does not select or download HF weights")
+            command.add_argument("--model", help="Jev/Kev/ko-decision server model ID; does not download or load HF weights")
             command.add_argument("--timeout", type=float, help="HTTP timeout in seconds")
+            command.add_argument("--prompt-language", choices=("en", "ko"),
+                                 help="Language of model instructions; leaves source and taxonomy unchanged (default: en)")
             command.add_argument("--max-tokens", type=int, help="Laya sequence budget, 1024 by default")
         if name in ("search", "evaluate"):
             command.add_argument("--limit", type=int, help="Maximum result notes (default: 5)")
@@ -131,7 +133,9 @@ def _settings(args: argparse.Namespace) -> dict:
               "base_url": None, "laya_base_url": "http://127.0.0.1:8000",
               "jev_base_url": "https://api.typesafe.ai", "jev_model": "jev-latest",
               "kev_base_url": "http://127.0.0.1:8009", "kev_model": "kev-latest", "model": None,
-              "timeout": 10.0,
+              "ko_decision_base_url": "http://127.0.0.1:8010",
+              "ko_decision_model": "mmetamong/ko-decision-roberta-large",
+              "timeout": 10.0, "prompt_language": "en",
               "max_tokens": 1024, "limit": 5, "candidates": 20}
     if args.config:
         config = _read_json(args.config)
@@ -148,11 +152,14 @@ def _settings(args: argparse.Namespace) -> dict:
         value = getattr(args, key, None)
         if value is not None:
             result[key] = value
-    if result["provider"] not in ("none", "laya", "kev", "jev"):
-        raise ValueError("Supported providers are none, laya, kev and jev")
+    if result["provider"] not in ("none", "laya", "kev", "jev", "ko-decision"):
+        raise ValueError("Supported providers are none, laya, kev, jev and ko-decision")
+    if result["prompt_language"] not in ("en", "ko"):
+        raise ValueError("prompt_language must be en or ko")
     if result["base_url"] is not None and not isinstance(result["base_url"], str):
         raise ValueError("base_url must be a URL string")
-    for key in ("laya_base_url", "jev_base_url", "jev_model", "kev_base_url", "kev_model"):
+    for key in ("laya_base_url", "jev_base_url", "jev_model", "kev_base_url", "kev_model",
+                "ko_decision_base_url", "ko_decision_model"):
         if not isinstance(result[key], str) or not result[key].strip():
             raise ValueError(f"{key} must be a nonempty string")
     if result["model"] is not None and (not isinstance(result["model"], str) or not result["model"].strip()):
@@ -188,6 +195,12 @@ def _provider(settings: dict):
         return KevProvider(base_url=settings["base_url"] or settings["kev_base_url"],
                            api_key=os.environ.get("KEV_API_KEY"),
                            model=settings["model"] or settings["kev_model"], timeout=settings["timeout"])
+    if settings["provider"] == "ko-decision":
+        from .ko_decision import KoDecisionProvider
+        return KoDecisionProvider(base_url=settings["base_url"] or settings["ko_decision_base_url"],
+                                  api_key=os.environ.get("KO_DECISION_API_KEY"),
+                                  model=settings["model"] or settings["ko_decision_model"],
+                                  timeout=settings["timeout"])
     return LayaProvider(base_url=settings["base_url"] or settings["laya_base_url"], api_key=os.environ.get("LAYA_API_KEY"),
                         timeout=settings["timeout"], max_tokens=settings["max_tokens"])
 
@@ -271,16 +284,24 @@ def _execute(args: argparse.Namespace) -> tuple[dict, int]:
         report = {"version": __version__, "provider": provider.name, "health": health, "inference_verified": False}
         if args.probe:
             from dataclasses import asdict
-            report["probe"] = asdict(provider.choose("The note explains how to back up Markdown files.",
-                                                      "What is the subject of the note?",
-                                                      {"A": "Backing up notes", "B": "Cooking pasta"}))
+            if settings["prompt_language"] == "ko":
+                report["probe"] = asdict(provider.choose("이 문서는 마크다운 파일을 백업하는 방법을 설명한다.",
+                                                         "문서의 주제는 무엇인가?",
+                                                         {"A": "노트 백업", "B": "파스타 요리"}))
+            else:
+                report["probe"] = asdict(provider.choose("The note explains how to back up Markdown files.",
+                                                         "What is the subject of the note?",
+                                                         {"A": "Backing up notes", "B": "Cooking pasta"}))
+            report["prompt_language"] = settings["prompt_language"]
             report["inference_verified"] = True
         return report, 0
     if args.command == "classify":
         if provider is None:
-            raise ValueError("Classification requires --provider laya, kev or jev and a reachable service")
-        return classify(vault, args.note, _read_json(args.taxonomy), provider), 0
-    options = {"cache_dir": cache, "provider": provider, "limit": settings["limit"], "candidates": settings["candidates"]}
+            raise ValueError("Classification requires --provider laya, kev, jev or ko-decision and a reachable service")
+        return classify(vault, args.note, _read_json(args.taxonomy), provider,
+                        prompt_language=settings["prompt_language"]), 0
+    options = {"cache_dir": cache, "provider": provider, "limit": settings["limit"],
+               "candidates": settings["candidates"], "prompt_language": settings["prompt_language"]}
     if args.command == "search":
         return search(vault, args.query, **options), 0
     return evaluate(vault, args.dataset, **options), 0

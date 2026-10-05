@@ -11,7 +11,9 @@ from .vault import read_note
 
 def search(vault: Path, query: str, *, cache_dir: Path,
            provider: DecisionProvider | None = None, limit: int = 5,
-           candidates: int = 20) -> dict:
+           candidates: int = 20, prompt_language: str = "en") -> dict:
+    if prompt_language not in ("en", "ko"):
+        raise ValueError("prompt_language must be en or ko")
     if not isinstance(query, str) or not query.strip():
         raise ValueError("Search query must not be blank")
     if not 1 <= limit <= candidates <= 200:
@@ -33,8 +35,13 @@ def search(vault: Path, query: str, *, cache_dir: Path,
             decisions = []
             for row in rows:
                 state = f"Query: {query}\nNote: {row['path']}\nTitle: {row['title']}\nPassage:\n{row['text']}"
+                if prompt_language == "ko":
+                    state = f"검색 질문: {query}\n문서: {row['path']}\n제목: {row['title']}\n본문:\n{row['text']}"
                 decisions.append(provider.choose(
-                    state, "Does the passage contain information useful for the query?",
+                    state, "본문에 검색 질문에 답하는 데 유용한 정보가 있는가?" if prompt_language == "ko" else
+                    "Does the passage contain information useful for the query?",
+                    {"A": "검색 질문과 관련된 유용한 정보가 있다", "B": "관련이 없거나 정보가 부족하다"}
+                    if prompt_language == "ko" else
                     {"A": "Relevant information for the query", "B": "Unrelated or insufficient information"}))
             # Apply only after every candidate succeeds: never mix score scales.
             for row, decision in zip(rows, decisions):
@@ -54,7 +61,7 @@ def search(vault: Path, query: str, *, cache_dir: Path,
         if len(distinct) == limit:
             break
     return {"query": query, "provider": "none" if provider is None else getattr(provider, "name", type(provider).__name__),
-            "model": model, "rerank_status": status, "fallback_reason": reason,
+            "model": model, "prompt_language": prompt_language, "rerank_status": status, "fallback_reason": reason,
             "candidate_count": len(hits), "results": distinct, "index": report,
             "elapsed_ms": round((perf_counter() - started) * 1000, 3)}
 
@@ -76,7 +83,10 @@ def validate_taxonomy(taxonomy: dict) -> dict:
     return {"categories": categories, "tags": tags}
 
 
-def classify(vault: Path, note: Path, taxonomy: dict, provider: DecisionProvider) -> dict:
+def classify(vault: Path, note: Path, taxonomy: dict, provider: DecisionProvider,
+             *, prompt_language: str = "en") -> dict:
+    if prompt_language not in ("en", "ko"):
+        raise ValueError("prompt_language must be en or ko")
     taxonomy = validate_taxonomy(taxonomy)
     chunks = read_note(vault, note)
     if not chunks:
@@ -88,12 +98,18 @@ def classify(vault: Path, note: Path, taxonomy: dict, provider: DecisionProvider
     passages, category_names, tags = [], set(), set()
     for chunk in chunks:
         state = f"Note: {chunk.path}\nTitle: {chunk.title}\nPassage:\n{chunk.text}"
-        category = provider.choose(state, "Which existing category best describes this passage?", choices)
+        if prompt_language == "ko":
+            state = f"문서: {chunk.path}\n제목: {chunk.title}\n본문:\n{chunk.text}"
+        category = provider.choose(state, "본문에 가장 적합한 기존 분류를 고르세요." if prompt_language == "ko" else
+                                   "Which existing category best describes this passage?", choices)
         selected = names[ord(category.choice)-65]
         category_names.add(selected)
         tag_results = {}
         for name, description in taxonomy["tags"].items():
-            decision = provider.choose(state, f"Does this passage match the tag {name}: {description}?",
+            decision = provider.choose(state,
+                                       f"본문이 다음 태그에 해당하는가? {name}: {description}" if prompt_language == "ko" else
+                                       f"Does this passage match the tag {name}: {description}?",
+                                       {"A": "태그에 해당한다", "B": "태그에 해당하지 않는다"} if prompt_language == "ko" else
                                        {"A": "The tag applies", "B": "The tag does not apply"})
             applies = decision.probabilities["A"] > decision.probabilities["B"]
             if applies:
@@ -102,6 +118,7 @@ def classify(vault: Path, note: Path, taxonomy: dict, provider: DecisionProvider
         passages.append({**asdict(chunk), "category": selected,
                          "category_decision": asdict(category), "tags": tag_results})
     return {"path": chunks[0].path, "provider": getattr(provider, "name", type(provider).__name__),
+            "prompt_language": prompt_language,
             "model": passages[0]["category_decision"]["model"],
             "status": "complete", "review_required": len(category_names) > 1,
             "category": next(iter(category_names)) if len(category_names) == 1 else None,

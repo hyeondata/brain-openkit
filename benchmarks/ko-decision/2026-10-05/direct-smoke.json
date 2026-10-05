@@ -1,0 +1,35 @@
+{
+  "model": "mmetamong/ko-decision-roberta-large",
+  "revision": "dfd606fff30d52963c0073659ff9a8f6bf1fce6d",
+  "parameters": 336657409,
+  "device": "cpu",
+  "threads": 4,
+  "torch": "2.14.1",
+  "transformers": "5.18.0",
+  "load_seconds": 0.3046953340017353,
+  "pair_token_lengths": [
+    59,
+    63,
+    59
+  ],
+  "probabilities": [
+    7.783985438436503e-07,
+    6.238940386538161e-07,
+    0.9999985694885254
+  ],
+  "source_card_example_reproduced": true,
+  "files_sha256": {
+    "model.safetensors": "aac3d7fbfeaabe2ff532028ab296067e4b47ed41848819f6919fa8c695073c5d",
+    "DATA_NOTICE.md": "9474a7113c2ee26f00cc7289dd71aec7595a9182e3407811c41cd17b0a41433c",
+    "tokenizer_config.json": "8c335996b382be0daf5ca42ddf4a91efbecf76826ccf26c9e46dd4bb424ded96",
+    "special_tokens_map.json": "63cd5b53789b3b5ae2c3d7aa377bcba1557ff0b41dc69ce07b94350ea32291c2",
+    "calibration.json": "c0cf04f8888deb72330d19007f0d28a260aab81bf05c6176d88f99a78a98aa1d",
+    "config.json": "455741c4f35481ddaadec5c5004de59f05054bfaf1ee08908ddf605eabd4645d",
+    "tokenizer.json": "dacfab652386ca05c69f0639e623c71754ae01e2a5d3c88ed16e86ba11ce9dc3",
+    "README.md": "2c9a64acde664b35539a75cf4edcf3b04514e2a79ff52c3aa29f24f03887d727",
+    "vocab.txt": "1ad4978b5dbe269dcc402a3c6eb71ceab21d712bca3b7d3b9994845e54cdcb39",
+    "DATA_LICENSE_CC-BY-SA-4.0.txt": "7abe19ec9bb73b36141b999b861d24ad855e808bafe0f81e84cce28556f6c297",
+    "files.sha256": "b433bcad83e5391c3a76e89e6df420d33cb2a63703389a2f263c75c404e8a980"
+  },
+  "inference_and_hashing_seconds": 1.1428999999989173
+}

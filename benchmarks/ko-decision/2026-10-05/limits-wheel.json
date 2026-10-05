@@ -1,0 +1,463 @@
+{
+  "checked_at": "2026-10-05T12:00:32.586809+00:00",
+  "scope": "Synthetic functional verification; one labeled example is not a quality estimate",
+  "provider": "ko-decision",
+  "prompt_language": "ko",
+  "model": "mmetamong/ko-decision-roberta-large",
+  "expected_model_revision": "dfd606fff30d52963c0073659ff9a8f6bf1fce6d",
+  "cli_mode": "installed",
+  "commands": [
+    {
+      "argv": [
+        "<python>",
+        "-I",
+        "-m",
+        "brain_openkit",
+        "doctor",
+        "--provider",
+        "ko-decision",
+        "--prompt-language",
+        "ko",
+        "--base-url",
+        "http://127.0.0.1:8010",
+        "--timeout",
+        "120",
+        "--vault",
+        "<temporary>/vault",
+        "--cache-dir",
+        "<temporary>/cache",
+        "--json"
+      ],
+      "exit_code": 0,
+      "response": {
+        "version": "0.2.0a4",
+        "provider": "ko-decision",
+        "health": {
+          "status": "ok",
+          "models": [
+            {
+              "name": "mmetamong/ko-decision-roberta-large",
+              "description": "Korean typed decisions; uncalibrated option probabilities",
+              "release_date": "2026-10-05",
+              "revision": "dfd606fff30d52963c0073659ff9a8f6bf1fce6d",
+              "max_length": 512,
+              "truncate_states": false,
+              "license": "cc-by-sa-4.0"
+            }
+          ]
+        },
+        "inference_verified": false
+      }
+    },
+    {
+      "argv": [
+        "<python>",
+        "-I",
+        "-m",
+        "brain_openkit",
+        "search",
+        "백업",
+        "--provider",
+        "none",
+        "--prompt-language",
+        "ko",
+        "--limit",
+        "2",
+        "--candidates",
+        "2",
+        "--vault",
+        "<temporary>/vault",
+        "--cache-dir",
+        "<temporary>/cache",
+        "--json"
+      ],
+      "exit_code": 0,
+      "response": {
+        "query": "백업",
+        "provider": "none",
+        "model": null,
+        "prompt_language": "ko",
+        "rerank_status": "disabled",
+        "fallback_reason": null,
+        "candidate_count": 2,
+        "results": [
+          {
+            "path": "oversized.md",
+            "title": "oversized",
+            "start_line": 1,
+            "end_line": 1,
+            "text": "백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 \n",
+            "bm25_score": 0.45454449407096115,
+            "model_score": null,
+            "decision": null
+          },
+          {
+            "path": "backup.md",
+            "title": "옵시디언 노트 백업",
+            "start_line": 1,
+            "end_line": 4,
+            "text": "# 옵시디언 노트 백업\r\n\r\n옵시디언의 마크다운 노트를 매일 외장 디스크에 백업한다.\r\n복원 시험을 통해 파일이 손상되지 않았는지 확인한다.\r\n",
+            "bm25_score": 0.3899774126584197,
+            "model_score": null,
+            "decision": null
+          }
+        ],
+        "index": {
+          "indexed": 2,
+          "unchanged": 0,
+          "deleted": 0,
+          "errors": []
+        },
+        "elapsed_ms": 4.746
+      }
+    },
+    {
+      "argv": [
+        "<python>",
+        "-I",
+        "-m",
+        "brain_openkit",
+        "search",
+        "백업",
+        "--limit",
+        "2",
+        "--candidates",
+        "2",
+        "--provider",
+        "ko-decision",
+        "--prompt-language",
+        "ko",
+        "--base-url",
+        "http://127.0.0.1:8010",
+        "--timeout",
+        "120",
+        "--vault",
+        "<temporary>/vault",
+        "--cache-dir",
+        "<temporary>/cache",
+        "--json"
+      ],
+      "exit_code": 0,
+      "response": {
+        "query": "백업",
+        "provider": "ko-decision",
+        "model": null,
+        "prompt_language": "ko",
+        "rerank_status": "unavailable",
+        "fallback_reason": "http_413",
+        "candidate_count": 2,
+        "results": [
+          {
+            "path": "oversized.md",
+            "title": "oversized",
+            "start_line": 1,
+            "end_line": 1,
+            "text": "백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 백업 \n",
+            "bm25_score": 0.45454449407096115,
+            "model_score": null,
+            "decision": null
+          },
+          {
+            "path": "backup.md",
+            "title": "옵시디언 노트 백업",
+            "start_line": 1,
+            "end_line": 4,
+            "text": "# 옵시디언 노트 백업\r\n\r\n옵시디언의 마크다운 노트를 매일 외장 디스크에 백업한다.\r\n복원 시험을 통해 파일이 손상되지 않았는지 확인한다.\r\n",
+            "bm25_score": 0.3899774126584197,
+            "model_score": null,
+            "decision": null
+          }
+        ],
+        "index": {
+          "indexed": 0,
+          "unchanged": 2,
+          "deleted": 0,
+          "errors": []
+        },
+        "elapsed_ms": 5.062
+      }
+    },
+    {
+      "argv": [
+        "<python>",
+        "-I",
+        "-m",
+        "brain_openkit",
+        "classify",
+        "oversized.md",
+        "--taxonomy",
+        "<temporary>/taxonomy.json",
+        "--provider",
+        "ko-decision",
+        "--prompt-language",
+        "ko",
+        "--base-url",
+        "http://127.0.0.1:8010",
+        "--timeout",
+        "120",
+        "--vault",
+        "<temporary>/vault",
+        "--cache-dir",
+        "<temporary>/cache",
+        "--json"
+      ],
+      "exit_code": 2,
+      "response": {
+        "error": {
+          "code": "ProviderError",
+          "message": "http_413"
+        }
+      }
+    },
+    {
+      "argv": [
+        "<python>",
+        "-I",
+        "-m",
+        "brain_openkit",
+        "classify",
+        "backup.md",
+        "--taxonomy",
+        "<temporary>/taxonomy.json",
+        "--provider",
+        "ko-decision",
+        "--prompt-language",
+        "ko",
+        "--base-url",
+        "http://127.0.0.1:8010",
+        "--timeout",
+        "120",
+        "--vault",
+        "<temporary>/vault",
+        "--cache-dir",
+        "<temporary>/cache",
+        "--json"
+      ],
+      "exit_code": 0,
+      "response": {
+        "path": "backup.md",
+        "provider": "ko-decision",
+        "prompt_language": "ko",
+        "model": "mmetamong/ko-decision-roberta-large",
+        "status": "complete",
+        "review_required": false,
+        "category": "기술",
+        "category_candidates": [
+          "기술"
+        ],
+        "tags": [
+          "백업"
+        ],
+        "passages": [
+          {
+            "path": "backup.md",
+            "title": "옵시디언 노트 백업",
+            "start_line": 1,
+            "end_line": 4,
+            "text": "# 옵시디언 노트 백업\r\n\r\n옵시디언의 마크다운 노트를 매일 외장 디스크에 백업한다.\r\n복원 시험을 통해 파일이 손상되지 않았는지 확인한다.\r\n",
+            "category": "기술",
+            "category_decision": {
+              "choice": "A",
+              "probabilities": {
+                "A": 0.9996732202681112,
+                "B": 0.00032677973188878484
+              },
+              "confidence": 0.9993464405362225,
+              "model": "mmetamong/ko-decision-roberta-large",
+              "usage": {
+                "input_tokens": 159,
+                "output_tokens": 0,
+                "state_tokens": 56,
+                "state_tokens_dropped": 0,
+                "truncated": false,
+                "truncated_questions": [],
+                "max_pair_tokens": 80,
+                "model_revision": "dfd606fff30d52963c0073659ff9a8f6bf1fce6d"
+              },
+              "elapsed_ms": 149.00691599905258,
+              "answer_confidence": null
+            },
+            "tags": {
+              "백업": {
+                "suggested": true,
+                "choice": "A",
+                "probabilities": {
+                  "A": 0.9215166327374793,
+                  "B": 0.07848336726252081
+                },
+                "confidence": 0.8430332654749586,
+                "model": "mmetamong/ko-decision-roberta-large",
+                "usage": {
+                  "input_tokens": 174,
+                  "output_tokens": 0,
+                  "state_tokens": 56,
+                  "state_tokens_dropped": 0,
+                  "truncated": false,
+                  "truncated_questions": [],
+                  "max_pair_tokens": 89,
+                  "model_revision": "dfd606fff30d52963c0073659ff9a8f6bf1fce6d"
+                },
+                "elapsed_ms": 121.32104200281901,
+                "answer_confidence": null
+              },
+              "요리": {
+                "suggested": false,
+                "choice": "B",
+                "probabilities": {
+                  "A": 0.41263855206141126,
+                  "B": 0.5873614479385887
+                },
+                "confidence": 0.17472289587717738,
+                "model": "mmetamong/ko-decision-roberta-large",
+                "usage": {
+                  "input_tokens": 162,
+                  "output_tokens": 0,
+                  "state_tokens": 56,
+                  "state_tokens_dropped": 0,
+                  "truncated": false,
+                  "truncated_questions": [],
+                  "max_pair_tokens": 83,
+                  "model_revision": "dfd606fff30d52963c0073659ff9a8f6bf1fce6d"
+                },
+                "elapsed_ms": 100.70983300101943,
+                "answer_confidence": null
+              }
+            }
+          }
+        ],
+        "note_modified": false
+      }
+    },
+    {
+      "argv": [
+        "<python>",
+        "-I",
+        "-m",
+        "brain_openkit",
+        "organize",
+        "backup.md",
+        "--category",
+        "기술",
+        "--plan",
+        "<temporary>/organize-plan.json",
+        "--tag",
+        "백업",
+        "--vault",
+        "<temporary>/vault",
+        "--cache-dir",
+        "<temporary>/cache",
+        "--json"
+      ],
+      "exit_code": 0,
+      "response": {
+        "version": 1,
+        "vault": "<temporary>/vault",
+        "label": "Organize note",
+        "changes": [
+          {
+            "path": "backup.md",
+            "before": "# 옵시디언 노트 백업\r\n\r\n옵시디언의 마크다운 노트를 매일 외장 디스크에 백업한다.\r\n복원 시험을 통해 파일이 손상되지 않았는지 확인한다.\r\n",
+            "before_sha256": "b296865a061e26deb2efa88bb06eaa0e0b5651e34b54ccaf80272246ef7e101a",
+            "content": "---\r\ncategory: \"기술\"\r\ntags: [\"백업\"]\r\n---\r\n# 옵시디언 노트 백업\r\n\r\n옵시디언의 마크다운 노트를 매일 외장 디스크에 백업한다.\r\n복원 시험을 통해 파일이 손상되지 않았는지 확인한다.\r\n",
+            "after_sha256": "9b1e8283f27aceb18e954f5e36c40f4d50740c4a99bd6a097c62c26a0e13ca15",
+            "diff": "--- backup.md\n+++ backup.md\n@@ -1,3 +1,7 @@\n+---\r\n+category: \"기술\"\r\n+tags: [\"백업\"]\r\n+---\r\n # 옵시디언 노트 백업\r\n \r\n 옵시디언의 마크다운 노트를 매일 외장 디스크에 백업한다.\r\n"
+          }
+        ],
+        "id": "3a19c3f28d8000605f885a80281d93226f81492d143deb086f671dc450b901cb"
+      }
+    },
+    {
+      "argv": [
+        "<python>",
+        "-I",
+        "-m",
+        "brain_openkit",
+        "apply",
+        "<temporary>/organize-plan.json",
+        "--approve",
+        "3a19c3f28d8000605f885a80281d93226f81492d143deb086f671dc450b901cb",
+        "--vault",
+        "<temporary>/vault",
+        "--cache-dir",
+        "<temporary>/cache",
+        "--json"
+      ],
+      "exit_code": 0,
+      "response": {
+        "transaction_id": "a56f75d8be0b4ab89fc33f30176ca993",
+        "status": "applied",
+        "paths": [
+          "backup.md"
+        ]
+      }
+    },
+    {
+      "argv": [
+        "<python>",
+        "-I",
+        "-m",
+        "brain_openkit",
+        "undo",
+        "a56f75d8be0b4ab89fc33f30176ca993",
+        "--vault",
+        "<temporary>/vault",
+        "--cache-dir",
+        "<temporary>/cache",
+        "--json"
+      ],
+      "exit_code": 0,
+      "response": {
+        "transaction_id": "a56f75d8be0b4ab89fc33f30176ca993",
+        "status": "undone",
+        "paths": [
+          "backup.md"
+        ]
+      }
+    }
+  ],
+  "model_revision": "dfd606fff30d52963c0073659ff9a8f6bf1fce6d",
+  "oversized_input": {
+    "single_line_repetitions": 900,
+    "search_restores_complete_bm25": true,
+    "search_fallback_reason": "http_413",
+    "classification_exit_code": 2,
+    "classification_error": "http_413",
+    "source_hashes_unchanged": true,
+    "boundary_scope": "Exact 512/513-token boundary is covered separately by runtime unit tests"
+  },
+  "single_labeled_example": {
+    "expected_category": "기술",
+    "predicted_category": "기술",
+    "category_matches": true,
+    "expected_tags": [
+      "백업"
+    ],
+    "predicted_tags": [
+      "백업"
+    ],
+    "exact_tags_match": true,
+    "false_positive_tags": [],
+    "false_negative_tags": [],
+    "quality_conclusion": "Not estimated from this single synthetic note"
+  },
+  "reviewed_write": {
+    "preview_did_not_modify_note": true,
+    "plan_stored_outside_vault": true,
+    "approved_exact_plan_id": "3a19c3f28d8000605f885a80281d93226f81492d143deb086f671dc450b901cb",
+    "applied_metadata": {
+      "category": "기술",
+      "tags": [
+        "백업"
+      ]
+    },
+    "original_body_bytes_preserved": true,
+    "source_sha256": "b296865a061e26deb2efa88bb06eaa0e0b5651e34b54ccaf80272246ef7e101a",
+    "applied_sha256": "9b1e8283f27aceb18e954f5e36c40f4d50740c4a99bd6a097c62c26a0e13ca15",
+    "undo_restores_original_bytes": true
+  },
+  "source_sha256": {
+    "backup.md": "b296865a061e26deb2efa88bb06eaa0e0b5651e34b54ccaf80272246ef7e101a",
+    "oversized.md": "cadec4140297f644b605529e77b8293ad584b91a4ad7301522620efea00dc807"
+  },
+  "functional_checks_passed": true
+}
