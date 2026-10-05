@@ -22,7 +22,7 @@ note paths, relative to `examples/vault/`. For example, `garden.md` refers to
 ```
 
 This tiny dataset is a **smoke check for the retrieval/evaluation workflow**.
-It is not a quality benchmark, held-out test set, or evidence that Laya improves
+It is not a quality benchmark, held-out test set, or evidence that Laya or Kev improves
 retrieval. Do not use its scores to make Korean/English performance claims.
 
 Evaluation reports macro-averaged recall at the requested result limit and
@@ -34,3 +34,18 @@ effects, and model loading; they are not isolated model-inference benchmarks.
 See the [project README](../README.md) for the current installation and CLI
 instructions. The example vault can be copied to a temporary directory for
 experiments; evaluation does not require modifying the source notes.
+
+With a local server running, the same examples work with either provider:
+
+```bash
+brain-openkit search "reading journal comets" --vault examples/vault --provider laya --timeout 120 --json
+brain-openkit search "reading journal comets" --vault examples/vault --provider kev --timeout 120 --json
+brain-openkit classify local-search.md --vault examples/vault --taxonomy examples/taxonomy.json --provider kev --timeout 120 --json
+brain-openkit evaluate examples/evaluation.jsonl --vault examples/vault --provider kev --timeout 120 --json
+```
+
+Start with `doctor --provider laya --probe --timeout 120` or
+`doctor --provider kev --probe --timeout 120`
+to check synthetic inference. A successful HTTP health check alone does not
+establish that weights have loaded. See the [local model guide](../docs/local-models.md)
+for setup and recorded verification.

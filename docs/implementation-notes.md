@@ -1,5 +1,9 @@
 # Implementation and validation notes
 
+For the subsequent 0.2.0a2 Laya/Kev integration and actual model checks, see
+[the 2026-10-05 verification](model-verification-2026-10-05.md).
+The dated 0.2.0a1 evidence below is retained as a historical snapshot.
+
 Snapshot: 2026-10-04. Version: `0.2.0a1`, source installation from the
 `codex/cli-mvp` implementation branch until merged. No PyPI release is published.
 These notes distinguish implementation, fixture checks, actual execution, and

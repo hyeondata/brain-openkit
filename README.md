@@ -18,7 +18,7 @@
   <a href="#providers">Providers</a> · <a href="#roadmap">Roadmap</a>
 </p>
 
-> **Source-installable alpha (0.2.0a1).** Use the `codex/cli-mvp` implementation
+> **Source-installable alpha (0.2.0a2).** Use the `codex/cli-mvp` implementation
 > branch until it is merged into `main`. There is no published PyPI package.
 > The CLI and agent skills are implemented; validation and remaining gaps are
 > recorded in [implementation notes](docs/implementation-notes.md).
@@ -26,7 +26,7 @@
 Brain OpenKit finds Markdown passages with original paths, line numbers, and
 excerpts. **Search defaults to local BM25, without a model or API key.** Claude
 Code or Codex can use the same eight skills to retrieve evidence, draft notes,
-and apply reviewed changes. Optional Laya and TypeSafe Jev adapters make
+and apply reviewed changes. Optional Laya, Kev, and TypeSafe Jev adapters make
 relevance and category/tag decisions; they do not generate prose.
 
 ## What it does
@@ -62,7 +62,7 @@ brain-openkit --version
 
 On Windows, activate with `.venv\Scripts\Activate.ps1` in PowerShell.
 The CLI has no third-party runtime dependencies; installation may download
-build tooling. Laya uses a separate optional environment.
+build tooling. Local Laya and Kev servers use separate optional environments.
 
 Every vault workflow requires **`--vault` or `vault` in a JSON config**.
 The CLI does not infer the vault from a note's parent directory. Only
@@ -104,7 +104,7 @@ installation, invocation, workspace skill fallback, validation, and removal.
 
 The host writes requested prose and supplies any web/extraction tools.
 The CLI itself ingests local UTF-8 text; it does not browse, perform OCR, or
-transcribe. Local Laya does not make a hosted Claude/Codex conversation offline.
+transcribe. Local decision models do not make a hosted Claude/Codex conversation offline.
 
 ## Try local search
 
@@ -187,12 +187,22 @@ Keep the journal for recovery; removing a plugin does not remove it.
 | --- | --- |
 | `none` | Default for search/evaluate; local BM25, no model key or inference. |
 | `laya` | Optional local multilingual decisions; exercised with real weights. |
+| `kev` | Optional local decisions; real Hugging Face Kev 0.5B weights passed the [CLI functional checks](docs/model-verification-2026-10-05.md). |
 | `jev` | Hosted TypeSafe adapter; contract fixtures pass, live-key inference remains unverified. |
 
 `classify` and `doctor` default to Laya unless overridden by config or flags.
 The common protocol currently implements `choose`; generic `score` and
 `noul` operations are future work. Remote providers receive selected excerpts
 when explicitly selected; there is no automatic cloud failover.
+
+Laya and Kev both download public weights from Hugging Face and run locally.
+They use their own official servers behind the same Brain OpenKit commands;
+Hugging Face hosts the downloads, not inference for this setup. No Hugging Face
+token is required for these public weights. See the [local model guide](docs/local-models.md)
+for pinned versions and the distinction between a checkpoint and an API model name.
+Both providers passed [actual CLI checks](docs/model-verification-2026-10-05.md)
+for inference, reranking, category/tag suggestions, evaluation, failure fallback,
+and unchanged source notes. These checks establish execution, not quality parity.
 
 ### Optional Laya server
 
@@ -205,6 +215,7 @@ python -m pip install "laya[serve]==0.3.26"
 LAYA_HOST=127.0.0.1 LAYA_PORT=8000 \
 LAYA_DEVICE=cpu LAYA_THREADS=4 \
 LAYA_MODELS=multilingual LAYA_DEFAULT_MODEL=multilingual LAYA_PRELOAD=0 \
+LAYA_REVISION=7b928d828b7b0e022f929d9bd2e44165aa270148 \
 laya-serve
 ~~~
 
@@ -228,6 +239,26 @@ trigger downloading. Use `--timeout 120` for initial loading instead of the
 default 10 seconds. If server authentication is enabled, set the same
 `LAYA_API_KEY` in both terminals. These public weights do not require a
 Hugging Face token.
+
+### Optional Kev server
+
+Start the server with the [Kev 0.5B setup](docs/local-models.md#kev-05b) in a
+separate terminal, then run these commands from the CLI environment:
+
+~~~bash
+brain-openkit doctor --provider kev --json
+brain-openkit doctor --provider kev --probe --timeout 120 --json
+brain-openkit search "reading journal comets" --vault examples/vault --provider kev --timeout 120 --json
+brain-openkit classify local-search.md --vault examples/vault --taxonomy examples/taxonomy.json --provider kev --timeout 120 --json
+brain-openkit evaluate examples/evaluation.jsonl --vault examples/vault --provider kev --timeout 120 --json
+~~~
+
+The default endpoint is `http://127.0.0.1:8009` and API model name is
+`kev-latest`. The server's startup command selects the Hugging Face checkpoint;
+`--model` selects an API model name and does not download or switch weights.
+Local Kev needs no API key unless the server enables authentication; in that
+case set the matching `KEV_API_KEY` in the CLI environment. Kev is a separate
+project from the hosted TypeSafe Jev service.
 
 ### Optional TypeSafe Jev
 
@@ -258,6 +289,8 @@ Example configuration saved at the checkout root:
   "cache_dir": ".cache/brain-openkit",
   "provider": "none",
   "laya_base_url": "http://127.0.0.1:8000",
+  "kev_base_url": "http://127.0.0.1:8009",
+  "kev_model": "kev-latest",
   "jev_base_url": "https://api.typesafe.ai",
   "jev_model": "jev-latest",
   "timeout": 10,
@@ -270,8 +303,10 @@ Example configuration saved at the checkout root:
 Flags override JSON settings, which override defaults. JSON `vault` and
 `cache_dir` resolve from the config file. An optional `base_url` config field
 or `--base-url` overrides the selected provider's endpoint. Keys are environment
-variables only. Classification/organization/source-note paths are vault-relative;
-input drafts, taxonomy, datasets, and plans resolve from the working directory.
+variables only. `--model` overrides the selected Kev/Jev API model name;
+Laya explicitly uses its multilingual model. Classification/organization/source-note
+paths are vault-relative; input drafts, taxonomy, datasets, and plans resolve
+from the working directory.
 
 Output is UTF-8, including redirected files and pipes. Rerank status is
 `disabled`, `not_needed`, `complete`, or `unavailable`; unavailable
@@ -318,6 +353,7 @@ also describe intended behavior beyond completed validation.
 
 - [x] Source-preserving BM25 retrieval and optional Laya decisions.
 - [x] Jev adapter and separate provider settings, with contract tests.
+- [x] Interchangeable Laya/Kev local adapters with Hugging Face model setup.
 - [x] Reviewed note plans, metadata/link updates, transactions, undo/recovery.
 - [x] Source capture, wiki adoption, and host-assisted drafting/research skills.
 - [x] Eight shared Claude Code/Codex skills and a read-only local web interface.
@@ -340,5 +376,5 @@ Original code and documentation use the [MIT License](LICENSE). External code,
 weights, and hosted services retain their own licenses and terms. Inspired by
 [AgriciDaniel/claude-obsidian](https://github.com/AgriciDaniel/claude-obsidian)
 and independently implemented, without copying its code or templates.
-Brain OpenKit is not affiliated with Obsidian, Laya, TypeSafe, or claude-obsidian.
+Brain OpenKit is not affiliated with Obsidian, Laya, Kev, TypeSafe, or claude-obsidian.
 See [ATTRIBUTION.md](ATTRIBUTION.md).

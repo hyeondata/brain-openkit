@@ -18,7 +18,7 @@
   <a href="#제공자">제공자</a> · <a href="#로드맵">로드맵</a>
 </p>
 
-> **소스에서 설치하는 알파 버전(0.2.0a1)입니다.** 구현이 `main`에 병합되기 전에는
+> **소스에서 설치하는 알파 버전(0.2.0a2)입니다.** 구현이 `main`에 병합되기 전에는
 > `codex/cli-mvp` 브랜치를 사용하세요. PyPI 배포 패키지는 없습니다.
 > CLI와 에이전트 스킬을 구현했으며, 확인한 내용과 남은 검증은
 > [구현·검증 기록](docs/implementation-notes.md)에 정리했습니다.
@@ -26,7 +26,7 @@
 Brain OpenKit은 원문 경로, 줄 번호, 발췌와 함께 Markdown 문단을 찾습니다.
 **기본 검색은 모델이나 API 키가 필요 없는 로컬 BM25입니다.** Claude Code와 Codex는
 동일한 8개 스킬로 근거를 검색하고 노트를 작성하며 검토한 변경을 적용할 수 있습니다.
-선택적 Laya·TypeSafe Jev 어댑터는 관련성·분류·태그를 판단하고, 문장을 생성하지 않습니다.
+선택적 Laya·Kev·TypeSafe Jev 어댑터는 관련성·분류·태그를 판단하고, 문장을 생성하지 않습니다.
 
 ## 현재 기능
 
@@ -61,7 +61,7 @@ brain-openkit --version
 
 Windows는 PowerShell에서 `.venv\Scripts\Activate.ps1`로 활성화합니다.
 CLI에는 외부 런타임 의존성이 없지만 설치 중 빌드 도구를 다운로드할 수 있습니다.
-Laya는 별도 선택적 환경을 사용합니다.
+로컬 Laya·Kev 서버는 각각 별도 선택적 환경을 사용합니다.
 
 모든 vault 작업은 **`--vault` 또는 JSON 설정의 `vault`가 필요합니다.**
 노트의 부모 디렉터리에서 vault를 추정하지 않습니다.
@@ -103,7 +103,7 @@ codex plugin add brain-openkit@brain-openkit
 
 요청한 문장 작성과 웹 검색·자료 추출은 호스트가 담당합니다.
 CLI 자체는 로컬 UTF-8 텍스트를 수집하며 웹 탐색·OCR·음성 전사를 하지 않습니다.
-로컬 Laya를 사용해도 호스팅된 Claude·Codex 대화 전체가 오프라인이 되는 것은 아닙니다.
+로컬 판단 모델을 사용해도 호스팅된 Claude·Codex 대화 전체가 오프라인이 되는 것은 아닙니다.
 
 ## 로컬 검색 실행
 
@@ -184,11 +184,21 @@ brain-openkit recover INTERRUPTED_TRANSACTION_ID --vault ../brain-openkit-demo -
 | --- | --- |
 | `none` | 검색·평가 기본값. 로컬 BM25이며 모델 키·추론이 필요 없습니다. |
 | `laya` | 선택적 로컬 다국어 판단. 실제 가중치로 실행했습니다. |
+| `kev` | Hugging Face의 실제 Kev 0.5B 가중치로 [CLI 기능 검증](docs/model-verification-2026-10-05.md)을 통과한 선택적 로컬 판단. |
 | `jev` | TypeSafe 호스팅 어댑터. 계약 fixture 테스트를 통과했으며 실제 키로 추론은 미검증입니다. |
 
 `classify`·`doctor`는 설정이나 옵션으로 바꾸지 않으면 Laya를 사용합니다.
 공통 계약은 현재 `choose`를 구현했으며 일반 `score`·`noul` 연산은 후속 범위입니다.
 원격 제공자를 명시적으로 선택하면 발췌문이 전송되며 클라우드로 자동 전환하지 않습니다.
+
+Laya와 Kev는 모두 Hugging Face의 공개 가중치를 내려받아 로컬에서 실행합니다.
+각 모델의 공식 서버를 사용하되 Brain OpenKit에서는 같은 명령으로 교체합니다.
+이 구성에서 Hugging Face는 다운로드 저장소이며, 추론은 사용자 컴퓨터에서 실행됩니다.
+공개 가중치 다운로드에 Hugging Face 토큰은 필요하지 않습니다.
+고정 버전과 가중치·API 모델 이름의 차이는 [로컬 모델 안내](docs/local-models.md)에 있습니다.
+두 제공자 모두 추론, 검색 재정렬, 분류·태그 추천, 평가, 실패 시 fallback,
+원문 보존을 [실제 CLI로 확인](docs/model-verification-2026-10-05.md)했습니다.
+이는 기능 실행 확인이며 품질이 같다는 의미는 아닙니다.
 
 ### 선택적 Laya 서버
 
@@ -201,6 +211,7 @@ python -m pip install "laya[serve]==0.3.26"
 LAYA_HOST=127.0.0.1 LAYA_PORT=8000 \
 LAYA_DEVICE=cpu LAYA_THREADS=4 \
 LAYA_MODELS=multilingual LAYA_DEFAULT_MODEL=multilingual LAYA_PRELOAD=0 \
+LAYA_REVISION=7b928d828b7b0e022f929d9bd2e44165aa270148 \
 laya-serve
 ~~~
 
@@ -223,6 +234,25 @@ brain-openkit evaluate examples/evaluation.jsonl --vault examples/vault --provid
 시작할 수 있습니다. 첫 적재에는 기본 10초 대신 `--timeout 120`을 사용하세요.
 서버 인증을 설정했다면 두 터미널의 `LAYA_API_KEY`에 같은 키를 넣습니다.
 이 공개 가중치에는 Hugging Face 토큰이 필요하지 않습니다.
+
+### 선택적 Kev 서버
+
+별도 터미널에서 [Kev 0.5B 설정](docs/local-models.md#kev-05b)으로 서버를 시작한 뒤
+CLI 환경에서 실행합니다.
+
+~~~bash
+brain-openkit doctor --provider kev --json
+brain-openkit doctor --provider kev --probe --timeout 120 --json
+brain-openkit search "reading journal comets" --vault examples/vault --provider kev --timeout 120 --json
+brain-openkit classify local-search.md --vault examples/vault --taxonomy examples/taxonomy.json --provider kev --timeout 120 --json
+brain-openkit evaluate examples/evaluation.jsonl --vault examples/vault --provider kev --timeout 120 --json
+~~~
+
+기본 주소는 `http://127.0.0.1:8009`, API 모델 이름은 `kev-latest`입니다.
+Hugging Face 가중치는 서버 시작 명령에서 선택합니다. `--model`은 API 모델 이름을
+선택하며 가중치를 다운로드하거나 교체하지 않습니다. 로컬 Kev는 서버 인증을 켠
+경우에만 키가 필요하며, 이때 CLI 환경의 `KEV_API_KEY`에 같은 키를 설정합니다.
+Kev는 TypeSafe의 호스팅 서비스 Jev와 별개 프로젝트입니다.
 
 ### 선택적 TypeSafe Jev
 
@@ -251,6 +281,8 @@ brain-openkit classify local-search.md --vault examples/vault --taxonomy example
   "cache_dir": ".cache/brain-openkit",
   "provider": "none",
   "laya_base_url": "http://127.0.0.1:8000",
+  "kev_base_url": "http://127.0.0.1:8009",
+  "kev_model": "kev-latest",
   "jev_base_url": "https://api.typesafe.ai",
   "jev_model": "jev-latest",
   "timeout": 10,
@@ -263,6 +295,7 @@ brain-openkit classify local-search.md --vault examples/vault --taxonomy example
 명령 옵션이 JSON 설정보다, JSON 설정이 기본값보다 우선합니다. JSON의 `vault`,
 `cache_dir`는 설정 파일 기준입니다. 선택적인 `base_url` 설정이나 `--base-url`은
 선택한 제공자의 주소를 덮어씁니다. 키는 환경 변수로만 전달합니다.
+`--model`은 선택한 Kev·Jev의 API 모델 이름을 덮어쓰며, Laya는 다국어 모델을 명시적으로 사용합니다.
 분류·정리·원본 노트 경로는 vault 기준이며, 입력 초안·분류 목록·평가 자료·계획 파일은
 현재 디렉터리 기준입니다.
 
@@ -310,6 +343,7 @@ Holdout 분류 정확도는 0.6667, 태그 micro F1은 0.4691이며 태그 오�
 
 - [x] 원문을 보존하는 BM25 검색과 선택적 Laya 판단
 - [x] Jev 어댑터·제공자별 설정과 계약 테스트
+- [x] Laya·Kev 로컬 어댑터 교체와 Hugging Face 모델 설정 안내
 - [x] 검토한 노트 계획·메타데이터·링크 변경, 트랜잭션, 실행 취소·복구
 - [x] 원문 수집·기존 위키 채택·호스트 기반 초안 작성·조사 스킬
 - [x] Claude Code·Codex 공용 스킬 8개와 읽기 전용 로컬 웹 화면
@@ -332,5 +366,5 @@ CLI 환경에서 `python -m unittest discover -s tests -v`로 테스트합니다
 각자의 라이선스·약관을 따릅니다.
 [AgriciDaniel/claude-obsidian](https://github.com/AgriciDaniel/claude-obsidian)에서
 영감을 받아 코드·템플릿을 복사하지 않고 독립 구현했습니다.
-Obsidian, Laya, TypeSafe, claude-obsidian과 제휴한 프로젝트가 아닙니다.
+Obsidian, Laya, Kev, TypeSafe, claude-obsidian과 제휴한 프로젝트가 아닙니다.
 [ATTRIBUTION.md](ATTRIBUTION.md)를 참고하세요.

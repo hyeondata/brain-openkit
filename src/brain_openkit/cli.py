@@ -45,9 +45,9 @@ def _parser() -> argparse.ArgumentParser:
         command.add_argument("--cache-dir", type=Path, help="Derived SQLite cache (default: .cache/brain-openkit)")
         command.add_argument("--json", action="store_true", help="Emit one JSON object, including errors")
         if name in ("doctor", "search", "classify", "evaluate"):
-            command.add_argument("--provider", choices=("none", "laya", "jev"))
+            command.add_argument("--provider", choices=("none", "laya", "kev", "jev"))
             command.add_argument("--base-url", help="Override the selected provider's endpoint")
-            command.add_argument("--model", dest="jev_model", help="Jev model ID (default: jev-latest)")
+            command.add_argument("--model", help="Jev/Kev server model ID; does not select or download HF weights")
             command.add_argument("--timeout", type=float, help="HTTP timeout in seconds")
             command.add_argument("--max-tokens", type=int, help="Laya sequence budget, 1024 by default")
         if name in ("search", "evaluate"):
@@ -109,7 +109,9 @@ def _settings(args: argparse.Namespace) -> dict:
     result = {"vault": None, "cache_dir": Path(".cache/brain-openkit"),
               "provider": "laya" if args.command in ("classify", "doctor") else "none",
               "base_url": None, "laya_base_url": "http://127.0.0.1:8000",
-              "jev_base_url": "https://api.typesafe.ai", "jev_model": "jev-latest", "timeout": 10.0,
+              "jev_base_url": "https://api.typesafe.ai", "jev_model": "jev-latest",
+              "kev_base_url": "http://127.0.0.1:8009", "kev_model": "kev-latest", "model": None,
+              "timeout": 10.0,
               "max_tokens": 1024, "limit": 5, "candidates": 20}
     if args.config:
         config = _read_json(args.config)
@@ -126,13 +128,15 @@ def _settings(args: argparse.Namespace) -> dict:
         value = getattr(args, key, None)
         if value is not None:
             result[key] = value
-    if result["provider"] not in ("none", "laya", "jev"):
-        raise ValueError("Supported providers are none, laya and jev")
+    if result["provider"] not in ("none", "laya", "kev", "jev"):
+        raise ValueError("Supported providers are none, laya, kev and jev")
     if result["base_url"] is not None and not isinstance(result["base_url"], str):
         raise ValueError("base_url must be a URL string")
-    for key in ("laya_base_url", "jev_base_url", "jev_model"):
+    for key in ("laya_base_url", "jev_base_url", "jev_model", "kev_base_url", "kev_model"):
         if not isinstance(result[key], str) or not result[key].strip():
             raise ValueError(f"{key} must be a nonempty string")
+    if result["model"] is not None and (not isinstance(result["model"], str) or not result["model"].strip()):
+        raise ValueError("model must be a nonempty string")
     for key in ("limit", "candidates", "max_tokens"):
         if type(result[key]) is not int:
             raise ValueError(f"{key} must be an integer")
@@ -158,7 +162,12 @@ def _provider(settings: dict):
         from .jev import JevProvider
         return JevProvider(base_url=settings["base_url"] or settings["jev_base_url"],
                            api_key=os.environ.get("TYPESAFE_API_KEY") or os.environ.get("JEV_API_KEY"),
-                           model=settings["jev_model"], timeout=settings["timeout"])
+                           model=settings["model"] or settings["jev_model"], timeout=settings["timeout"])
+    if settings["provider"] == "kev":
+        from .kev import KevProvider
+        return KevProvider(base_url=settings["base_url"] or settings["kev_base_url"],
+                           api_key=os.environ.get("KEV_API_KEY"),
+                           model=settings["model"] or settings["kev_model"], timeout=settings["timeout"])
     return LayaProvider(base_url=settings["base_url"] or settings["laya_base_url"], api_key=os.environ.get("LAYA_API_KEY"),
                         timeout=settings["timeout"], max_tokens=settings["max_tokens"])
 
@@ -234,7 +243,7 @@ def _execute(args: argparse.Namespace) -> tuple[dict, int]:
         return report, 0
     if args.command == "classify":
         if provider is None:
-            raise ValueError("Classification requires --provider laya or jev and a reachable service")
+            raise ValueError("Classification requires --provider laya, kev or jev and a reachable service")
         return classify(vault, args.note, _read_json(args.taxonomy), provider), 0
     options = {"cache_dir": cache, "provider": provider, "limit": settings["limit"], "candidates": settings["candidates"]}
     if args.command == "search":

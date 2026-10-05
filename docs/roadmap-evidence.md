@@ -1,7 +1,7 @@
 # Roadmap implementation and evidence
 
 This matrix tracks the original roadmap rather than treating a plugin manifest
-as the completed product. Release target: **0.2.0a1**, source installation from
+as the completed product. Release target: **0.2.0a2**, source installation from
 `codex/cli-mvp`. Validation is against synthetic vaults, not private user data.
 
 Implementation is available in [draft PR #1](https://github.com/hyeondata/brain-openkit/pull/1).
@@ -9,15 +9,20 @@ All six [CI jobs at `33d3a42`](https://github.com/hyeondata/brain-openkit/action
 passed; actual host and model evidence is recorded in
 [implementation notes](implementation-notes.md).
 
+The 0.2.0a2 addition makes Laya and Hugging Face Kev checkpoints interchangeable
+through the CLI. See [the actual model checks](model-verification-2026-10-05.md)
+and [pinned local setup](local-models.md).
+
 | Original item | Implementation | Verification and remaining limits |
 | --- | --- | --- |
 | Read-only indexing and retrieval | SQLite refresh, BM25, exact path/line/excerpt | Original CLI tests; unchanged source hashes; Korean/English and CRLF checks |
 | Optional Laya decisions | Explicit multilingual choice adapter, whole-query fallback, passage classification/tags | Actual Laya 0.3.26/checkpoint run; 352 successful benchmark requests. Quality limits below |
+| Hugging Face Kev decisions | Optional local Kev adapter, separate endpoint/model/key, shared System One contract | Actual Kev-0.5B and Laya CLI search, category/tag suggestions, evaluation, HTTP outage fallback and unchanged source hashes. Kev-0.8B and other checkpoints remain unmeasured |
 | Installable CLI and tests | Python >=3.11 package and dependency-free plugin runner | Installed CLI, relocated plugin cache, standard-library test suite; CI verification recorded in implementation notes |
 | Broader Korean/English evaluation | Frozen 24-note corpus, 36 retrieval queries, category/tag labels; separate development and query holdout | Labels independently reviewed before measurement; metrics independently recomputed. Same-corpus synthetic holdout only |
 | Jev adapter/configuration | Separate TypeSafe response validation, environment credential, provider-specific endpoints/model | Local HTTP contract/error tests. Live account inference unverified because no key is configured; no silent hosted fallback |
 | Reviewed metadata/link updates with recovery | Preview hashes/diffs, explicit plan ID, journal, apply/undo/recover | Fault-injected second-file failure, actual subprocess crash, stale-edit refusal, metadata/newline and path tests |
-| Source ingestion, wiki creation, optional generation | Init/adopt index, immutable source capture, linked notes, save, additive fold, lint; host-written drafts | CLI workflow loop; actual agent runs recorded in implementation notes. Laya/Jev do not generate prose |
+| Source ingestion, wiki creation, optional generation | Init/adopt index, immutable source capture, linked notes, save, additive fold, lint; host-written drafts | CLI workflow loop; actual agent runs recorded in implementation notes. Laya/Kev/Jev choose from options; the host writes prose |
 | Obsidian plugin **or** local web interface | Read-only loopback web search | Actual browser Korean search and source display; HTTP/DOM/security regression tests. No native Obsidian plugin |
 | Added requirement: Claude and Codex use | Eight shared skills, each host's plugin/catalog, cached source runner | Claude strict manifest validation; Codex installed cache discovery; actual host invocation separately recorded |
 

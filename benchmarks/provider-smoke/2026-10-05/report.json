@@ -1,0 +1,1224 @@
+{
+  "checked_at": "2026-10-05T09:03:57.675297+00:00",
+  "scope": "Synthetic functional smoke, not a quality or cost comparison",
+  "providers": {
+    "laya": {
+      "health": {
+        "version": "0.2.0a2",
+        "provider": "laya",
+        "health": {
+          "status": "ok",
+          "loaded": [
+            "multilingual"
+          ],
+          "revisions": {
+            "multilingual": "7b928d828b7b0e022f929d9bd2e44165aa270148"
+          },
+          "device": "cpu",
+          "device_is_preference": false,
+          "checkpoint_devices": {
+            "multilingual": "cpu"
+          },
+          "cpu_fallbacks": {
+            "multilingual": {
+              "count": 0,
+              "last_reason": null
+            }
+          }
+        },
+        "inference_verified": false
+      },
+      "probe": {
+        "version": "0.2.0a2",
+        "provider": "laya",
+        "health": {
+          "status": "ok",
+          "loaded": [
+            "multilingual"
+          ],
+          "revisions": {
+            "multilingual": "7b928d828b7b0e022f929d9bd2e44165aa270148"
+          },
+          "device": "cpu",
+          "device_is_preference": false,
+          "checkpoint_devices": {
+            "multilingual": "cpu"
+          },
+          "cpu_fallbacks": {
+            "multilingual": {
+              "count": 0,
+              "last_reason": null
+            }
+          }
+        },
+        "inference_verified": true,
+        "probe": {
+          "choice": "A",
+          "probabilities": {
+            "A": 0.9685,
+            "B": 0.0315
+          },
+          "confidence": 0.7982,
+          "model": "convaiinnovations/laya/multilingual",
+          "usage": {
+            "input_tokens": 36,
+            "output_tokens": 0,
+            "state_tokens": 10,
+            "state_tokens_dropped": 0,
+            "truncated": false,
+            "truncated_questions": []
+          },
+          "elapsed_ms": 58.1482919951668,
+          "answer_confidence": 0.9685
+        }
+      },
+      "probe_matches_expected_A": true,
+      "search": {
+        "query": "검색",
+        "provider": "laya",
+        "model": "convaiinnovations/laya/multilingual",
+        "rerank_status": "complete",
+        "fallback_reason": null,
+        "candidate_count": 2,
+        "results": [
+          {
+            "path": "local-search.md",
+            "title": "로컬 검색 실험",
+            "start_line": 1,
+            "end_line": 7,
+            "text": "# 로컬 검색 실험\r\n\r\n한국어 Markdown 노트를 문단으로 나누고 BM25로 검색 후보를 찾는다.\r\n검색 결과에는 원문 경로와 줄 번호를 함께 표시한다.\r\n\r\nLaya 재정렬은 질문과 후보 문단의 관련성을 평가한다.\r\nBM25 단독 검색과 비교해 검색 품질이 개선되는지 확인한다.\r\n",
+            "bm25_score": 1.3046267792680704,
+            "model_score": 0.5874,
+            "decision": {
+              "choice": "A",
+              "probabilities": {
+                "A": 0.5874,
+                "B": 0.4126
+              },
+              "confidence": 0.0222,
+              "model": "convaiinnovations/laya/multilingual",
+              "usage": {
+                "input_tokens": 156,
+                "output_tokens": 0,
+                "state_tokens": 123,
+                "state_tokens_dropped": 0,
+                "truncated": false,
+                "truncated_questions": []
+              },
+              "elapsed_ms": 80.45975000277394,
+              "answer_confidence": 0.5874
+            }
+          },
+          {
+            "path": "garden.md",
+            "title": "베란다 바질 관리",
+            "start_line": 1,
+            "end_line": 6,
+            "text": "# 베란다 바질 관리\n\n바질 화분은 햇빛이 드는 베란다에 놓는다.\n흙 표면이 마르면 물을 주고 잎의 상태를 관찰한다.\n\n이번 주에는 새 잎이 두 장 자랐다. 이 기록은 문서 검색 예제를 위한 가상 관찰이다.\n",
+            "bm25_score": 0.6626247040354766,
+            "model_score": 0.2321,
+            "decision": {
+              "choice": "B",
+              "probabilities": {
+                "A": 0.2321,
+                "B": 0.7679
+              },
+              "confidence": 0.2184,
+              "model": "convaiinnovations/laya/multilingual",
+              "usage": {
+                "input_tokens": 137,
+                "output_tokens": 0,
+                "state_tokens": 104,
+                "state_tokens_dropped": 0,
+                "truncated": false,
+                "truncated_questions": []
+              },
+              "elapsed_ms": 79.4157910058857,
+              "answer_confidence": 0.7679
+            }
+          }
+        ],
+        "index": {
+          "indexed": 0,
+          "unchanged": 4,
+          "deleted": 0,
+          "errors": []
+        },
+        "elapsed_ms": 161.773
+      },
+      "classify": {
+        "local-search.md": {
+          "path": "local-search.md",
+          "provider": "laya",
+          "model": "convaiinnovations/laya/multilingual",
+          "status": "complete",
+          "review_required": false,
+          "category": "research",
+          "category_candidates": [
+            "research"
+          ],
+          "tags": [
+            "evaluation",
+            "local"
+          ],
+          "passages": [
+            {
+              "path": "local-search.md",
+              "title": "로컬 검색 실험",
+              "start_line": 1,
+              "end_line": 7,
+              "text": "# 로컬 검색 실험\r\n\r\n한국어 Markdown 노트를 문단으로 나누고 BM25로 검색 후보를 찾는다.\r\n검색 결과에는 원문 경로와 줄 번호를 함께 표시한다.\r\n\r\nLaya 재정렬은 질문과 후보 문단의 관련성을 평가한다.\r\nBM25 단독 검색과 비교해 검색 품질이 개선되는지 확인한다.\r\n",
+              "category": "research",
+              "category_decision": {
+                "choice": "A",
+                "probabilities": {
+                  "A": 0.5211,
+                  "B": 0.1609,
+                  "C": 0.3179
+                },
+                "confidence": 0.0916,
+                "model": "convaiinnovations/laya/multilingual",
+                "usage": {
+                  "input_tokens": 178,
+                  "output_tokens": 0,
+                  "state_tokens": 119,
+                  "state_tokens_dropped": 0,
+                  "truncated": false,
+                  "truncated_questions": []
+                },
+                "elapsed_ms": 91.18512499844655,
+                "answer_confidence": 0.5211
+              },
+              "tags": {
+                "local": {
+                  "suggested": true,
+                  "choice": "A",
+                  "probabilities": {
+                    "A": 0.7949,
+                    "B": 0.2051
+                  },
+                  "confidence": 0.2679,
+                  "model": "convaiinnovations/laya/multilingual",
+                  "usage": {
+                    "input_tokens": 160,
+                    "output_tokens": 0,
+                    "state_tokens": 119,
+                    "state_tokens_dropped": 0,
+                    "truncated": false,
+                    "truncated_questions": []
+                  },
+                  "elapsed_ms": 83.71908399567474,
+                  "answer_confidence": 0.7949
+                },
+                "evaluation": {
+                  "suggested": true,
+                  "choice": "A",
+                  "probabilities": {
+                    "A": 0.6852,
+                    "B": 0.3148
+                  },
+                  "confidence": 0.1014,
+                  "model": "convaiinnovations/laya/multilingual",
+                  "usage": {
+                    "input_tokens": 157,
+                    "output_tokens": 0,
+                    "state_tokens": 119,
+                    "state_tokens_dropped": 0,
+                    "truncated": false,
+                    "truncated_questions": []
+                  },
+                  "elapsed_ms": 84.34966699860524,
+                  "answer_confidence": 0.6852
+                },
+                "plants": {
+                  "suggested": false,
+                  "choice": "B",
+                  "probabilities": {
+                    "A": 0.4622,
+                    "B": 0.5378
+                  },
+                  "confidence": 0.0041,
+                  "model": "convaiinnovations/laya/multilingual",
+                  "usage": {
+                    "input_tokens": 155,
+                    "output_tokens": 0,
+                    "state_tokens": 119,
+                    "state_tokens_dropped": 0,
+                    "truncated": false,
+                    "truncated_questions": []
+                  },
+                  "elapsed_ms": 83.79366699955426,
+                  "answer_confidence": 0.5378
+                }
+              }
+            }
+          ],
+          "note_modified": false
+        },
+        "reading.md": {
+          "path": "reading.md",
+          "provider": "laya",
+          "model": "convaiinnovations/laya/multilingual",
+          "status": "complete",
+          "review_required": false,
+          "category": "reading",
+          "category_candidates": [
+            "reading"
+          ],
+          "tags": [],
+          "passages": [
+            {
+              "path": "reading.md",
+              "title": "Reading journal",
+              "start_line": 1,
+              "end_line": 6,
+              "text": "# Reading journal\n\nThe fictional book The Patient Observatory follows a group studying comets.\nMy reading notes compare their patient observations with hasty conclusions.\n\nThis invented journal entry provides a small English retrieval example.\n",
+              "category": "reading",
+              "category_decision": {
+                "choice": "C",
+                "probabilities": {
+                  "A": 0.0009,
+                  "B": 0.0009,
+                  "C": 0.9982
+                },
+                "confidence": 0.9871,
+                "model": "convaiinnovations/laya/multilingual",
+                "usage": {
+                  "input_tokens": 114,
+                  "output_tokens": 0,
+                  "state_tokens": 55,
+                  "state_tokens_dropped": 0,
+                  "truncated": false,
+                  "truncated_questions": []
+                },
+                "elapsed_ms": 74.18837500154041,
+                "answer_confidence": 0.9982
+              },
+              "tags": {
+                "local": {
+                  "suggested": false,
+                  "choice": "B",
+                  "probabilities": {
+                    "A": 0.1729,
+                    "B": 0.8271
+                  },
+                  "confidence": 0.3357,
+                  "model": "convaiinnovations/laya/multilingual",
+                  "usage": {
+                    "input_tokens": 96,
+                    "output_tokens": 0,
+                    "state_tokens": 55,
+                    "state_tokens_dropped": 0,
+                    "truncated": false,
+                    "truncated_questions": []
+                  },
+                  "elapsed_ms": 64.19308299518889,
+                  "answer_confidence": 0.8271
+                },
+                "evaluation": {
+                  "suggested": false,
+                  "choice": "B",
+                  "probabilities": {
+                    "A": 0.0728,
+                    "B": 0.9272
+                  },
+                  "confidence": 0.6238,
+                  "model": "convaiinnovations/laya/multilingual",
+                  "usage": {
+                    "input_tokens": 93,
+                    "output_tokens": 0,
+                    "state_tokens": 55,
+                    "state_tokens_dropped": 0,
+                    "truncated": false,
+                    "truncated_questions": []
+                  },
+                  "elapsed_ms": 65.54000000323867,
+                  "answer_confidence": 0.9272
+                },
+                "plants": {
+                  "suggested": false,
+                  "choice": "B",
+                  "probabilities": {
+                    "A": 0.116,
+                    "B": 0.884
+                  },
+                  "confidence": 0.4822,
+                  "model": "convaiinnovations/laya/multilingual",
+                  "usage": {
+                    "input_tokens": 91,
+                    "output_tokens": 0,
+                    "state_tokens": 55,
+                    "state_tokens_dropped": 0,
+                    "truncated": false,
+                    "truncated_questions": []
+                  },
+                  "elapsed_ms": 65.9506660012994,
+                  "answer_confidence": 0.884
+                }
+              }
+            }
+          ],
+          "note_modified": false
+        }
+      },
+      "evaluate": {
+        "dataset": "<checkout>/examples/evaluation.jsonl",
+        "query_count": 4,
+        "limit": 3,
+        "candidates": 6,
+        "requested_provider": "LayaProvider",
+        "baseline": {
+          "query_count": 4,
+          "recall_at_k": 1.0,
+          "mrr": 1.0,
+          "elapsed_ms": 5.410748992289882,
+          "model_query_count": 0,
+          "fallback_query_count": 0,
+          "rerank_status_counts": {
+            "disabled": 4
+          }
+        },
+        "requested": {
+          "query_count": 4,
+          "recall_at_k": 1.0,
+          "mrr": 1.0,
+          "elapsed_ms": 404.4265000047744,
+          "model_query_count": 4,
+          "fallback_query_count": 0,
+          "rerank_status_counts": {
+            "complete": 4
+          }
+        },
+        "queries": [
+          {
+            "query": "한국어 BM25 검색 후보와 원문 줄 번호",
+            "relevant": [
+              "local-search.md"
+            ],
+            "baseline": {
+              "paths": [
+                "local-search.md",
+                "garden.md"
+              ],
+              "recall_at_k": 1.0,
+              "reciprocal_rank": 1.0,
+              "elapsed_ms": 1.5472500017494895,
+              "rerank_status": "disabled",
+              "model_used": false,
+              "fallback_reason": null,
+              "provider": "none",
+              "model": null
+            },
+            "requested": {
+              "paths": [
+                "local-search.md",
+                "garden.md"
+              ],
+              "recall_at_k": 1.0,
+              "reciprocal_rank": 1.0,
+              "elapsed_ms": 178.02933399798349,
+              "rerank_status": "complete",
+              "model_used": true,
+              "fallback_reason": null,
+              "provider": "laya",
+              "model": "convaiinnovations/laya/multilingual"
+            }
+          },
+          {
+            "query": "바질 화분에 물을 주는 시점",
+            "relevant": [
+              "garden.md"
+            ],
+            "baseline": {
+              "paths": [
+                "garden.md"
+              ],
+              "recall_at_k": 1.0,
+              "reciprocal_rank": 1.0,
+              "elapsed_ms": 1.2867080004070885,
+              "rerank_status": "disabled",
+              "model_used": false,
+              "fallback_reason": null,
+              "provider": "none",
+              "model": null
+            },
+            "requested": {
+              "paths": [
+                "garden.md"
+              ],
+              "recall_at_k": 1.0,
+              "reciprocal_rank": 1.0,
+              "elapsed_ms": 84.20483300142223,
+              "rerank_status": "complete",
+              "model_used": true,
+              "fallback_reason": null,
+              "provider": "laya",
+              "model": "convaiinnovations/laya/multilingual"
+            }
+          },
+          {
+            "query": "hosted decision provider credentials",
+            "relevant": [
+              "provider-notes.md"
+            ],
+            "baseline": {
+              "paths": [
+                "provider-notes.md"
+              ],
+              "recall_at_k": 1.0,
+              "reciprocal_rank": 1.0,
+              "elapsed_ms": 1.3103749952279031,
+              "rerank_status": "disabled",
+              "model_used": false,
+              "fallback_reason": null,
+              "provider": "none",
+              "model": null
+            },
+            "requested": {
+              "paths": [
+                "provider-notes.md"
+              ],
+              "recall_at_k": 1.0,
+              "reciprocal_rank": 1.0,
+              "elapsed_ms": 75.76062500447733,
+              "rerank_status": "complete",
+              "model_used": true,
+              "fallback_reason": null,
+              "provider": "laya",
+              "model": "convaiinnovations/laya/multilingual"
+            }
+          },
+          {
+            "query": "fictional book comets reading journal",
+            "relevant": [
+              "reading.md"
+            ],
+            "baseline": {
+              "paths": [
+                "reading.md"
+              ],
+              "recall_at_k": 1.0,
+              "reciprocal_rank": 1.0,
+              "elapsed_ms": 1.266415994905401,
+              "rerank_status": "disabled",
+              "model_used": false,
+              "fallback_reason": null,
+              "provider": "none",
+              "model": null
+            },
+            "requested": {
+              "paths": [
+                "reading.md"
+              ],
+              "recall_at_k": 1.0,
+              "reciprocal_rank": 1.0,
+              "elapsed_ms": 66.43170800089138,
+              "rerank_status": "complete",
+              "model_used": true,
+              "fallback_reason": null,
+              "provider": "laya",
+              "model": "convaiinnovations/laya/multilingual"
+            }
+          }
+        ]
+      },
+      "injected_outage": {
+        "search": {
+          "query": "검색",
+          "provider": "laya",
+          "model": null,
+          "rerank_status": "unavailable",
+          "fallback_reason": "http_503",
+          "candidate_count": 2,
+          "results": [
+            {
+              "path": "local-search.md",
+              "title": "로컬 검색 실험",
+              "start_line": 1,
+              "end_line": 7,
+              "text": "# 로컬 검색 실험\r\n\r\n한국어 Markdown 노트를 문단으로 나누고 BM25로 검색 후보를 찾는다.\r\n검색 결과에는 원문 경로와 줄 번호를 함께 표시한다.\r\n\r\nLaya 재정렬은 질문과 후보 문단의 관련성을 평가한다.\r\nBM25 단독 검색과 비교해 검색 품질이 개선되는지 확인한다.\r\n",
+              "bm25_score": 1.3046267792680704,
+              "model_score": null,
+              "decision": null
+            },
+            {
+              "path": "garden.md",
+              "title": "베란다 바질 관리",
+              "start_line": 1,
+              "end_line": 6,
+              "text": "# 베란다 바질 관리\n\n바질 화분은 햇빛이 드는 베란다에 놓는다.\n흙 표면이 마르면 물을 주고 잎의 상태를 관찰한다.\n\n이번 주에는 새 잎이 두 장 자랐다. 이 기록은 문서 검색 예제를 위한 가상 관찰이다.\n",
+              "bm25_score": 0.6626247040354766,
+              "model_score": null,
+              "decision": null
+            }
+          ],
+          "index": {
+            "indexed": 0,
+            "unchanged": 4,
+            "deleted": 0,
+            "errors": []
+          },
+          "elapsed_ms": 59.527
+        },
+        "classify": {
+          "error": {
+            "code": "ProviderError",
+            "message": "http_503"
+          }
+        }
+      },
+      "source_hashes_unchanged": true
+    },
+    "kev": {
+      "health": {
+        "version": "0.2.0a2",
+        "provider": "kev",
+        "health": {
+          "status": "ok",
+          "models": [
+            {
+              "name": "kev-latest",
+              "description": "Kev pointer head on Qwen/Qwen2.5-0.5B, serving jaredpalmer/kev-0.5b@edf1dc6d7f8d983c0adfd251e80a686e5539fc61 at temperature 1.00",
+              "release_date": "2026-10-05",
+              "run": "jaredpalmer/kev-0.5b@edf1dc6d7f8d983c0adfd251e80a686e5539fc61",
+              "base": "Qwen/Qwen2.5-0.5B",
+              "lora": 16,
+              "device": "mps",
+              "backend": "torch",
+              "dtype": "float32",
+              "temperature": 1.0,
+              "max_state_tokens": 65536,
+              "truncate_states": false,
+              "cuda_graphs": null,
+              "prefix_cache": {
+                "size": 4,
+                "min_state_tokens": 384,
+                "max_tokens": 65536,
+                "hits": 0,
+                "misses": 0,
+                "cached_states": 0,
+                "oom_retries": 0
+              },
+              "batches": {
+                "count": 24,
+                "requests": 24,
+                "queued": 0
+              }
+            },
+            {
+              "name": "jev-latest",
+              "description": "Kev pointer head on Qwen/Qwen2.5-0.5B, serving jaredpalmer/kev-0.5b@edf1dc6d7f8d983c0adfd251e80a686e5539fc61 at temperature 1.00",
+              "release_date": "2026-10-05",
+              "run": "jaredpalmer/kev-0.5b@edf1dc6d7f8d983c0adfd251e80a686e5539fc61",
+              "base": "Qwen/Qwen2.5-0.5B",
+              "lora": 16,
+              "device": "mps",
+              "backend": "torch",
+              "dtype": "float32",
+              "temperature": 1.0,
+              "max_state_tokens": 65536,
+              "truncate_states": false,
+              "cuda_graphs": null,
+              "prefix_cache": {
+                "size": 4,
+                "min_state_tokens": 384,
+                "max_tokens": 65536,
+                "hits": 0,
+                "misses": 0,
+                "cached_states": 0,
+                "oom_retries": 0
+              },
+              "batches": {
+                "count": 24,
+                "requests": 24,
+                "queued": 0
+              }
+            }
+          ]
+        },
+        "inference_verified": false
+      },
+      "probe": {
+        "version": "0.2.0a2",
+        "provider": "kev",
+        "health": {
+          "status": "ok",
+          "models": [
+            {
+              "name": "kev-latest",
+              "description": "Kev pointer head on Qwen/Qwen2.5-0.5B, serving jaredpalmer/kev-0.5b@edf1dc6d7f8d983c0adfd251e80a686e5539fc61 at temperature 1.00",
+              "release_date": "2026-10-05",
+              "run": "jaredpalmer/kev-0.5b@edf1dc6d7f8d983c0adfd251e80a686e5539fc61",
+              "base": "Qwen/Qwen2.5-0.5B",
+              "lora": 16,
+              "device": "mps",
+              "backend": "torch",
+              "dtype": "float32",
+              "temperature": 1.0,
+              "max_state_tokens": 65536,
+              "truncate_states": false,
+              "cuda_graphs": null,
+              "prefix_cache": {
+                "size": 4,
+                "min_state_tokens": 384,
+                "max_tokens": 65536,
+                "hits": 0,
+                "misses": 0,
+                "cached_states": 0,
+                "oom_retries": 0
+              },
+              "batches": {
+                "count": 24,
+                "requests": 24,
+                "queued": 0
+              }
+            },
+            {
+              "name": "jev-latest",
+              "description": "Kev pointer head on Qwen/Qwen2.5-0.5B, serving jaredpalmer/kev-0.5b@edf1dc6d7f8d983c0adfd251e80a686e5539fc61 at temperature 1.00",
+              "release_date": "2026-10-05",
+              "run": "jaredpalmer/kev-0.5b@edf1dc6d7f8d983c0adfd251e80a686e5539fc61",
+              "base": "Qwen/Qwen2.5-0.5B",
+              "lora": 16,
+              "device": "mps",
+              "backend": "torch",
+              "dtype": "float32",
+              "temperature": 1.0,
+              "max_state_tokens": 65536,
+              "truncate_states": false,
+              "cuda_graphs": null,
+              "prefix_cache": {
+                "size": 4,
+                "min_state_tokens": 384,
+                "max_tokens": 65536,
+                "hits": 0,
+                "misses": 0,
+                "cached_states": 0,
+                "oom_retries": 0
+              },
+              "batches": {
+                "count": 24,
+                "requests": 24,
+                "queued": 0
+              }
+            }
+          ]
+        },
+        "inference_verified": true,
+        "probe": {
+          "choice": "A",
+          "probabilities": {
+            "A": 0.9998,
+            "B": 0.0002
+          },
+          "confidence": 0.9996,
+          "model": "kev-latest",
+          "usage": {
+            "input_tokens": 35,
+            "output_tokens": 52
+          },
+          "elapsed_ms": 125.76520800212165,
+          "answer_confidence": null
+        }
+      },
+      "probe_matches_expected_A": true,
+      "search": {
+        "query": "검색",
+        "provider": "kev",
+        "model": "kev-latest",
+        "rerank_status": "complete",
+        "fallback_reason": null,
+        "candidate_count": 2,
+        "results": [
+          {
+            "path": "local-search.md",
+            "title": "로컬 검색 실험",
+            "start_line": 1,
+            "end_line": 7,
+            "text": "# 로컬 검색 실험\r\n\r\n한국어 Markdown 노트를 문단으로 나누고 BM25로 검색 후보를 찾는다.\r\n검색 결과에는 원문 경로와 줄 번호를 함께 표시한다.\r\n\r\nLaya 재정렬은 질문과 후보 문단의 관련성을 평가한다.\r\nBM25 단독 검색과 비교해 검색 품질이 개선되는지 확인한다.\r\n",
+            "bm25_score": 1.3046267792680704,
+            "model_score": 0.905,
+            "decision": {
+              "choice": "A",
+              "probabilities": {
+                "A": 0.905,
+                "B": 0.095
+              },
+              "confidence": 0.81,
+              "model": "kev-latest",
+              "usage": {
+                "input_tokens": 153,
+                "output_tokens": 48
+              },
+              "elapsed_ms": 56.109958997694775,
+              "answer_confidence": null
+            }
+          },
+          {
+            "path": "garden.md",
+            "title": "베란다 바질 관리",
+            "start_line": 1,
+            "end_line": 6,
+            "text": "# 베란다 바질 관리\n\n바질 화분은 햇빛이 드는 베란다에 놓는다.\n흙 표면이 마르면 물을 주고 잎의 상태를 관찰한다.\n\n이번 주에는 새 잎이 두 장 자랐다. 이 기록은 문서 검색 예제를 위한 가상 관찰이다.\n",
+            "bm25_score": 0.6626247040354766,
+            "model_score": 0.8373,
+            "decision": {
+              "choice": "A",
+              "probabilities": {
+                "A": 0.8373,
+                "B": 0.1627
+              },
+              "confidence": 0.6747,
+              "model": "kev-latest",
+              "usage": {
+                "input_tokens": 141,
+                "output_tokens": 52
+              },
+              "elapsed_ms": 43.37841699452838,
+              "answer_confidence": null
+            }
+          }
+        ],
+        "index": {
+          "indexed": 0,
+          "unchanged": 4,
+          "deleted": 0,
+          "errors": []
+        },
+        "elapsed_ms": 101.258
+      },
+      "classify": {
+        "local-search.md": {
+          "path": "local-search.md",
+          "provider": "kev",
+          "model": "kev-latest",
+          "status": "complete",
+          "review_required": false,
+          "category": "research",
+          "category_candidates": [
+            "research"
+          ],
+          "tags": [
+            "evaluation",
+            "local",
+            "plants"
+          ],
+          "passages": [
+            {
+              "path": "local-search.md",
+              "title": "로컬 검색 실험",
+              "start_line": 1,
+              "end_line": 7,
+              "text": "# 로컬 검색 실험\r\n\r\n한국어 Markdown 노트를 문단으로 나누고 BM25로 검색 후보를 찾는다.\r\n검색 결과에는 원문 경로와 줄 번호를 함께 표시한다.\r\n\r\nLaya 재정렬은 질문과 후보 문단의 관련성을 평가한다.\r\nBM25 단독 검색과 비교해 검색 품질이 개선되는지 확인한다.\r\n",
+              "category": "research",
+              "category_decision": {
+                "choice": "A",
+                "probabilities": {
+                  "A": 0.9548,
+                  "B": 0.0028,
+                  "C": 0.0424
+                },
+                "confidence": 0.9322,
+                "model": "kev-latest",
+                "usage": {
+                  "input_tokens": 175,
+                  "output_tokens": 63
+                },
+                "elapsed_ms": 54.619290996924974,
+                "answer_confidence": null
+              },
+              "tags": {
+                "local": {
+                  "suggested": true,
+                  "choice": "A",
+                  "probabilities": {
+                    "A": 0.9492,
+                    "B": 0.0508
+                  },
+                  "confidence": 0.8983,
+                  "model": "kev-latest",
+                  "usage": {
+                    "input_tokens": 156,
+                    "output_tokens": 52
+                  },
+                  "elapsed_ms": 43.61466600676067,
+                  "answer_confidence": null
+                },
+                "evaluation": {
+                  "suggested": true,
+                  "choice": "A",
+                  "probabilities": {
+                    "A": 0.7939,
+                    "B": 0.2061
+                  },
+                  "confidence": 0.5879,
+                  "model": "kev-latest",
+                  "usage": {
+                    "input_tokens": 153,
+                    "output_tokens": 52
+                  },
+                  "elapsed_ms": 43.71945899765706,
+                  "answer_confidence": null
+                },
+                "plants": {
+                  "suggested": true,
+                  "choice": "A",
+                  "probabilities": {
+                    "A": 0.7906,
+                    "B": 0.2094
+                  },
+                  "confidence": 0.5812,
+                  "model": "kev-latest",
+                  "usage": {
+                    "input_tokens": 151,
+                    "output_tokens": 52
+                  },
+                  "elapsed_ms": 43.66120800114004,
+                  "answer_confidence": null
+                }
+              }
+            }
+          ],
+          "note_modified": false
+        },
+        "reading.md": {
+          "path": "reading.md",
+          "provider": "kev",
+          "model": "kev-latest",
+          "status": "complete",
+          "review_required": false,
+          "category": "reading",
+          "category_candidates": [
+            "reading"
+          ],
+          "tags": [],
+          "passages": [
+            {
+              "path": "reading.md",
+              "title": "Reading journal",
+              "start_line": 1,
+              "end_line": 6,
+              "text": "# Reading journal\n\nThe fictional book The Patient Observatory follows a group studying comets.\nMy reading notes compare their patient observations with hasty conclusions.\n\nThis invented journal entry provides a small English retrieval example.\n",
+              "category": "reading",
+              "category_decision": {
+                "choice": "C",
+                "probabilities": {
+                  "A": 0.0248,
+                  "B": 0.0035,
+                  "C": 0.9717
+                },
+                "confidence": 0.9575,
+                "model": "kev-latest",
+                "usage": {
+                  "input_tokens": 111,
+                  "output_tokens": 63
+                },
+                "elapsed_ms": 36.58395900129108,
+                "answer_confidence": null
+              },
+              "tags": {
+                "local": {
+                  "suggested": false,
+                  "choice": "B",
+                  "probabilities": {
+                    "A": 0.3518,
+                    "B": 0.6482
+                  },
+                  "confidence": 0.2964,
+                  "model": "kev-latest",
+                  "usage": {
+                    "input_tokens": 92,
+                    "output_tokens": 52
+                  },
+                  "elapsed_ms": 34.23962499800837,
+                  "answer_confidence": null
+                },
+                "evaluation": {
+                  "suggested": false,
+                  "choice": "B",
+                  "probabilities": {
+                    "A": 0.3361,
+                    "B": 0.6639
+                  },
+                  "confidence": 0.3279,
+                  "model": "kev-latest",
+                  "usage": {
+                    "input_tokens": 89,
+                    "output_tokens": 52
+                  },
+                  "elapsed_ms": 34.11466699617449,
+                  "answer_confidence": null
+                },
+                "plants": {
+                  "suggested": false,
+                  "choice": "B",
+                  "probabilities": {
+                    "A": 0.3935,
+                    "B": 0.6065
+                  },
+                  "confidence": 0.2129,
+                  "model": "kev-latest",
+                  "usage": {
+                    "input_tokens": 87,
+                    "output_tokens": 52
+                  },
+                  "elapsed_ms": 33.99283299950184,
+                  "answer_confidence": null
+                }
+              }
+            }
+          ],
+          "note_modified": false
+        }
+      },
+      "evaluate": {
+        "dataset": "<checkout>/examples/evaluation.jsonl",
+        "query_count": 4,
+        "limit": 3,
+        "candidates": 6,
+        "requested_provider": "KevProvider",
+        "baseline": {
+          "query_count": 4,
+          "recall_at_k": 1.0,
+          "mrr": 1.0,
+          "elapsed_ms": 5.3512079975917,
+          "model_query_count": 0,
+          "fallback_query_count": 0,
+          "rerank_status_counts": {
+            "disabled": 4
+          }
+        },
+        "requested": {
+          "query_count": 4,
+          "recall_at_k": 1.0,
+          "mrr": 1.0,
+          "elapsed_ms": 206.4779159918544,
+          "model_query_count": 4,
+          "fallback_query_count": 0,
+          "rerank_status_counts": {
+            "complete": 4
+          }
+        },
+        "queries": [
+          {
+            "query": "한국어 BM25 검색 후보와 원문 줄 번호",
+            "relevant": [
+              "local-search.md"
+            ],
+            "baseline": {
+              "paths": [
+                "local-search.md",
+                "garden.md"
+              ],
+              "recall_at_k": 1.0,
+              "reciprocal_rank": 1.0,
+              "elapsed_ms": 1.5889999995124526,
+              "rerank_status": "disabled",
+              "model_used": false,
+              "fallback_reason": null,
+              "provider": "none",
+              "model": null
+            },
+            "requested": {
+              "paths": [
+                "local-search.md",
+                "garden.md"
+              ],
+              "recall_at_k": 1.0,
+              "reciprocal_rank": 1.0,
+              "elapsed_ms": 90.64637499977835,
+              "rerank_status": "complete",
+              "model_used": true,
+              "fallback_reason": null,
+              "provider": "kev",
+              "model": "kev-latest"
+            }
+          },
+          {
+            "query": "바질 화분에 물을 주는 시점",
+            "relevant": [
+              "garden.md"
+            ],
+            "baseline": {
+              "paths": [
+                "garden.md"
+              ],
+              "recall_at_k": 1.0,
+              "reciprocal_rank": 1.0,
+              "elapsed_ms": 1.291957996727433,
+              "rerank_status": "disabled",
+              "model_used": false,
+              "fallback_reason": null,
+              "provider": "none",
+              "model": null
+            },
+            "requested": {
+              "paths": [
+                "garden.md"
+              ],
+              "recall_at_k": 1.0,
+              "reciprocal_rank": 1.0,
+              "elapsed_ms": 45.1812909959699,
+              "rerank_status": "complete",
+              "model_used": true,
+              "fallback_reason": null,
+              "provider": "kev",
+              "model": "kev-latest"
+            }
+          },
+          {
+            "query": "hosted decision provider credentials",
+            "relevant": [
+              "provider-notes.md"
+            ],
+            "baseline": {
+              "paths": [
+                "provider-notes.md"
+              ],
+              "recall_at_k": 1.0,
+              "reciprocal_rank": 1.0,
+              "elapsed_ms": 1.2532079999800771,
+              "rerank_status": "disabled",
+              "model_used": false,
+              "fallback_reason": null,
+              "provider": "none",
+              "model": null
+            },
+            "requested": {
+              "paths": [
+                "provider-notes.md"
+              ],
+              "recall_at_k": 1.0,
+              "reciprocal_rank": 1.0,
+              "elapsed_ms": 35.39737499522744,
+              "rerank_status": "complete",
+              "model_used": true,
+              "fallback_reason": null,
+              "provider": "kev",
+              "model": "kev-latest"
+            }
+          },
+          {
+            "query": "fictional book comets reading journal",
+            "relevant": [
+              "reading.md"
+            ],
+            "baseline": {
+              "paths": [
+                "reading.md"
+              ],
+              "recall_at_k": 1.0,
+              "reciprocal_rank": 1.0,
+              "elapsed_ms": 1.2170420013717376,
+              "rerank_status": "disabled",
+              "model_used": false,
+              "fallback_reason": null,
+              "provider": "none",
+              "model": null
+            },
+            "requested": {
+              "paths": [
+                "reading.md"
+              ],
+              "recall_at_k": 1.0,
+              "reciprocal_rank": 1.0,
+              "elapsed_ms": 35.2528750008787,
+              "rerank_status": "complete",
+              "model_used": true,
+              "fallback_reason": null,
+              "provider": "kev",
+              "model": "kev-latest"
+            }
+          }
+        ]
+      },
+      "injected_outage": {
+        "search": {
+          "query": "검색",
+          "provider": "kev",
+          "model": null,
+          "rerank_status": "unavailable",
+          "fallback_reason": "http_503",
+          "candidate_count": 2,
+          "results": [
+            {
+              "path": "local-search.md",
+              "title": "로컬 검색 실험",
+              "start_line": 1,
+              "end_line": 7,
+              "text": "# 로컬 검색 실험\r\n\r\n한국어 Markdown 노트를 문단으로 나누고 BM25로 검색 후보를 찾는다.\r\n검색 결과에는 원문 경로와 줄 번호를 함께 표시한다.\r\n\r\nLaya 재정렬은 질문과 후보 문단의 관련성을 평가한다.\r\nBM25 단독 검색과 비교해 검색 품질이 개선되는지 확인한다.\r\n",
+              "bm25_score": 1.3046267792680704,
+              "model_score": null,
+              "decision": null
+            },
+            {
+              "path": "garden.md",
+              "title": "베란다 바질 관리",
+              "start_line": 1,
+              "end_line": 6,
+              "text": "# 베란다 바질 관리\n\n바질 화분은 햇빛이 드는 베란다에 놓는다.\n흙 표면이 마르면 물을 주고 잎의 상태를 관찰한다.\n\n이번 주에는 새 잎이 두 장 자랐다. 이 기록은 문서 검색 예제를 위한 가상 관찰이다.\n",
+              "bm25_score": 0.6626247040354766,
+              "model_score": null,
+              "decision": null
+            }
+          ],
+          "index": {
+            "indexed": 0,
+            "unchanged": 4,
+            "deleted": 0,
+            "errors": []
+          },
+          "elapsed_ms": 3.649
+        },
+        "classify": {
+          "error": {
+            "code": "ProviderError",
+            "message": "http_503"
+          }
+        }
+      },
+      "source_hashes_unchanged": true
+    }
+  },
+  "source_sha256": {
+    "garden.md": "40558251ab366ccd8540b6e563b221ac97c90367399227ddc24507c74e6faa7d",
+    "local-search.md": "1e7fd050d9b9914cc9bd18109602ecbd12b30c6db0dedcdebe9de6ed069e49d4",
+    "provider-notes.md": "1826879deeb848c0965b0f5b653bc171b44b8f1adf3e6f0a391930c957487884",
+    "reading.md": "d746f9d7faf125204527882dc053e335d0be737627e32b995f2341ca207aa2ce"
+  },
+  "functional_checks_passed": true,
+  "runtime": {
+    "laya": {
+      "laya": "0.3.26",
+      "python": "3.13.1",
+      "torch": "2.14.1",
+      "transformers": "5.18.0",
+      "model": "convaiinnovations/laya",
+      "subfolder": "multilingual",
+      "revision": "7b928d828b7b0e022f929d9bd2e44165aa270148",
+      "device": "cpu",
+      "threads": 4
+    },
+    "kev": {
+      "python": "3.12.11",
+      "platform": "macOS-15.3.2-arm64-arm-64bit",
+      "packages": {
+        "torch": "2.8.0",
+        "transformers": "5.17.0",
+        "peft": "0.21.0",
+        "huggingface-hub": "1.32.0",
+        "uvicorn": "0.53.0"
+      },
+      "source_revision": "fe64b1274ea7f80d4095866df90666abb03e9cf6",
+      "weights": {
+        "jaredpalmer/kev-0.5b": "edf1dc6d7f8d983c0adfd251e80a686e5539fc61",
+        "Qwen/Qwen2.5-0.5B": "060db6499f32faf8b98477b0a26969ef7d8b9987"
+      },
+      "backend": "torch",
+      "device": "mps",
+      "dtype": "float32",
+      "temperature": 1.0
+    },
+    "hardware_memory_gib": 64
+  }
+}
