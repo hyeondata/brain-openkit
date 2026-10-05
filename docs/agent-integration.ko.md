@@ -7,17 +7,17 @@
 선택적으로 사용하는 Laya·Kev·Jev 제공자는 분류나 관련성을 판단합니다.
 초기화, 원문 보존, 저장, 정리, lint, fold에는 모델 서비스가 필요하지 않습니다.
 
-같은 버전으로 설치하려면 `v0.2.0a3` 태그를 체크아웃하세요.
+같은 버전으로 설치하려면 `v0.2.0a4` 태그를 체크아웃하세요.
 
 ```bash
-git clone --branch v0.2.0a3 --depth 1 https://github.com/hyeondata/brain-openkit.git
+git clone --branch v0.2.0a4 --depth 1 https://github.com/hyeondata/brain-openkit.git
 ```
 
-또는 [GitHub 프리릴리스](https://github.com/hyeondata/brain-openkit/releases/tag/v0.2.0a3)의
-[brain_openkit-0.2.0a3.tar.gz 전체 소스 배포본](https://github.com/hyeondata/brain-openkit/releases/download/v0.2.0a3/brain_openkit-0.2.0a3.tar.gz)을
+또는 [GitHub 프리릴리스](https://github.com/hyeondata/brain-openkit/releases/tag/v0.2.0a4)의
+[brain_openkit-0.2.0a4.tar.gz 전체 소스 배포본](https://github.com/hyeondata/brain-openkit/releases/download/v0.2.0a4/brain_openkit-0.2.0a4.tar.gz)을
 내려받아 압축을 풀고, 아래 예제의 `/absolute/path/to/brain-openkit`을
 압축을 푼 디렉터리의 절대 경로로 바꿉니다.
-`skills/`, `scripts/`, `src/`, `.claude-plugin/`, `.codex-plugin/`,
+`skills/`, `scripts/`, `src/`, `hooks/`, `.claude-plugin/`, `.codex-plugin/`,
 `.agents/plugins/`를 함께 유지해야 합니다. 릴리스 wheel은 Python CLI만 설치하며,
 전체 호스트 플러그인 배포본을 포함하지 않습니다. 소스 압축 파일을 pip로 설치해도
 호스트 플러그인이 등록되지는 않습니다. 이 릴리스는 PyPI에 배포하지 않았습니다.
@@ -26,6 +26,9 @@ git clone --branch v0.2.0a3 --depth 1 https://github.com/hyeondata/brain-openkit
 호스트에서 **Python 3.11 이상**을 실행할 수 있어야 합니다.
 `python3 --version`으로 확인하며, Windows에서는 `python --version`으로 확인합니다.
 macOS에 기본 제공되는 오래된 Python으로는 실행할 수 없습니다.
+아카이브 훅에는 선택적으로 `BRAIN_OPENKIT_PYTHON` 환경 변수에 Python 3.11 이상
+실행기의 절대 경로를 지정할 수 있습니다. [아카이브 설정 예제](conversation-archive.ko.md)를
+참고하세요. 이 설정은 Python을 설치하지 않습니다.
 
 플러그인에는 `src/brain_openkit/`과 `scripts/brain-openkit.py`가 포함됩니다.
 Python 패키지 설치는 선택 사항입니다. 실행기는 자신의 제품 디렉터리를 찾아
@@ -64,7 +67,10 @@ claude plugin list
 
 명령과 manifest는 공식 [Claude 플러그인 형식](https://code.claude.com/docs/en/plugins-reference)과
 [설치 명령 안내](https://code.claude.com/docs/en/plugins/cli-reference)를 따릅니다.
-이 플러그인이 훅이나 MCP 서버를 자동으로 실행하지는 않습니다.
+플러그인에는 선택 기능인 [대화 아카이브](conversation-archive.ko.md)를 위한
+`Stop`·`SessionEnd` 훅이 포함됩니다. 기록은 기본적으로 꺼져 있으며 명시적으로
+선택한 보관함에서 활성화해야 합니다. 기록기는 모델이나 네트워크 요청을
+사용하지 않으며, 이 플러그인은 MCP 서버를 설치하지 않습니다.
 
 ## Codex
 
@@ -89,6 +95,12 @@ $brain-openkit:brain-search /absolute/path/to/MyVault에서 로컬 검색 설계
 해당 프로젝트를 작업 대상 vault로 지정하지 않습니다.
 공식 [Codex 플러그인 패키징 안내](https://developers.openai.com/plugins/build/plugins)를 참고하세요.
 
+선택 기능인 아카이브는 `Stop` 훅을 사용합니다. Codex CLI의 `/hooks`에서 정의를
+검토하고 신뢰를 승인해야 하며, 플러그인 설치만으로 훅을 신뢰하지는 않습니다.
+훅 정의가 변경되면 다시 검토해야 합니다. 설정과 검증 범위는
+[대화 아카이브 가이드](conversation-archive.ko.md)에 설명합니다.
+Codex 데스크톱의 자동 수집은 검증하지 않았습니다.
+
 Agent Skills는 지원하지만 플러그인 설치 기능이 없는 호스트에서는 워크스페이스의
 로컬 스킬 탐색 기능을 사용합니다. 제품의 `skills/`, `scripts/`, `src/` 디렉터리
 전체를 **별도의 에이전트 워크스페이스** 안에 있는 `.agents/`로 복사합니다.
@@ -110,6 +122,8 @@ agent-workspace/.agents/
 `SKILL.md` 하나만 복사하면 동작하지 않습니다. 심볼릭 링크로 설치할 때는 각 스킬
 디렉터리를 연결하고 전체 제품 트리를 유지하며, 실행기를 찾기 전에 스킬의 실제 경로를
 확인해야 합니다. Windows에서는 복사 방식이 더 폭넓게 동작합니다.
+이 대체 설치 방식은 검토 후 실행하는 스킬 8개를 설치합니다. 디렉터리 3개를
+복사하는 것만으로 자동 아카이브 훅이 등록되지는 않습니다.
 
 ## 사용할 수 있는 작업
 
@@ -142,6 +156,13 @@ vault와 제품 디렉터리 바깥에 둡니다. 원격 제공자는 사용자�
 `undo TRANSACTION_ID --vault VAULT`를 사용합니다. 중단된 롤백이나 실행 취소를
 마무리하려면 `recover TRANSACTION_ID --vault VAULT`를 사용합니다.
 이후 편집 내용과 충돌하면 해당 편집을 덮어쓰지 않고 보존합니다.
+
+명시적으로 활성화한 대화 기록은 별도로 범위를 제한한 쓰기 기능입니다.
+기록기는 `Inbox/Conversations/`의 관리 대상 파일에만 자체 소유권·해시·원자적
+쓰기 검사를 적용하며, 메시지마다 계획을 만들거나 승인을 요청하지 않습니다.
+기록을 꺼도 기존 아카이브는 유지됩니다. 자동 정리에는 별도의 보관 기간 설정과
+활성화가 필요합니다. 이 권한으로 다른 노트를 편집할 수는 없습니다. 용량 제한,
+포함되는 텍스트와 설정은 [대화 아카이브](conversation-archive.ko.md)를 참고하세요.
 
 조사, URL, PDF 등 다른 형식의 자료를 다루려면 호스트에 적절한 검색·추출 기능이
 있어야 합니다. CLI 자체는 로컬 UTF-8 텍스트를 수집하며, 웹 탐색·OCR·음성 전사를
@@ -185,6 +206,9 @@ app-server의 `skills/list`에서 캐시 경로를 포함한 활성 스킬 8개�
 `v0.2.0a3` 릴리스 파일에 대한 검증은 [릴리스 검증](release-0.2.0a3.ko.md)에
 별도로 기록합니다. 과거의 스킬 탐색 결과만으로 릴리스된 플러그인이 호스트 작업을
 완료했다고 볼 수는 없습니다.
+`v0.2.0a4`의 아카이브 전용 증거는 [해당 릴리스 검증](release-0.2.0a4.ko.md)에
+별도로 기록합니다. 이전 보고서로 현재 버전의 자동 아카이브 동작을 입증할 수는
+없습니다.
 
 ## 업데이트와 제거
 
@@ -201,3 +225,4 @@ codex plugin remove brain-openkit@brain-openkit
 통합 기능을 제거해도 vault는 삭제되지 않습니다. 워크스페이스에 복사해 설치했다면
 직접 설치한 Brain OpenKit 디렉터리만 제거하고, 관계없는 스킬과 설정은 보존하세요.
 플러그인을 제거하면서 vault나 journal을 함께 삭제하지 마세요.
+호스트 플러그인을 제거해도 기존 대화 아카이브와 보관함 설정은 남습니다.

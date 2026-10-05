@@ -25,6 +25,26 @@ def _parser() -> argparse.ArgumentParser:
     parser = _ArgumentParser(prog="brain-openkit", description="Source-grounded search and reviewed organization for Obsidian")
     parser.add_argument("--version", action="version", version=__version__)
     commands = parser.add_subparsers(dest="command", required=True)
+    archive = commands.add_parser("conversations", help="Opt-in local conversation recording; no model calls")
+    actions = archive.add_subparsers(dest="conversation_action", required=True)
+    for action in ("status", "configure", "capture", "prune"):
+        sub = actions.add_parser(action)
+        sub.add_argument("--vault", type=Path, required=True)
+        sub.add_argument("--json", action="store_true")
+        if action == "configure":
+            enabled = sub.add_mutually_exclusive_group()
+            enabled.add_argument("--enable", dest="enabled", action="store_const", const=True, default=None)
+            enabled.add_argument("--disable", dest="enabled", action="store_const", const=False)
+            sub.add_argument("--max-bytes", type=int)
+            sub.add_argument("--include-tool-output", action=argparse.BooleanOptionalAction, default=None)
+            sub.add_argument("--retention-days", type=int)
+            sub.add_argument("--auto-prune", action=argparse.BooleanOptionalAction, default=None)
+        elif action == "capture":
+            sub.add_argument("--host", choices=("claude", "codex"), required=True)
+            sub.add_argument("--session-id", required=True)
+            sub.add_argument("--transcript", type=Path, required=True)
+        elif action == "prune":
+            sub.add_argument("--apply", action="store_true", help="Delete only unchanged managed records selected by retention")
     descriptions = {"doctor": "Check the decision provider (no inference unless --probe)",
                     "index": "Refresh the local Markdown index", "search": "Search with source excerpts",
                     "classify": "Suggest existing categories and tags", "evaluate": "Evaluate retrieval on labeled JSONL",
@@ -192,6 +212,21 @@ def _export_plan(vault: Path, plan: dict, destination: Path | None) -> dict:
 
 
 def _execute(args: argparse.Namespace) -> tuple[dict, int]:
+    if args.command == "conversations":
+        from . import conversations
+        action = args.conversation_action
+        if action == "configure":
+            fields = ("enabled", "max_bytes", "include_tool_output", "retention_days", "auto_prune")
+            result = conversations.configure(args.vault, **{key: getattr(args, key) for key in fields
+                                                            if getattr(args, key) is not None})
+        elif action == "status":
+            result = conversations.status(args.vault)
+        elif action == "prune":
+            result = conversations.prune(args.vault, apply=args.apply)
+        else:
+            from .conversation_hooks import capture_transcript
+            result = capture_transcript(args.vault, args.host, args.session_id, args.transcript)
+        return result, 3 if result.get("status") in {"blocked", "pending_transcript"} else 0
     settings = _settings(args)
     vault, cache = settings["vault"], settings["cache_dir"]
     if args.command in ("init", "ingest", "save", "organize", "fold", "lint"):

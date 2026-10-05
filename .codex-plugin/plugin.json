@@ -1,6 +1,6 @@
 {
   "name": "brain-openkit",
-  "version": "0.2.0a3",
+  "version": "0.2.0a4",
   "description": "Source-linked Markdown knowledge workflows with local search, optional decision models, and reviewed recoverable changes.",
   "author": {"name": "Brain OpenKit contributors", "url": "https://github.com/hyeondata/brain-openkit"},
   "homepage": "https://github.com/hyeondata/brain-openkit",

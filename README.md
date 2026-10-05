@@ -15,14 +15,16 @@
   English · <a href="README.ko.md">한국어</a><br>
   <a href="#what-it-does">Overview</a> · <a href="#install-from-source">Install</a> ·
   <a href="docs/agent-integration.md">Claude Code / Codex</a> ·
+  <a href="docs/conversation-archive.md">Conversation archive</a> ·
   <a href="#providers">Providers</a> · <a href="#roadmap">Roadmap</a>
 </p>
 
-> **Alpha [v0.2.0a3](https://github.com/hyeondata/brain-openkit/releases/tag/v0.2.0a3).**
+> **Alpha [v0.2.0a4](https://github.com/hyeondata/brain-openkit/releases/tag/v0.2.0a4).**
 > Use the tagged checkout for a repeatable CLI and host-plugin installation.
-> The GitHub release includes CLI and source archives; PyPI is not published.
-> See the [release verification](docs/release-0.2.0a3.md) and
-> [implementation notes](docs/implementation-notes.md) for evidence and limits.
+> GitHub release assets provide the CLI and full source; PyPI is not published.
+> See the [0.2.0a4 verification](docs/release-0.2.0a4.md),
+> [historical 0.2.0a3 verification](docs/release-0.2.0a3.md) and
+> [implementation notes](docs/implementation-notes.md) for their respective evidence and limits.
 
 Brain OpenKit finds Markdown passages with original paths, line numbers, and
 excerpts. **Search defaults to local BM25, without a model or API key.** Claude
@@ -42,10 +44,21 @@ relevance and category/tag decisions; they do not generate prose.
   file contents still match the recorded state.
 - Inspect links and supported metadata, evaluate labeled queries, and browse
   read-only BM25 search at `127.0.0.1`.
+- Keep optional local Markdown conversation archives under
+  `Inbox/Conversations/`; archiving is off by default.
 
 The product checkout and your vault are separate directories. Search and
-classification read source notes; indexes are derived cache files. Note
-workflows preview first and write only through an explicitly applied plan.
+classification read source notes; indexes are derived cache files. Curated
+note workflows preview first and write only through an explicitly applied plan.
+
+**Conversation archiving is off by default.** Enabling it for an explicit
+vault authorizes local Markdown archive updates. Archiving uses no model and
+makes no network requests; the host conversation may still use a paid hosted
+model. See the [conversation archive guide](docs/conversation-archive.md) for
+status, enable/disable commands, host setup and current verification limits.
+Claude Code and Codex CLI capture passed working-source OFF/ON/resume checks.
+Codex Desktop capture is unverified. Final artifact and CI results are recorded
+with the [release evidence](docs/release-0.2.0a4.md).
 
 A synthetic vault was checked in Obsidian 1.13.4 for saved content, native
 content/tag search, links/backlinks, graph updates, and undo. See the app
@@ -55,11 +68,11 @@ and the verified scope.
 
 ## Install from source
 
-Use **Python 3.11 or newer**. The release tag fixes the version; ongoing
-development uses `main`. These commands are for macOS/Linux:
+Use **Python 3.11 or newer**. These macOS/Linux commands use the `v0.2.0a4`
+tag to fix the version; ongoing development uses `main`.
 
 ~~~bash
-git clone --branch v0.2.0a3 --depth 1 https://github.com/hyeondata/brain-openkit.git
+git clone --branch v0.2.0a4 --depth 1 https://github.com/hyeondata/brain-openkit.git
 cd brain-openkit
 python3.11 -m venv .venv
 source .venv/bin/activate
@@ -72,28 +85,30 @@ On Windows, activate with `.venv\Scripts\Activate.ps1` in PowerShell.
 The CLI has no third-party runtime dependencies; installation may download
 build tooling. Local Laya and Kev servers use separate optional environments.
 
-The [GitHub prerelease](https://github.com/hyeondata/brain-openkit/releases/tag/v0.2.0a3)
-also provides these downloads:
+Download the release assets from the
+[GitHub prerelease](https://github.com/hyeondata/brain-openkit/releases/tag/v0.2.0a4):
 
 | Asset | Use |
 | --- | --- |
-| [brain_openkit-0.2.0a3-py3-none-any.whl](https://github.com/hyeondata/brain-openkit/releases/download/v0.2.0a3/brain_openkit-0.2.0a3-py3-none-any.whl) | CLI-only installation into a Python environment. |
-| [brain_openkit-0.2.0a3.tar.gz](https://github.com/hyeondata/brain-openkit/releases/download/v0.2.0a3/brain_openkit-0.2.0a3.tar.gz) | Full source distribution; extract it to use the CLI source and host plugins. |
-| [SHA256SUMS](https://github.com/hyeondata/brain-openkit/releases/download/v0.2.0a3/SHA256SUMS) | SHA-256 checksums for the release files. |
+| [brain_openkit-0.2.0a4-py3-none-any.whl](https://github.com/hyeondata/brain-openkit/releases/download/v0.2.0a4/brain_openkit-0.2.0a4-py3-none-any.whl) | CLI-only installation into a Python environment. |
+| [brain_openkit-0.2.0a4.tar.gz](https://github.com/hyeondata/brain-openkit/releases/download/v0.2.0a4/brain_openkit-0.2.0a4.tar.gz) | Full source distribution; extract it to use the CLI source and host plugins. |
+| [SHA256SUMS](https://github.com/hyeondata/brain-openkit/releases/download/v0.2.0a4/SHA256SUMS) | SHA-256 checksums for the release files. |
 
 For the CLI alone, install the downloaded wheel in an activated Python environment:
 
 ~~~bash
-python -m pip install ./brain_openkit-0.2.0a3-py3-none-any.whl
+python -m pip install ./brain_openkit-0.2.0a4-py3-none-any.whl
 ~~~
 
 **Host plugins require the tagged checkout or extracted full source distribution.**
-Keep `skills/`, `scripts/`, `src/`, and the host manifests together. Installing
+Keep `skills/`, `scripts/`, `src/`, `hooks/`, and the host manifests together. Installing
 the wheel, or installing the source archive through pip, installs the Python
 CLI but does not register a Claude/Codex plugin. The examples below use the
 complete checkout, including its synthetic example vault. No PyPI package is published.
 
-Every vault workflow requires **`--vault` or `vault` in a JSON config**.
+Every vault workflow requires an explicit vault. Existing note workflows accept
+**`--vault` or `vault` in a JSON config**; `conversations` commands require
+`--vault` directly.
 The CLI does not infer the vault from a note's parent directory. Only
 `doctor`, which checks the provider, can run without a vault.
 
@@ -116,7 +131,9 @@ Restart the host after installation. The bundled Python runner works from the
 plugin cache without an editable package install. Python 3.11+ and the host's
 normal authenticated model access are still required.
 These instructions use a local product directory. See the
-[release verification](docs/release-0.2.0a3.md) for checks on the release artifacts.
+[0.2.0a4 verification](docs/release-0.2.0a4.md) for the current verification
+scope. The [0.2.0a3 verification](docs/release-0.2.0a3.md) records the earlier
+release and does not verify conversation archiving.
 
 | Skill | Purpose |
 | --- | --- |
@@ -322,8 +339,11 @@ has not been verified with an actual key.
 
 ## Configuration and output
 
-Each subcommand accepts `--config settings.json` and `--json`.
-Example configuration saved at the checkout root:
+Note and provider commands accept `--config settings.json` and `--json`.
+`conversations` commands instead require `--vault` directly, accept `--json`,
+and manage their own `.brain-openkit/conversations.json` in that vault.
+The following is an example of the note/provider configuration saved at the
+checkout root:
 
 ~~~json
 {

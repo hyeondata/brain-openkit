@@ -1,6 +1,7 @@
 """Exercise a relocated plugin as a source distribution without site packages."""
 
 import json
+import os
 from pathlib import Path
 import shutil
 import subprocess
@@ -46,7 +47,7 @@ class PackagingTests(unittest.TestCase):
             temporary = Path(directory)
             product = temporary / "plugin cache with spaces"
             product.mkdir()
-            for name in ("src", "scripts", "skills", ".claude-plugin", ".codex-plugin"):
+            for name in ("src", "scripts", "skills", "hooks", ".claude-plugin", ".codex-plugin"):
                 shutil.copytree(ROOT / name, product / name, ignore=shutil.ignore_patterns("__pycache__", "*.egg-info"))
             vault = temporary / "user vault 한글"
             vault.mkdir()
@@ -66,6 +67,42 @@ class PackagingTests(unittest.TestCase):
             self.assertEqual(note.read_bytes(), original)
             self.assertFalse(any(product.rglob("__pycache__")))
             self.assertEqual({p.name for p in vault.iterdir()}, {"기록.md"})
+
+    def test_relocated_hook_is_off_by_default_and_records_only_after_opt_in(self):
+        with tempfile.TemporaryDirectory(prefix="brain hook ") as directory:
+            temporary = Path(directory)
+            product = temporary / "plugin cache 한글"
+            product.mkdir()
+            for name in ("src", "scripts", "hooks"):
+                shutil.copytree(ROOT / name, product / name, ignore=shutil.ignore_patterns("__pycache__", "*.egg-info"))
+            vault = temporary / "vault"
+            vault.mkdir()
+            transcript = temporary / "synthetic.jsonl"
+            transcript.write_text(json.dumps({'type': 'user', 'uuid': 'synthetic-u',
+                'message': {'role': 'user', 'content': '호박등대 기록'}}, ensure_ascii=False) + '\n' +
+                json.dumps({'type': 'assistant', 'uuid': 'synthetic-a', 'message': {
+                    'role': 'assistant', 'content': [{'type': 'text', 'text': '기록 확인'}]}}, ensure_ascii=False) + '\n', encoding='utf-8')
+            payload = json.dumps({'hook_event_name': 'Stop', 'session_id': 'packaging-fixture',
+                'cwd': str(vault), 'transcript_path': str(transcript), 'last_assistant_message': '기록 확인'})
+            env = {**os.environ, 'BRAIN_OPENKIT_VAULT': str(vault)}
+            hook = [sys.executable, '-I', '-S', str(product / 'scripts/conversation-hook.py')]
+            before = subprocess.run(hook, input=payload, capture_output=True, text=True, encoding='utf-8', env=env)
+            self.assertEqual(before.returncode, 0, before.stderr)
+            self.assertEqual(list(vault.iterdir()), [])
+            enable = subprocess.run([sys.executable, '-I', '-S', str(product / 'scripts/brain-openkit.py'),
+                                    'conversations', 'configure', '--enable', '--vault', str(vault), '--json'],
+                                    capture_output=True, text=True, encoding='utf-8')
+            self.assertEqual(enable.returncode, 0, enable.stderr + enable.stdout)
+            after = subprocess.run(hook, input=payload, capture_output=True, text=True, encoding='utf-8', env=env)
+            self.assertEqual(after.returncode, 0, after.stderr)
+            files = list((vault / 'Inbox' / 'Conversations').glob('*.md'))
+            self.assertEqual(len(files), 1, after.stdout + after.stderr)
+            self.assertIn('호박등대 기록', files[0].read_text(encoding='utf-8'))
+            snapshot = files[0].read_bytes()
+            repeat = subprocess.run(hook, input=payload, capture_output=True, text=True, encoding='utf-8', env=env)
+            self.assertEqual(repeat.returncode, 0)
+            self.assertEqual(files[0].read_bytes(), snapshot)
+            self.assertFalse(any(product.rglob('__pycache__')))
 
     def test_shared_runtime_reference_resolves_from_every_skill(self):
         for name in SKILLS:

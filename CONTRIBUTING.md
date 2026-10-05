@@ -7,18 +7,19 @@ are welcome.
 
 Read the [README](README.md), [agent integration guide](docs/agent-integration.md),
 and [implementation notes](docs/implementation-notes.md). Base new development
-on `main`; use the `v0.2.0a3` tag to reproduce the
-[GitHub prerelease](https://github.com/hyeondata/brain-openkit/releases/tag/v0.2.0a3).
+on `main`; use the `v0.2.0a4` tag to reproduce the
+[GitHub prerelease](https://github.com/hyeondata/brain-openkit/releases/tag/v0.2.0a4).
 The
 [original design](docs/superpowers/specs/2026-10-04-obsidian-laya-design.md) and
 [agent workflow design](docs/superpowers/specs/2026-10-04-agent-workflows-design.md)
 include requirements beyond completed validation.
 
 The release wheel is CLI-only. Host plugins require a tagged checkout or an
-extracted full source distribution with `skills/`, `scripts/`, `src/`, and
+extracted full source distribution with `skills/`, `scripts/`, `src/`, `hooks/`, and
 host manifests kept together. Check the
-[release verification](docs/release-0.2.0a3.md) when changing packaging. The
-release assets and `SHA256SUMS` are on GitHub; PyPI is not published.
+[release verification](docs/release-0.2.0a4.md) when changing packaging. Preserve
+the [historical 0.2.0a3 evidence](docs/release-0.2.0a3.md). Published release
+assets and `SHA256SUMS` are on GitHub; PyPI is not published.
 
 ## Develop and test
 
@@ -62,6 +63,11 @@ Exercise writes only in disposable vaults.
 - Note changes must have a reviewable plan, expected contents, exact approval
   ID, and transaction evidence. Preview-only work must stop before applying.
   Existing user authorization carries forward; do not force redundant prompts.
+- Explicitly enabled conversation archiving is a bounded exception: the local
+  recorder updates its owned `Inbox/Conversations/` files using ownership/hash
+  checks and atomic replacement, without a per-message plan or model call.
+  Recording and automatic retention are off by default. Do not extend that
+  opt-in to unrelated notes, external tool-output files or global host settings.
 - Preserve subsequent edits on conflict, undo, and recovery. Test failures
   between file writes, interrupted undo, symlinks, and stale contents.
   A multi-file transaction is recoverable, not globally atomic.
@@ -77,6 +83,13 @@ Add tests for meaningful boundaries: source excerpts and newlines, index
 invalidation, malformed/truncated responses, failures, path confinement,
 transaction recovery, and plugin cache relocation. Do not describe fixture
 tests as accuracy measurements.
+
+For [conversation archiving](docs/conversation-archive.md), cover disabled
+no-ops, session resume/deduplication, edited archives, conflicting history,
+input and storage limits, incomplete JSONL, and retention preserving unmanaged
+or edited files. Check packaged hooks in a relocated plugin and report actual
+Claude/Codex callbacks separately from parser fixtures. A native CLI hook
+check does not establish Codex Desktop support.
 
 ## Contribute evaluation examples
 
@@ -128,14 +141,20 @@ own terms. Identify provenance and notices; see [ATTRIBUTION.md](ATTRIBUTION.md)
 ## 한국어 안내
 
 Python 3.11 이상에서 설치하고 변경 관련 테스트와 전체 테스트를 실행합니다.
-새 개발은 `main`을 기준으로 하고, 릴리스를 재현할 때는 `v0.2.0a3` 태그를 사용합니다.
+새 개발은 `main`을 기준으로 하고, 릴리스를 재현할 때는 `v0.2.0a4` 태그를 사용합니다.
 GitHub의 wheel은 CLI 전용이며, 호스트 플러그인에는 태그 체크아웃이나 압축을 푼
-전체 소스 배포본이 필요합니다. PyPI에는 배포하지 않았습니다.
+전체 소스 배포본이 필요합니다. `hooks/`를 포함한 제품 디렉터리를 함께 유지하세요.
+PyPI에는 배포하지 않았습니다.
 HTTP fixture·실제 모델·호스트 실행·브라우저·
 플랫폼 검증을 구분하고 이전 커밋의 CI 결과를 새 변경의 결과로 쓰지 마세요.
 
 검색·분류는 원본을 보존하고, 노트 변경은 명시적 vault의 계획·승인 ID·트랜잭션을
 거칩니다. 실행 취소·복구가 이후 편집을 덮어쓰지 않도록 검증하세요.
+명시적으로 활성화한 대화 아카이브는 제한된 예외입니다. 로컬 기록기는 전용
+폴더의 관리 대상 파일만 소유권·해시·원자적 교체 검사로 갱신하며 메시지마다
+계획이나 모델 호출을 사용하지 않습니다. 기록과 자동 정리는 기본적으로 꺼져
+있으며, 해당 설정을 다른 노트나 호스트 전역 설정의 변경 권한으로 확대하지 마세요.
+파서 테스트, 실제 CLI 훅, 데스크톱 지원의 검증 범위도 구분하세요.
 공개할 권리가 있는 자료만 사용하며 계획·journal에 포함된 본문과 원본 경로도
 비공개 데이터로 취급합니다. 합성 평가를 실제 vault 수용 검증으로 대체하지 말고,
 두 README의 상태·범위·명령을 함께 수정해 주세요.
