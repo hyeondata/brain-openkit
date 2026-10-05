@@ -1,0 +1,53 @@
+{
+  "suite": "bilingual-v1",
+  "frozen_at_utc": "2026-10-04 14:25:11 UTC",
+  "source": "Original authored synthetic notes; no private vault or external text",
+  "label_review": {
+    "author": "bilingual_evaluation agent",
+    "independent_reviewer": "codex_integration_research agent",
+    "before_measurement": true,
+    "changes": "Added maintenance to git-backup and private-vault; clarified maintenance scope for inventory versus routine file copying.",
+    "scope": "Retrieval relevance labels, category/tag labels and taxonomy; no model rankings inspected"
+  },
+  "counts": {
+    "notes": 24,
+    "retrieval_development": 12,
+    "retrieval_holdout": 24,
+    "classification_development": 6,
+    "classification_holdout": 18
+  },
+  "frozen_parameters": {
+    "limit": 3,
+    "candidates": 8
+  },
+  "sha256": {
+    "classification.jsonl": "3282ebc0acc3e6c70bfe960a3b36c4c28882493e80d22ec1e2a2a320ecabdb84",
+    "retrieval-development.jsonl": "6a328fddbe2fff8a93caa988fff7ba24671661445071a05aa38156ad1524af34",
+    "retrieval-holdout.jsonl": "ab6d3ecc3de72712418987af4fe02f8354f18d5baa72607bff74d38f9369153d",
+    "taxonomy.json": "ea6e445cf53e93d2b8b5462d5c6956d56e2e1b1f04f3b7fbd7f15bbcdbbf40e7",
+    "vault/api-retries.md": "ed0ce0b8a2d09de50f77407994338f45d91be4de5454c56beffd721a1a5edb2e",
+    "vault/basil.md": "0e829b10c2952ff1ed2b839f158e86a474fbe82d0153cc916e98d56cf97ce0bc",
+    "vault/camera.md": "d1755fe05b53762ec4a1bc5cb49f20c60ad90949da5d9d3b05bd28ee0bba4755",
+    "vault/capture-inbox.md": "9d67925409aa3ad1589b7fbf35e25685888ada90f7970753385b3af1ea741d5c",
+    "vault/citations.md": "d1ae26e46e1a5effe08f90d8c1da98234a1e37d41154bb0c83f46e9a56d7fa34",
+    "vault/evaluation-split.md": "622a6dc05eb451221b739abb8515e00426ba050fc2c1ab804ac8335fea84fe41",
+    "vault/experiment-metrics.md": "30b733c8d2ad315cbf8cab9999087d7f376b43611fc7fcda66144f75f408686c",
+    "vault/field-recorder.md": "889fc8771aaee727b3c4c2f4bcb2c1e6bc3838853531cfbdd9e5228c46902f00",
+    "vault/freezer.md": "542b80cb7823e17777645804afb22d83fd24f76e5eb949748e63d0eda0bd27d5",
+    "vault/git-backup.md": "897bd66631053da915f1798530d6433d06ea54876f8dcc65acb5bf3c50f007fd",
+    "vault/incident-review.md": "9f79343d75f8b10218e14de5273ea9b381d73d9a82ffda1572233f3b4117b189",
+    "vault/meeting-followup.md": "d9f8518c39807f5d09b223b04a105328465d6e684594c4cbb7412cfca29ce13a",
+    "vault/offline-maps.md": "0f188138e886773cb929866290d43c1801fd73c88af65e72ab7349bc789f7ad4",
+    "vault/onboarding.md": "068454145384e882d483a81f674edff2d8ec97ba754465f47f24cfee206cb344",
+    "vault/paper-archive.md": "c0739c52f0fbf33d1f184e19fbe86c5a6ee89f400ddc75d3f5271ffe1c7889d8",
+    "vault/passport.md": "3d66fb9fb90579c72845f89dfefea413df5707b2aef5b4a130245b5db76472b0",
+    "vault/private-vault.md": "a7fb32c3b97ab6397cfaa1bac191236ccd208a2da96a171967a1e87dd23d1b33",
+    "vault/project-priority.md": "33281ad691bdb73a48d0d9e80eaf180fc44eb5f80efd763b2238378758e9aade",
+    "vault/release-rollback.md": "dc0a2ced09d13b17cbda697c54cfd08c7515d8876dba09a1d0a604abee122f6f",
+    "vault/router.md": "1ffb43053e3713cfd0c0c770ba6bd2218a1306afa5a3cacc8972035d4bcea56e",
+    "vault/sqlite-cache.md": "4257d6decc02284b828170a3dd04570b69897c5ff38c3813dad1d8d7710847b8",
+    "vault/survey-consent.md": "8fdaf4575c3b4e5b3fd3fd9d2e6e4bf8168636d1ee79d7821c0504220e3add48",
+    "vault/train-backup.md": "b5051d0ad4a7d9d7d0e91add666743066ca5d0e0be89fdbaefa80ce89e469961",
+    "vault/wikilinks.md": "041387afc3c3419dff42adf8ad922f6e941210a1b10c16cdb22c33de900fb7b7"
+  }
+}

@@ -5,7 +5,7 @@
 ## 선택한 이름
 
 - 프로젝트 표시명: **Brain OpenKit**
-- 저장소 이름 및 향후 CLI 명칭: **`brain-openkit`**
+- 저장소 이름 및 CLI 명칭: **`brain-openkit`**
 - 저작권 프로젝트명: **Brain OpenKit contributors**
 - 영문 소개: **An open-source second-brain toolkit for Obsidian.**
 - 한국어 소개: **Obsidian을 위한 오픈소스 세컨드 브레인 도구 모음.**
@@ -55,16 +55,16 @@ Obsidian 커뮤니티를 위한 독립 프로젝트이며 Obsidian의 공식 제
 구성을 참고하고 Brain OpenKit의 범위에 맞춰 새로 작성했다. 기존 문구와 이미지, 제품 기능 목록은 복제하지 않는다.
 
 1. 이름과 한 문장 소개로 검색·정리 목적을 전달한다.
-2. 설계 단계임을 첫 화면에 표시한다.
+2. 현재 CLI alpha 단계임을 첫 화면에 표시한다.
 3. 목표 기능과 Mermaid 흐름도로 구조를 설명한다.
-4. 현재 읽을 수 있는 문서와 구현 예정 명령을 구분한다.
+4. 실행 가능한 명령과 후속 구현 범위를 구분한다.
 5. Laya 우선 구현과 Jev 후속 어댑터를 명시한다.
 6. 데이터 처리 조건과 아직 측정하지 않은 품질을 설명한다.
 7. 로드맵, 기여 경로, 라이선스, 출처를 연결한다.
 
 기본 README는 영어로 작성하고 [한국어판](../README.ko.md)을 같은 범위로 유지한다.
 CI 성공, 릴리스 버전, 다운로드 수처럼 실제 근거가 필요한 배지는 해당 상태가 생긴 뒤 추가한다.
-현재 배지는 문서의 실제 상태와 라이선스, 도입 예정 모델만 나타낸다.
+현재 배지는 구현 단계와 라이선스, 지원 모델을 나타낸다.
 
 ## 공개 저장소에 사용할 소개
 
@@ -72,7 +72,7 @@ GitHub repository slug: `brain-openkit`
 
 권장 About 설명:
 
-> An open-source second-brain toolkit for Obsidian. Laya-first, with interchangeable decision providers. Currently in design.
+> An open-source second-brain toolkit for Obsidian. Local Markdown search and optional Laya decisions. CLI alpha.
 
 권장 topics:
 
@@ -97,5 +97,5 @@ Hugging Face에는 현재 사용할 상위 Laya 모델을 링크한다. 첫 CLI�
 - [ATTRIBUTION.md](../ATTRIBUTION.md): 참고 프로젝트와 외부 구성 요소의 출처·라이선스 구분
 - [설계서](superpowers/specs/2026-10-04-obsidian-laya-design.md): Laya를 기본으로 사용하는 CLI와 제공자 교체 설계
 
-문서는 설계 단계의 프로젝트 범위와 기여 방향을 설명한다. 실행 가능한 CLI, 패키지 발행,
-Hugging Face 데모는 구현과 평가 결과에 맞춰 후속 단계에서 준비한다.
+문서는 CLI alpha의 구현 범위와 기여 방향을 설명한다. 현재 소스 설치로 실행할 수 있으며,
+패키지 발행과 Hugging Face 데모는 평가 결과에 맞춰 후속 단계에서 준비한다.

@@ -1,0 +1,10 @@
+{
+  "name": "brain-openkit",
+  "version": "0.2.0a3",
+  "description": "Source-linked Markdown knowledge workflows with local search, optional decision models, and reviewed recoverable changes.",
+  "author": {"name": "Brain OpenKit contributors", "url": "https://github.com/hyeondata/brain-openkit"},
+  "homepage": "https://github.com/hyeondata/brain-openkit",
+  "repository": "https://github.com/hyeondata/brain-openkit",
+  "license": "MIT",
+  "keywords": ["obsidian", "knowledge", "search", "laya", "kev", "markdown"]
+}

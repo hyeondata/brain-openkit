@@ -1,0 +1,12 @@
+{
+  "categories": {
+    "research": "Research notes about search methods, software experiments, or decision models",
+    "gardening": "Plant care, watering, and garden observations",
+    "reading": "Book notes, reading journals, and literary observations"
+  },
+  "tags": {
+    "local": "Discusses software processing or model inference on a local computer",
+    "evaluation": "Discusses measuring quality or comparing experimental results",
+    "plants": "Discusses plants or their care"
+  }
+}

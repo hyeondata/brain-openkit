@@ -1,0 +1,1249 @@
+{
+  "checked_at": "2026-10-05T09:19:49.028225+00:00",
+  "scope": "Synthetic functional smoke, not a quality or cost comparison",
+  "providers": {
+    "kev": {
+      "health": {
+        "version": "0.2.0a3",
+        "provider": "kev",
+        "health": {
+          "status": "ok",
+          "models": [
+            {
+              "name": "kev-latest",
+              "description": "Kev pointer head on Qwen/Qwen3.5-0.8B-Base, serving jaredpalmer/kev-0.8b@bf75a6a8848ea6960ff2ed108d9ed44c2941174f at temperature 2.35",
+              "release_date": "2026-10-05",
+              "run": "jaredpalmer/kev-0.8b@bf75a6a8848ea6960ff2ed108d9ed44c2941174f",
+              "base": "Qwen/Qwen3.5-0.8B-Base",
+              "lora": 16,
+              "device": "mps",
+              "backend": "mlx",
+              "dtype": "bfloat16",
+              "temperature": 2.3510958125672174,
+              "max_state_tokens": 65536,
+              "truncate_states": false,
+              "cuda_graphs": null,
+              "prefix_cache": {
+                "size": 4,
+                "min_state_tokens": 0,
+                "max_tokens": 65536,
+                "hits": 0,
+                "misses": 0,
+                "cached_states": 0,
+                "oom_retries": 0
+              },
+              "batches": {
+                "count": 0,
+                "requests": 0,
+                "queued": 0
+              }
+            },
+            {
+              "name": "jev-latest",
+              "description": "Kev pointer head on Qwen/Qwen3.5-0.8B-Base, serving jaredpalmer/kev-0.8b@bf75a6a8848ea6960ff2ed108d9ed44c2941174f at temperature 2.35",
+              "release_date": "2026-10-05",
+              "run": "jaredpalmer/kev-0.8b@bf75a6a8848ea6960ff2ed108d9ed44c2941174f",
+              "base": "Qwen/Qwen3.5-0.8B-Base",
+              "lora": 16,
+              "device": "mps",
+              "backend": "mlx",
+              "dtype": "bfloat16",
+              "temperature": 2.3510958125672174,
+              "max_state_tokens": 65536,
+              "truncate_states": false,
+              "cuda_graphs": null,
+              "prefix_cache": {
+                "size": 4,
+                "min_state_tokens": 0,
+                "max_tokens": 65536,
+                "hits": 0,
+                "misses": 0,
+                "cached_states": 0,
+                "oom_retries": 0
+              },
+              "batches": {
+                "count": 0,
+                "requests": 0,
+                "queued": 0
+              }
+            }
+          ]
+        },
+        "inference_verified": false
+      },
+      "probe": {
+        "version": "0.2.0a3",
+        "provider": "kev",
+        "health": {
+          "status": "ok",
+          "models": [
+            {
+              "name": "kev-latest",
+              "description": "Kev pointer head on Qwen/Qwen3.5-0.8B-Base, serving jaredpalmer/kev-0.8b@bf75a6a8848ea6960ff2ed108d9ed44c2941174f at temperature 2.35",
+              "release_date": "2026-10-05",
+              "run": "jaredpalmer/kev-0.8b@bf75a6a8848ea6960ff2ed108d9ed44c2941174f",
+              "base": "Qwen/Qwen3.5-0.8B-Base",
+              "lora": 16,
+              "device": "mps",
+              "backend": "mlx",
+              "dtype": "bfloat16",
+              "temperature": 2.3510958125672174,
+              "max_state_tokens": 65536,
+              "truncate_states": false,
+              "cuda_graphs": null,
+              "prefix_cache": {
+                "size": 4,
+                "min_state_tokens": 0,
+                "max_tokens": 65536,
+                "hits": 0,
+                "misses": 0,
+                "cached_states": 0,
+                "oom_retries": 0
+              },
+              "batches": {
+                "count": 0,
+                "requests": 0,
+                "queued": 0
+              }
+            },
+            {
+              "name": "jev-latest",
+              "description": "Kev pointer head on Qwen/Qwen3.5-0.8B-Base, serving jaredpalmer/kev-0.8b@bf75a6a8848ea6960ff2ed108d9ed44c2941174f at temperature 2.35",
+              "release_date": "2026-10-05",
+              "run": "jaredpalmer/kev-0.8b@bf75a6a8848ea6960ff2ed108d9ed44c2941174f",
+              "base": "Qwen/Qwen3.5-0.8B-Base",
+              "lora": 16,
+              "device": "mps",
+              "backend": "mlx",
+              "dtype": "bfloat16",
+              "temperature": 2.3510958125672174,
+              "max_state_tokens": 65536,
+              "truncate_states": false,
+              "cuda_graphs": null,
+              "prefix_cache": {
+                "size": 4,
+                "min_state_tokens": 0,
+                "max_tokens": 65536,
+                "hits": 0,
+                "misses": 0,
+                "cached_states": 0,
+                "oom_retries": 0
+              },
+              "batches": {
+                "count": 0,
+                "requests": 0,
+                "queued": 0
+              }
+            }
+          ]
+        },
+        "inference_verified": true,
+        "probe": {
+          "choice": "A",
+          "probabilities": {
+            "A": 0.9911,
+            "B": 0.0089
+          },
+          "confidence": 0.9823,
+          "model": "kev-latest",
+          "usage": {
+            "input_tokens": 35,
+            "output_tokens": 52
+          },
+          "elapsed_ms": 86.23470799648203,
+          "answer_confidence": null
+        }
+      },
+      "probe_matches_expected_A": true,
+      "search": {
+        "query": "검색",
+        "provider": "kev",
+        "model": "kev-latest",
+        "rerank_status": "complete",
+        "fallback_reason": null,
+        "candidate_count": 2,
+        "results": [
+          {
+            "path": "local-search.md",
+            "title": "로컬 검색 실험",
+            "start_line": 1,
+            "end_line": 7,
+            "text": "# 로컬 검색 실험\r\n\r\n한국어 Markdown 노트를 문단으로 나누고 BM25로 검색 후보를 찾는다.\r\n검색 결과에는 원문 경로와 줄 번호를 함께 표시한다.\r\n\r\nLaya 재정렬은 질문과 후보 문단의 관련성을 평가한다.\r\nBM25 단독 검색과 비교해 검색 품질이 개선되는지 확인한다.\r\n",
+            "bm25_score": 1.3046267792680704,
+            "model_score": 0.6216,
+            "decision": {
+              "choice": "A",
+              "probabilities": {
+                "A": 0.6216,
+                "B": 0.3784
+              },
+              "confidence": 0.2432,
+              "model": "kev-latest",
+              "usage": {
+                "input_tokens": 132,
+                "output_tokens": 52
+              },
+              "elapsed_ms": 68.11675000062678,
+              "answer_confidence": null
+            }
+          },
+          {
+            "path": "garden.md",
+            "title": "베란다 바질 관리",
+            "start_line": 1,
+            "end_line": 6,
+            "text": "# 베란다 바질 관리\n\n바질 화분은 햇빛이 드는 베란다에 놓는다.\n흙 표면이 마르면 물을 주고 잎의 상태를 관찰한다.\n\n이번 주에는 새 잎이 두 장 자랐다. 이 기록은 문서 검색 예제를 위한 가상 관찰이다.\n",
+            "bm25_score": 0.6626247040354766,
+            "model_score": 0.6061,
+            "decision": {
+              "choice": "A",
+              "probabilities": {
+                "A": 0.6061,
+                "B": 0.3939
+              },
+              "confidence": 0.2122,
+              "model": "kev-latest",
+              "usage": {
+                "input_tokens": 115,
+                "output_tokens": 52
+              },
+              "elapsed_ms": 53.360000005341135,
+              "answer_confidence": null
+            }
+          }
+        ],
+        "index": {
+          "indexed": 0,
+          "unchanged": 4,
+          "deleted": 0,
+          "errors": []
+        },
+        "elapsed_ms": 123.237
+      },
+      "classify": {
+        "local-search.md": {
+          "path": "local-search.md",
+          "provider": "kev",
+          "model": "kev-latest",
+          "status": "complete",
+          "review_required": false,
+          "category": "research",
+          "category_candidates": [
+            "research"
+          ],
+          "tags": [
+            "evaluation",
+            "local"
+          ],
+          "passages": [
+            {
+              "path": "local-search.md",
+              "title": "로컬 검색 실험",
+              "start_line": 1,
+              "end_line": 7,
+              "text": "# 로컬 검색 실험\r\n\r\n한국어 Markdown 노트를 문단으로 나누고 BM25로 검색 후보를 찾는다.\r\n검색 결과에는 원문 경로와 줄 번호를 함께 표시한다.\r\n\r\nLaya 재정렬은 질문과 후보 문단의 관련성을 평가한다.\r\nBM25 단독 검색과 비교해 검색 품질이 개선되는지 확인한다.\r\n",
+              "category": "research",
+              "category_decision": {
+                "choice": "A",
+                "probabilities": {
+                  "A": 0.9688,
+                  "B": 0.0044,
+                  "C": 0.0268
+                },
+                "confidence": 0.9532,
+                "model": "kev-latest",
+                "usage": {
+                  "input_tokens": 155,
+                  "output_tokens": 63
+                },
+                "elapsed_ms": 58.325332996901125,
+                "answer_confidence": null
+              },
+              "tags": {
+                "local": {
+                  "suggested": true,
+                  "choice": "A",
+                  "probabilities": {
+                    "A": 0.5113,
+                    "B": 0.4887
+                  },
+                  "confidence": 0.0225,
+                  "model": "kev-latest",
+                  "usage": {
+                    "input_tokens": 136,
+                    "output_tokens": 52
+                  },
+                  "elapsed_ms": 23.41100000194274,
+                  "answer_confidence": null
+                },
+                "evaluation": {
+                  "suggested": true,
+                  "choice": "A",
+                  "probabilities": {
+                    "A": 0.7733,
+                    "B": 0.2267
+                  },
+                  "confidence": 0.5467,
+                  "model": "kev-latest",
+                  "usage": {
+                    "input_tokens": 133,
+                    "output_tokens": 52
+                  },
+                  "elapsed_ms": 23.73358300246764,
+                  "answer_confidence": null
+                },
+                "plants": {
+                  "suggested": false,
+                  "choice": "B",
+                  "probabilities": {
+                    "A": 0.036,
+                    "B": 0.964
+                  },
+                  "confidence": 0.9281,
+                  "model": "kev-latest",
+                  "usage": {
+                    "input_tokens": 131,
+                    "output_tokens": 50
+                  },
+                  "elapsed_ms": 23.425707993737888,
+                  "answer_confidence": null
+                }
+              }
+            }
+          ],
+          "note_modified": false
+        },
+        "reading.md": {
+          "path": "reading.md",
+          "provider": "kev",
+          "model": "kev-latest",
+          "status": "complete",
+          "review_required": false,
+          "category": "reading",
+          "category_candidates": [
+            "reading"
+          ],
+          "tags": [
+            "evaluation"
+          ],
+          "passages": [
+            {
+              "path": "reading.md",
+              "title": "Reading journal",
+              "start_line": 1,
+              "end_line": 6,
+              "text": "# Reading journal\n\nThe fictional book The Patient Observatory follows a group studying comets.\nMy reading notes compare their patient observations with hasty conclusions.\n\nThis invented journal entry provides a small English retrieval example.\n",
+              "category": "reading",
+              "category_decision": {
+                "choice": "C",
+                "probabilities": {
+                  "A": 0.0061,
+                  "B": 0.0021,
+                  "C": 0.9918
+                },
+                "confidence": 0.9877,
+                "model": "kev-latest",
+                "usage": {
+                  "input_tokens": 115,
+                  "output_tokens": 63
+                },
+                "elapsed_ms": 46.965667002950795,
+                "answer_confidence": null
+              },
+              "tags": {
+                "local": {
+                  "suggested": false,
+                  "choice": "B",
+                  "probabilities": {
+                    "A": 0.1098,
+                    "B": 0.8902
+                  },
+                  "confidence": 0.7804,
+                  "model": "kev-latest",
+                  "usage": {
+                    "input_tokens": 96,
+                    "output_tokens": 52
+                  },
+                  "elapsed_ms": 23.208500002510846,
+                  "answer_confidence": null
+                },
+                "evaluation": {
+                  "suggested": true,
+                  "choice": "A",
+                  "probabilities": {
+                    "A": 0.514,
+                    "B": 0.486
+                  },
+                  "confidence": 0.0281,
+                  "model": "kev-latest",
+                  "usage": {
+                    "input_tokens": 93,
+                    "output_tokens": 50
+                  },
+                  "elapsed_ms": 23.77695900213439,
+                  "answer_confidence": null
+                },
+                "plants": {
+                  "suggested": false,
+                  "choice": "B",
+                  "probabilities": {
+                    "A": 0.0153,
+                    "B": 0.9847
+                  },
+                  "confidence": 0.9693,
+                  "model": "kev-latest",
+                  "usage": {
+                    "input_tokens": 91,
+                    "output_tokens": 52
+                  },
+                  "elapsed_ms": 23.310625001613516,
+                  "answer_confidence": null
+                }
+              }
+            }
+          ],
+          "note_modified": false
+        }
+      },
+      "evaluate": {
+        "dataset": "<checkout>/examples/evaluation.jsonl",
+        "query_count": 4,
+        "limit": 3,
+        "candidates": 6,
+        "requested_provider": "KevProvider",
+        "baseline": {
+          "query_count": 4,
+          "recall_at_k": 1.0,
+          "mrr": 1.0,
+          "elapsed_ms": 7.428500000969507,
+          "model_query_count": 0,
+          "fallback_query_count": 0,
+          "rerank_status_counts": {
+            "disabled": 4
+          }
+        },
+        "requested": {
+          "query_count": 4,
+          "recall_at_k": 1.0,
+          "mrr": 1.0,
+          "elapsed_ms": 280.92983399983495,
+          "model_query_count": 4,
+          "fallback_query_count": 0,
+          "rerank_status_counts": {
+            "complete": 4
+          }
+        },
+        "queries": [
+          {
+            "query": "한국어 BM25 검색 후보와 원문 줄 번호",
+            "relevant": [
+              "local-search.md"
+            ],
+            "baseline": {
+              "paths": [
+                "local-search.md",
+                "garden.md"
+              ],
+              "recall_at_k": 1.0,
+              "reciprocal_rank": 1.0,
+              "elapsed_ms": 1.7010000010486692,
+              "rerank_status": "disabled",
+              "model_used": false,
+              "fallback_reason": null,
+              "provider": "none",
+              "model": null
+            },
+            "requested": {
+              "paths": [
+                "local-search.md",
+                "garden.md"
+              ],
+              "recall_at_k": 1.0,
+              "reciprocal_rank": 1.0,
+              "elapsed_ms": 116.84274999424815,
+              "rerank_status": "complete",
+              "model_used": true,
+              "fallback_reason": null,
+              "provider": "kev",
+              "model": "kev-latest"
+            }
+          },
+          {
+            "query": "바질 화분에 물을 주는 시점",
+            "relevant": [
+              "garden.md"
+            ],
+            "baseline": {
+              "paths": [
+                "garden.md"
+              ],
+              "recall_at_k": 1.0,
+              "reciprocal_rank": 1.0,
+              "elapsed_ms": 1.2913749960716814,
+              "rerank_status": "disabled",
+              "model_used": false,
+              "fallback_reason": null,
+              "provider": "none",
+              "model": null
+            },
+            "requested": {
+              "paths": [
+                "garden.md"
+              ],
+              "recall_at_k": 1.0,
+              "reciprocal_rank": 1.0,
+              "elapsed_ms": 54.987292001897,
+              "rerank_status": "complete",
+              "model_used": true,
+              "fallback_reason": null,
+              "provider": "kev",
+              "model": "kev-latest"
+            }
+          },
+          {
+            "query": "hosted decision provider credentials",
+            "relevant": [
+              "provider-notes.md"
+            ],
+            "baseline": {
+              "paths": [
+                "provider-notes.md"
+              ],
+              "recall_at_k": 1.0,
+              "reciprocal_rank": 1.0,
+              "elapsed_ms": 2.838542000972666,
+              "rerank_status": "disabled",
+              "model_used": false,
+              "fallback_reason": null,
+              "provider": "none",
+              "model": null
+            },
+            "requested": {
+              "paths": [
+                "provider-notes.md"
+              ],
+              "recall_at_k": 1.0,
+              "reciprocal_rank": 1.0,
+              "elapsed_ms": 55.304875000729226,
+              "rerank_status": "complete",
+              "model_used": true,
+              "fallback_reason": null,
+              "provider": "kev",
+              "model": "kev-latest"
+            }
+          },
+          {
+            "query": "fictional book comets reading journal",
+            "relevant": [
+              "reading.md"
+            ],
+            "baseline": {
+              "paths": [
+                "reading.md"
+              ],
+              "recall_at_k": 1.0,
+              "reciprocal_rank": 1.0,
+              "elapsed_ms": 1.5975830028764904,
+              "rerank_status": "disabled",
+              "model_used": false,
+              "fallback_reason": null,
+              "provider": "none",
+              "model": null
+            },
+            "requested": {
+              "paths": [
+                "reading.md"
+              ],
+              "recall_at_k": 1.0,
+              "reciprocal_rank": 1.0,
+              "elapsed_ms": 53.794917002960574,
+              "rerank_status": "complete",
+              "model_used": true,
+              "fallback_reason": null,
+              "provider": "kev",
+              "model": "kev-latest"
+            }
+          }
+        ]
+      },
+      "injected_outage": {
+        "search": {
+          "query": "검색",
+          "provider": "kev",
+          "model": null,
+          "rerank_status": "unavailable",
+          "fallback_reason": "http_503",
+          "candidate_count": 2,
+          "results": [
+            {
+              "path": "local-search.md",
+              "title": "로컬 검색 실험",
+              "start_line": 1,
+              "end_line": 7,
+              "text": "# 로컬 검색 실험\r\n\r\n한국어 Markdown 노트를 문단으로 나누고 BM25로 검색 후보를 찾는다.\r\n검색 결과에는 원문 경로와 줄 번호를 함께 표시한다.\r\n\r\nLaya 재정렬은 질문과 후보 문단의 관련성을 평가한다.\r\nBM25 단독 검색과 비교해 검색 품질이 개선되는지 확인한다.\r\n",
+              "bm25_score": 1.3046267792680704,
+              "model_score": null,
+              "decision": null
+            },
+            {
+              "path": "garden.md",
+              "title": "베란다 바질 관리",
+              "start_line": 1,
+              "end_line": 6,
+              "text": "# 베란다 바질 관리\n\n바질 화분은 햇빛이 드는 베란다에 놓는다.\n흙 표면이 마르면 물을 주고 잎의 상태를 관찰한다.\n\n이번 주에는 새 잎이 두 장 자랐다. 이 기록은 문서 검색 예제를 위한 가상 관찰이다.\n",
+              "bm25_score": 0.6626247040354766,
+              "model_score": null,
+              "decision": null
+            }
+          ],
+          "index": {
+            "indexed": 0,
+            "unchanged": 4,
+            "deleted": 0,
+            "errors": []
+          },
+          "elapsed_ms": 3.943
+        },
+        "classify": {
+          "error": {
+            "code": "ProviderError",
+            "message": "http_503"
+          }
+        }
+      },
+      "source_hashes_unchanged": true
+    }
+  },
+  "source_sha256": {
+    "garden.md": "40558251ab366ccd8540b6e563b221ac97c90367399227ddc24507c74e6faa7d",
+    "local-search.md": "1e7fd050d9b9914cc9bd18109602ecbd12b30c6db0dedcdebe9de6ed069e49d4",
+    "provider-notes.md": "1826879deeb848c0965b0f5b653bc171b44b8f1adf3e6f0a391930c957487884",
+    "reading.md": "d746f9d7faf125204527882dc053e335d0be737627e32b995f2341ca207aa2ce"
+  },
+  "functional_checks_passed": true,
+  "default_cli_checks": [
+    {
+      "command": "doctor",
+      "provider_flag_omitted": true,
+      "report": {
+        "version": "0.2.0a3",
+        "provider": "kev",
+        "health": {
+          "status": "ok",
+          "models": [
+            {
+              "name": "kev-latest",
+              "description": "Kev pointer head on Qwen/Qwen3.5-0.8B-Base, serving jaredpalmer/kev-0.8b@bf75a6a8848ea6960ff2ed108d9ed44c2941174f at temperature 2.35",
+              "release_date": "2026-10-05",
+              "run": "jaredpalmer/kev-0.8b@bf75a6a8848ea6960ff2ed108d9ed44c2941174f",
+              "base": "Qwen/Qwen3.5-0.8B-Base",
+              "lora": 16,
+              "device": "mps",
+              "backend": "mlx",
+              "dtype": "bfloat16",
+              "temperature": 2.3510958125672174,
+              "max_state_tokens": 65536,
+              "truncate_states": false,
+              "cuda_graphs": null,
+              "prefix_cache": {
+                "size": 4,
+                "min_state_tokens": 0,
+                "max_tokens": 65536,
+                "hits": 6,
+                "misses": 10,
+                "cached_states": 4,
+                "oom_retries": 0
+              },
+              "batches": {
+                "count": 16,
+                "requests": 16,
+                "queued": 0
+              }
+            },
+            {
+              "name": "jev-latest",
+              "description": "Kev pointer head on Qwen/Qwen3.5-0.8B-Base, serving jaredpalmer/kev-0.8b@bf75a6a8848ea6960ff2ed108d9ed44c2941174f at temperature 2.35",
+              "release_date": "2026-10-05",
+              "run": "jaredpalmer/kev-0.8b@bf75a6a8848ea6960ff2ed108d9ed44c2941174f",
+              "base": "Qwen/Qwen3.5-0.8B-Base",
+              "lora": 16,
+              "device": "mps",
+              "backend": "mlx",
+              "dtype": "bfloat16",
+              "temperature": 2.3510958125672174,
+              "max_state_tokens": 65536,
+              "truncate_states": false,
+              "cuda_graphs": null,
+              "prefix_cache": {
+                "size": 4,
+                "min_state_tokens": 0,
+                "max_tokens": 65536,
+                "hits": 6,
+                "misses": 10,
+                "cached_states": 4,
+                "oom_retries": 0
+              },
+              "batches": {
+                "count": 16,
+                "requests": 16,
+                "queued": 0
+              }
+            }
+          ]
+        },
+        "inference_verified": true,
+        "probe": {
+          "choice": "A",
+          "probabilities": {
+            "A": 0.9911,
+            "B": 0.0089
+          },
+          "confidence": 0.9823,
+          "model": "kev-latest",
+          "usage": {
+            "input_tokens": 35,
+            "output_tokens": 52
+          },
+          "elapsed_ms": 73.90500000474276,
+          "answer_confidence": null
+        }
+      }
+    },
+    {
+      "command": "classify",
+      "provider_flag_omitted": true,
+      "report": {
+        "path": "local-search.md",
+        "provider": "kev",
+        "model": "kev-latest",
+        "status": "complete",
+        "review_required": false,
+        "category": "research",
+        "category_candidates": [
+          "research"
+        ],
+        "tags": [
+          "evaluation",
+          "local"
+        ],
+        "passages": [
+          {
+            "path": "local-search.md",
+            "title": "로컬 검색 실험",
+            "start_line": 1,
+            "end_line": 7,
+            "text": "# 로컬 검색 실험\n\n한국어 Markdown 노트를 문단으로 나누고 BM25로 검색 후보를 찾는다.\n검색 결과에는 원문 경로와 줄 번호를 함께 표시한다.\n\nLaya 재정렬은 질문과 후보 문단의 관련성을 평가한다.\nBM25 단독 검색과 비교해 검색 품질이 개선되는지 확인한다.\n",
+            "category": "research",
+            "category_decision": {
+              "choice": "A",
+              "probabilities": {
+                "A": 0.9707,
+                "B": 0.004,
+                "C": 0.0253
+              },
+              "confidence": 0.9561,
+              "model": "kev-latest",
+              "usage": {
+                "input_tokens": 155,
+                "output_tokens": 62
+              },
+              "elapsed_ms": 69.25887500256067,
+              "answer_confidence": null
+            },
+            "tags": {
+              "local": {
+                "suggested": true,
+                "choice": "A",
+                "probabilities": {
+                  "A": 0.5614,
+                  "B": 0.4386
+                },
+                "confidence": 0.1229,
+                "model": "kev-latest",
+                "usage": {
+                  "input_tokens": 136,
+                  "output_tokens": 52
+                },
+                "elapsed_ms": 23.82775000296533,
+                "answer_confidence": null
+              },
+              "evaluation": {
+                "suggested": true,
+                "choice": "A",
+                "probabilities": {
+                  "A": 0.7727,
+                  "B": 0.2273
+                },
+                "confidence": 0.5454,
+                "model": "kev-latest",
+                "usage": {
+                  "input_tokens": 133,
+                  "output_tokens": 52
+                },
+                "elapsed_ms": 23.312874996918254,
+                "answer_confidence": null
+              },
+              "plants": {
+                "suggested": false,
+                "choice": "B",
+                "probabilities": {
+                  "A": 0.0387,
+                  "B": 0.9613
+                },
+                "confidence": 0.9226,
+                "model": "kev-latest",
+                "usage": {
+                  "input_tokens": 131,
+                  "output_tokens": 52
+                },
+                "elapsed_ms": 23.321542001212947,
+                "answer_confidence": null
+              }
+            }
+          }
+        ],
+        "note_modified": false
+      }
+    }
+  ],
+  "runtime_probe": {
+    "models": {
+      "status": 200,
+      "seconds": 0.009001375001389533,
+      "request_id": "b299bfb20e6449e7b79aec771a0964af",
+      "body": {
+        "models": [
+          {
+            "name": "kev-latest",
+            "description": "Kev pointer head on Qwen/Qwen3.5-0.8B-Base, serving jaredpalmer/kev-0.8b@bf75a6a8848ea6960ff2ed108d9ed44c2941174f at temperature 2.35",
+            "release_date": "2026-10-05",
+            "run": "jaredpalmer/kev-0.8b@bf75a6a8848ea6960ff2ed108d9ed44c2941174f",
+            "base": "Qwen/Qwen3.5-0.8B-Base",
+            "lora": 16,
+            "device": "mps",
+            "backend": "mlx",
+            "dtype": "bfloat16",
+            "temperature": 2.3510958125672174,
+            "max_state_tokens": 65536,
+            "truncate_states": false,
+            "cuda_graphs": null,
+            "prefix_cache": {
+              "size": 4,
+              "min_state_tokens": 0,
+              "max_tokens": 65536,
+              "hits": 0,
+              "misses": 0,
+              "cached_states": 0,
+              "oom_retries": 0
+            },
+            "batches": {
+              "count": 0,
+              "requests": 0,
+              "queued": 0
+            }
+          },
+          {
+            "name": "jev-latest",
+            "description": "Kev pointer head on Qwen/Qwen3.5-0.8B-Base, serving jaredpalmer/kev-0.8b@bf75a6a8848ea6960ff2ed108d9ed44c2941174f at temperature 2.35",
+            "release_date": "2026-10-05",
+            "run": "jaredpalmer/kev-0.8b@bf75a6a8848ea6960ff2ed108d9ed44c2941174f",
+            "base": "Qwen/Qwen3.5-0.8B-Base",
+            "lora": 16,
+            "device": "mps",
+            "backend": "mlx",
+            "dtype": "bfloat16",
+            "temperature": 2.3510958125672174,
+            "max_state_tokens": 65536,
+            "truncate_states": false,
+            "cuda_graphs": null,
+            "prefix_cache": {
+              "size": 4,
+              "min_state_tokens": 0,
+              "max_tokens": 65536,
+              "hits": 0,
+              "misses": 0,
+              "cached_states": 0,
+              "oom_retries": 0
+            },
+            "batches": {
+              "count": 0,
+              "requests": 0,
+              "queued": 0
+            }
+          }
+        ]
+      }
+    },
+    "cases": [
+      {
+        "status": 200,
+        "seconds": 1.4487338339968119,
+        "request_id": "fa890995b64743f28683639cb6135243",
+        "body": {
+          "model": "kev-latest",
+          "answers": {
+            "decision": {
+              "type": "choice",
+              "choice": "card",
+              "confidence": 0.9894,
+              "probabilities": {
+                "card": 0.9929,
+                "mortgage": 0.0054,
+                "savings": 0.0016
+              }
+            }
+          },
+          "usage": {
+            "input_tokens": 54,
+            "output_tokens": 65
+          },
+          "latency_ms": 1445.7
+        },
+        "id": "banking-en",
+        "expected": "card",
+        "correct": true,
+        "contract_valid": true,
+        "request": {
+          "model": "kev-latest",
+          "state": "My debit card was stolen. Please block it and issue a replacement.",
+          "questions": {
+            "decision": {
+              "type": "choice",
+              "instructions": "Which department should handle this customer request?",
+              "criteria": {
+                "card": "Lost or stolen bank cards",
+                "mortgage": "Buying a home with a mortgage",
+                "savings": "Opening a savings account"
+              }
+            }
+          }
+        }
+      },
+      {
+        "status": 200,
+        "seconds": 0.045267041998158675,
+        "request_id": "552681c73e7e4da6a244ac100c4f70ac",
+        "body": {
+          "model": "kev-latest",
+          "answers": {
+            "decision": {
+              "type": "choice",
+              "choice": "positive",
+              "confidence": 0.8681,
+              "probabilities": {
+                "positive": 0.9121,
+                "negative": 0.0067,
+                "neutral": 0.0812
+              }
+            }
+          },
+          "usage": {
+            "input_tokens": 55,
+            "output_tokens": 63
+          },
+          "latency_ms": 42.8
+        },
+        "id": "sentiment-en",
+        "expected": "positive",
+        "correct": true,
+        "contract_valid": true,
+        "request": {
+          "model": "kev-latest",
+          "state": "The restaurant served excellent food and the staff were incredibly kind. I loved the meal.",
+          "questions": {
+            "decision": {
+              "type": "choice",
+              "instructions": "What is the sentiment of this review?",
+              "criteria": {
+                "positive": "The writer liked the experience",
+                "negative": "The writer disliked the experience",
+                "neutral": "The writer expresses no opinion"
+              }
+            }
+          }
+        }
+      },
+      {
+        "status": 200,
+        "seconds": 0.11258016700594453,
+        "request_id": "0242008286c643189b35bd977b61ef54",
+        "body": {
+          "model": "kev-latest",
+          "answers": {
+            "decision": {
+              "type": "choice",
+              "choice": "technology",
+              "confidence": 0.9912,
+              "probabilities": {
+                "technology": 0.9941,
+                "cooking": 0.0038,
+                "travel": 0.0021
+              }
+            }
+          },
+          "usage": {
+            "input_tokens": 70,
+            "output_tokens": 64
+          },
+          "latency_ms": 110.2
+        },
+        "id": "category-en",
+        "expected": "technology",
+        "correct": true,
+        "contract_valid": true,
+        "request": {
+          "model": "kev-latest",
+          "state": "SQLite provides a SQL database engine that stores all data in a single file. BM25 ranks documents using term frequency and inverse document frequency.",
+          "questions": {
+            "decision": {
+              "type": "choice",
+              "instructions": "Select the category that best describes this note.",
+              "criteria": {
+                "technology": "Programming, databases, software, and computing",
+                "cooking": "Preparing food and recipes",
+                "travel": "Trips and destinations"
+              }
+            }
+          }
+        }
+      },
+      {
+        "status": 200,
+        "seconds": 0.06688333299825899,
+        "request_id": "7b0aeddaec4f4c148cbe33c99dc9026d",
+        "body": {
+          "model": "kev-latest",
+          "answers": {
+            "decision": {
+              "type": "choice",
+              "choice": "yes",
+              "confidence": 0.5849,
+              "probabilities": {
+                "yes": 0.7925,
+                "no": 0.2075
+              }
+            }
+          },
+          "usage": {
+            "input_tokens": 46,
+            "output_tokens": 52
+          },
+          "latency_ms": 64.8
+        },
+        "id": "tag-en",
+        "expected": "yes",
+        "correct": true,
+        "contract_valid": true,
+        "request": {
+          "model": "kev-latest",
+          "state": "SQLite provides a SQL database engine that stores all data in a single file.",
+          "questions": {
+            "decision": {
+              "type": "choice",
+              "instructions": "Does the tag databases describe the main subject of this note?",
+              "criteria": {
+                "yes": "The tag is relevant",
+                "no": "The tag is unrelated"
+              }
+            }
+          }
+        }
+      },
+      {
+        "status": 200,
+        "seconds": 0.04373716600093758,
+        "request_id": "6ed1dd2b48d34d53a91a3f88cb1a96f4",
+        "body": {
+          "model": "kev-latest",
+          "answers": {
+            "decision": {
+              "type": "choice",
+              "choice": "technology",
+              "confidence": 0.9932,
+              "probabilities": {
+                "technology": 0.9955,
+                "cooking": 0.0024,
+                "travel": 0.0021
+              }
+            }
+          },
+          "usage": {
+            "input_tokens": 78,
+            "output_tokens": 64
+          },
+          "latency_ms": 40.4
+        },
+        "id": "category-ko",
+        "expected": "technology",
+        "correct": true,
+        "contract_valid": true,
+        "request": {
+          "model": "kev-latest",
+          "state": "SQLite는 데이터를 하나의 파일에 저장하는 SQL 데이터베이스 엔진이다. BM25는 검색어 빈도를 사용해 문서 순위를 계산한다.",
+          "questions": {
+            "decision": {
+              "type": "choice",
+              "instructions": "이 메모에 가장 적합한 분류를 선택하세요.",
+              "criteria": {
+                "technology": "프로그래밍, 데이터베이스, 소프트웨어 및 컴퓨팅",
+                "cooking": "요리와 레시피",
+                "travel": "여행과 목적지"
+              }
+            }
+          }
+        }
+      },
+      {
+        "status": 200,
+        "seconds": 0.04004095900018001,
+        "request_id": "dcf7ea3c1b8f4748b4ebecb52eb4f453",
+        "body": {
+          "model": "kev-latest",
+          "answers": {
+            "decision": {
+              "type": "choice",
+              "choice": "yes",
+              "confidence": 0.7102,
+              "probabilities": {
+                "yes": 0.8551,
+                "no": 0.1449
+              }
+            }
+          },
+          "usage": {
+            "input_tokens": 46,
+            "output_tokens": 52
+          },
+          "latency_ms": 37.4
+        },
+        "id": "tag-ko",
+        "expected": "yes",
+        "correct": true,
+        "contract_valid": true,
+        "request": {
+          "model": "kev-latest",
+          "state": "SQLite는 데이터를 하나의 파일에 저장하는 SQL 데이터베이스 엔진이다.",
+          "questions": {
+            "decision": {
+              "type": "choice",
+              "instructions": "데이터베이스 태그가 이 메모의 주제와 관련이 있습니까?",
+              "criteria": {
+                "yes": "태그가 관련됨",
+                "no": "태그가 관련 없음"
+              }
+            }
+          }
+        }
+      }
+    ],
+    "pins": {
+      "jaredpalmer/kev-0.8b": {
+        "revision": "bf75a6a8848ea6960ff2ed108d9ed44c2941174f",
+        "tag": "v1.0",
+        "path": "<temporary-runtime>/hf-cache/hub/models--jaredpalmer--kev-0.8b/snapshots/bf75a6a8848ea6960ff2ed108d9ed44c2941174f",
+        "sha256": {
+          "adapter_model.safetensors": "9b908623acb162118575f4e7a94524f9c139c335be4bfb74d6cfceca01e1885a",
+          "head.pt": "f400bd12802b2b105ae45d6b03774a158a3db4fccff42413734ddca2e5c920b6",
+          "provenance.json": "fce039fbda7de19451c9b5d3065aee2c5e063e1562a8bc18c72e297fbd15e9d8",
+          "result.json": "523770dbe04ad23bfdadd627d253273220fe8969a74b213e0fafb1e65093bc8c",
+          "tokenizer_config.json": "8671bed7c852ce9e661be94f179a7b4ffd091c2a65aea0363e5501c20318ee45",
+          "tokenizer.json": "06b9509352d2af50381ab2247e083b80d32d5c0aba91c272ca9ff729b6a0e523",
+          "training_metrics.json": "5f94d869c3707c0efff9f2e893e288014bc88515ae04fe5f75c9d793c453cfc1",
+          "adapter_config.json": "748acb2cda88454cb1ba69d745ba336f3fcb5486eac349e90960c8b8d8d3e854",
+          "training_config.json": "3ec3d92146248265652d4387f8eb65ee8defaed4dd9173b049e7b5193045ece6"
+        }
+      },
+      "Qwen/Qwen3.5-0.8B-Base": {
+        "revision": "dc7cdfe2ee4154fa7e30f5b51ca41bfa40174e68",
+        "path": "<temporary-runtime>/hf-cache/hub/models--Qwen--Qwen3.5-0.8B-Base/snapshots/dc7cdfe2ee4154fa7e30f5b51ca41bfa40174e68",
+        "sha256": {
+          "tokenizer_config.json": "e611fbccc7c29ef3b1cafb1cb7ea548d189968632901d678fd62be68c47885de",
+          "config.json": "b90b86f35c8e6925ef74ee04d0e758f0a845c83a42089ad82bbaa948de9b4204",
+          "tokenizer.json": "fe000e3ed39ed12b8d2481d527d44f93c65d37e87645d2dcc80d1bf9d50d2927",
+          "model.safetensors-00001-of-00001.safetensors": "c2b1e5a17d9c1e27685d92ed9b382911ebb99955ecd89052d1721241adfbab6c",
+          "vocab.json": "ce99b4cb2983d118806ce0a8b777a35b093e2000a503ebde25853284c9dfa003",
+          "model.safetensors.index.json": "ce9a885efdf27d3664fdef5d512ad365216f1074051ef840c7cd8e5431495d0a",
+          "video_preprocessor_config.json": "d039cd7d88b3502a99edd455496b75b44ecf7dd3b3669748bafac37e6cecc085",
+          "preprocessor_config.json": "27225450ac9c6529872ee1924fcb0962ff5634834f817040f444118116f4e516"
+        }
+      }
+    },
+    "source_revision": "fe64b1274ea7f80d4095866df90666abb03e9cf6",
+    "runtime": {
+      "python": "3.12.11",
+      "platform": "macOS-15.3.2-arm64-arm-64bit",
+      "packages": {
+        "torch": "2.8.0",
+        "transformers": "5.17.0",
+        "peft": "0.21.0",
+        "huggingface-hub": "1.32.0",
+        "uvicorn": "0.53.0",
+        "mlx": "0.32.2",
+        "mlx-lm": "0.31.3"
+      }
+    },
+    "probability_check": "Absolute sum tolerance: number of options * 0.00005 + 1e-8, allowing upstream four-decimal rounding."
+  },
+  "default_launcher_health": {
+    "models": [
+      {
+        "name": "kev-latest",
+        "description": "Kev pointer head on Qwen/Qwen3.5-0.8B-Base, serving jaredpalmer/kev-0.8b@bf75a6a8848ea6960ff2ed108d9ed44c2941174f at temperature 2.35",
+        "release_date": "2026-10-05",
+        "run": "jaredpalmer/kev-0.8b@bf75a6a8848ea6960ff2ed108d9ed44c2941174f",
+        "base": "Qwen/Qwen3.5-0.8B-Base",
+        "lora": 16,
+        "device": "mps",
+        "backend": "mlx",
+        "dtype": "bfloat16",
+        "temperature": 2.3510958125672174,
+        "max_state_tokens": 65536,
+        "truncate_states": false,
+        "cuda_graphs": null,
+        "prefix_cache": {
+          "size": 4,
+          "min_state_tokens": 0,
+          "max_tokens": 65536,
+          "hits": 0,
+          "misses": 0,
+          "cached_states": 0,
+          "oom_retries": 0
+        },
+        "batches": {
+          "count": 0,
+          "requests": 0,
+          "queued": 0
+        }
+      },
+      {
+        "name": "jev-latest",
+        "description": "Kev pointer head on Qwen/Qwen3.5-0.8B-Base, serving jaredpalmer/kev-0.8b@bf75a6a8848ea6960ff2ed108d9ed44c2941174f at temperature 2.35",
+        "release_date": "2026-10-05",
+        "run": "jaredpalmer/kev-0.8b@bf75a6a8848ea6960ff2ed108d9ed44c2941174f",
+        "base": "Qwen/Qwen3.5-0.8B-Base",
+        "lora": 16,
+        "device": "mps",
+        "backend": "mlx",
+        "dtype": "bfloat16",
+        "temperature": 2.3510958125672174,
+        "max_state_tokens": 65536,
+        "truncate_states": false,
+        "cuda_graphs": null,
+        "prefix_cache": {
+          "size": 4,
+          "min_state_tokens": 0,
+          "max_tokens": 65536,
+          "hits": 0,
+          "misses": 0,
+          "cached_states": 0,
+          "oom_retries": 0
+        },
+        "batches": {
+          "count": 0,
+          "requests": 0,
+          "queued": 0
+        }
+      }
+    ]
+  }
+}
