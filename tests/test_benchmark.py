@@ -139,7 +139,7 @@ class BenchmarkTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory, decision_server() as (url, requests):
             root = Path(directory)
             runtime = root / "runtime.json"
-            runtime.write_text(json.dumps({"package": "fixture-kev", "version": "fixture-1"}))
+            runtime.write_text(json.dumps({"package": "fixture-kev", "version": "fixture-1"}), encoding="utf-8")
             output = root / "report"
             with redirect_stdout(io.StringIO()), redirect_stderr(io.StringIO()):
                 try:
@@ -149,7 +149,7 @@ class BenchmarkTests(unittest.TestCase):
                 except SystemExit as exc:
                     self.fail(f"Benchmark CLI rejected a supported provider: {exc.code}")
             self.assertEqual(code, 0)
-            report = json.loads((output / "report.json").read_text())
+            report = json.loads((output / "report.json").read_text(encoding="utf-8"))
             self.assertEqual(report["provider"], "kev")
             self.assertEqual(report["requested_model"], "fixture-alias")
             self.assertEqual(report["observed_models"], ["fixture-kev"])
@@ -173,7 +173,7 @@ class BenchmarkTests(unittest.TestCase):
                 code = benchmark.main(["--provider", "ko-decision", "--base-url", url,
                                        "--prompt-language", "ko", "--output", str(output)])
             self.assertEqual(code, 0)
-            report = json.loads((output / "report.json").read_text())
+            report = json.loads((output / "report.json").read_text(encoding="utf-8"))
             self.assertEqual(report["provider"], "ko-decision")
             self.assertEqual(report["requested_model"], "mmetamong/ko-decision-roberta-large")
             self.assertEqual(report["observed_models"], ["mmetamong/ko-decision-roberta-large"])
