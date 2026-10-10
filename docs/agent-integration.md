@@ -2,6 +2,9 @@
 
 English | [한국어](agent-integration.ko.md)
 
+These instructions use macOS examples. The current changes have not been
+verified on Windows or Linux.
+
 The same eight skills invoke a bundled Python CLI in either host. Claude or
 Codex writes requested prose; BM25 retrieves locally, and optionally selected
 Laya/Kev/Jev providers make classification or relevance decisions. No model service
@@ -25,7 +28,7 @@ published package for this release.
 
 Keep the product checkout or extracted source separate from your vault.
 Python **3.11 or newer** must be available
-to the host. Check `python3 --version` or `python --version` on Windows.
+to the host. Check `python3 --version`.
 An older macOS system Python is insufficient.
 For archive hooks, an optional `BRAIN_OPENKIT_PYTHON` environment variable can
 select an absolute Python 3.11+ interpreter path; see the
@@ -125,7 +128,7 @@ Repository skills use unprefixed names such as `$brain-search`. Keep all three
 directories together when updating. Copying an individual `SKILL.md` without
 the shared reference and bundled core will not work. For symlink installations,
 link each skill directory, preserve the full product tree, and resolve the
-skill's real path before locating the runner. Copying is more portable on Windows.
+skill's real path before locating the runner.
 This fallback installs the eight reviewed skills; copying the three
 directories does not register automatic archive hooks.
 

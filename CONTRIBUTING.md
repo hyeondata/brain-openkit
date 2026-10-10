@@ -23,7 +23,11 @@ assets and `SHA256SUMS` are on GitHub; PyPI is not published.
 
 ## Develop and test
 
-Use Python 3.11 or newer. From the checkout root:
+Current validation and CI run on macOS with Python 3.11 and 3.13.
+Windows/Linux behavior is unverified for the current changes.
+Keep historical release verification records unchanged.
+
+Use Python 3.11 or newer on macOS. From the checkout root:
 
 ~~~bash
 python3.11 -m venv .venv
@@ -46,7 +50,7 @@ For Jev, use a privately configured `TYPESAFE_API_KEY` (or `JEV_API_KEY`)
 only when intentionally testing the hosted service; inference can be billable.
 No key is required by the fixture suite.
 
-Report unit/HTTP-fixture, real-model, actual-host, browser, and cross-platform
+Report unit/HTTP-fixture, real-model, actual-host, browser, and macOS environment
 checks separately. Manifest validation and skill discovery do not prove that
 an agent performed a task. Test a relocated plugin cache without an editable
 install, and invoke the actual skill with citations and before/after hashes.
@@ -140,13 +144,15 @@ own terms. Identify provenance and notices; see [ATTRIBUTION.md](ATTRIBUTION.md)
 
 ## 한국어 안내
 
-Python 3.11 이상에서 설치하고 변경 관련 테스트와 전체 테스트를 실행합니다.
+현재 검증과 CI는 macOS의 Python 3.11·3.13에서 실행합니다.
+Windows·Linux에서 이번 변경의 동작은 미검증이며, 과거 릴리스 검증 기록은 유지합니다.
+macOS의 Python 3.11 이상에서 설치하고 변경 관련 테스트와 전체 테스트를 실행합니다.
 새 개발은 `main`을 기준으로 하고, 릴리스를 재현할 때는 `v0.2.0a4` 태그를 사용합니다.
 GitHub의 wheel은 CLI 전용이며, 호스트 플러그인에는 태그 체크아웃이나 압축을 푼
 전체 소스 배포본이 필요합니다. `hooks/`를 포함한 제품 디렉터리를 함께 유지하세요.
 PyPI에는 배포하지 않았습니다.
 HTTP fixture·실제 모델·호스트 실행·브라우저·
-플랫폼 검증을 구분하고 이전 커밋의 CI 결과를 새 변경의 결과로 쓰지 마세요.
+macOS 환경 검증을 구분하고 이전 커밋의 CI 결과를 새 변경의 결과로 쓰지 마세요.
 
 검색·분류는 원본을 보존하고, 노트 변경은 명시적 vault의 계획·승인 ID·트랜잭션을
 거칩니다. 실행 취소·복구가 이후 편집을 덮어쓰지 않도록 검증하세요.

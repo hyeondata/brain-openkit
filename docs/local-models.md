@@ -34,7 +34,8 @@ Classification and `doctor` default to Kev; search and evaluation default to
 local BM25 (`--provider none`). Select `--provider kev` to rerank with Kev or
 `--provider laya` to use Laya explicitly.
 
-The commands below are for macOS/Linux. Laya/Kev setup uses
+The commands below use macOS examples; the current changes are unverified on
+Windows and Linux. Laya/Kev setup uses
 [uv](https://docs.astral.sh/uv/) and Git; ko-decision uses Python's `venv` and pip.
 Initial installation/download needs network access and sufficient local disk
 and memory. Servers bind to loopback. Stop a server with Ctrl+C when done.
