@@ -86,6 +86,45 @@ class WorkflowTests(unittest.TestCase):
         with self.assertRaises(ProviderError):
             classify(self.vault, self.vault / "a.md", {"categories": {"work": "Work"}}, FixedProvider(fail_after=0))
 
+    def test_korean_prompts_preserve_source_and_choice_mapping(self):
+        calls = []
+
+        class RecordingProvider(FixedProvider):
+            def choose(self, state, question, choices):
+                calls.append((state, question, choices))
+                return super().choose(state, question, choices)
+
+        provider = RecordingProvider(["B", "A"])
+        source = (self.vault / "a.md").read_bytes()
+        result = classify(self.vault, Path("a.md"),
+                          {"categories": {"요리": "조리법", "개발": "소프트웨어"},
+                           "tags": {"검색": "문서 검색"}}, provider, prompt_language="ko")
+        self.assertEqual(result["category"], "개발")
+        self.assertEqual(result["tags"], ["검색"])
+        self.assertEqual(result["prompt_language"], "ko")
+        self.assertTrue(all(source.decode().strip() in state for state, _, _ in calls))
+        self.assertIn("분류", calls[0][1])
+        self.assertIn("검색", calls[1][1])
+        self.assertEqual(calls[0][2]["B"], "개발: 소프트웨어")
+        self.assertEqual(calls[1][2]["A"], "태그에 해당한다")
+        calls.clear()
+        found = search(self.vault, "local", cache_dir=self.cache,
+                       provider=provider, prompt_language="ko")
+        self.assertEqual(found["prompt_language"], "ko")
+        self.assertEqual(found["rerank_status"], "complete")
+        self.assertIn("검색 질문: local", calls[0][0])
+        self.assertIn("유용한", calls[0][1])
+        self.assertEqual((self.vault / "a.md").read_bytes(), source)
+
+    def test_invalid_prompt_language_fails_before_model_calls(self):
+        provider = FixedProvider()
+        with self.assertRaisesRegex(ValueError, "prompt_language"):
+            search(self.vault, "local", cache_dir=self.cache, provider=provider, prompt_language="ja")
+        with self.assertRaisesRegex(ValueError, "prompt_language"):
+            classify(self.vault, Path("a.md"), {"categories": {"work": "Work"}},
+                     provider, prompt_language="ja")
+        self.assertEqual(provider.calls, 0)
+
     def test_taxonomy_invalid_inputs(self):
         for bad in [None, {}, {"categories": []}, {"categories": {"": "Description"}},
                     {"categories": {"a": "A"}, "tags": {"b": 1}},

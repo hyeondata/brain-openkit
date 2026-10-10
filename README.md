@@ -26,10 +26,14 @@
 > [historical 0.2.0a3 verification](docs/release-0.2.0a3.md) and
 > [implementation notes](docs/implementation-notes.md) for their respective evidence and limits.
 
+The optional `ko-decision` and `codex` providers and `--prompt-language` option described below
+are unreleased source changes. They are not included in the `v0.2.0a4` tag or its
+release assets; use the checkout containing these changes to try them.
+
 Brain OpenKit finds Markdown passages with original paths, line numbers, and
 excerpts. **Search defaults to local BM25, without a model or API key.** Claude
 Code or Codex can use the same eight skills to retrieve evidence, draft notes,
-and apply reviewed changes. Optional Laya, Kev, and TypeSafe Jev adapters make
+and apply reviewed changes. Optional Laya, Kev, ko-decision, Codex, and TypeSafe Jev adapters make
 relevance and category/tag decisions; they do not generate prose.
 
 ## What it does
@@ -83,7 +87,7 @@ brain-openkit --version
 
 On Windows, activate with `.venv\Scripts\Activate.ps1` in PowerShell.
 The CLI has no third-party runtime dependencies; installation may download
-build tooling. Local Laya and Kev servers use separate optional environments.
+build tooling. Local Laya, Kev, and ko-decision servers use separate optional environments.
 
 Download the release assets from the
 [GitHub prerelease](https://github.com/hyeondata/brain-openkit/releases/tag/v0.2.0a4):
@@ -238,6 +242,8 @@ Keep the journal for recovery; removing a plugin does not remove it.
 | `laya` | Optional local multilingual decisions; exercised with real weights. |
 | `kev` | Default for classify/doctor; the bundled launcher selects pinned Hugging Face Kev 0.8B weights. [Actual CLI checks passed](docs/kev-08-verification-2026-10-05.md). |
 | `jev` | Hosted TypeSafe adapter; contract fixtures pass, live-key inference remains unverified. |
+| `ko-decision` | Optional Korean RoBERTa decisions in the unreleased source. Uses a pinned external checkpoint; see [setup](docs/local-models.md#ko-decision-unreleased-source) and [verification](docs/ko-decision-verification-2026-10-05.md). |
+| `codex` | Optional cloud decisions through an authenticated Codex CLI, in unreleased source. The current configured defaults are `gpt-6-astra` and `ultra` reasoning. |
 
 `classify` and `doctor` default to Kev unless overridden by config or flags;
 the bundled Kev launcher selects 0.8B. Select Laya with `--provider laya`.
@@ -319,6 +325,33 @@ project from the hosted TypeSafe Jev service.
 The [0.8B verification report](docs/kev-08-verification-2026-10-05.md) records
 its own results separately from the historical 0.5B checks.
 
+### Optional ko-decision server (unreleased source)
+
+Follow the [separate runtime setup](docs/local-models.md#ko-decision-unreleased-source)
+to install `.[ko-decision]` and start `brain-openkit-serve-ko-decision`. The server
+downloads `mmetamong/ko-decision-roberta-large` at revision
+`dfd606fff30d52963c0073659ff9a8f6bf1fce6d` and listens on `127.0.0.1:8010`.
+
+~~~bash
+brain-openkit doctor --provider ko-decision --prompt-language ko --probe --timeout 120 --json
+brain-openkit search "한국어 BM25 검색 후보" --vault examples/vault --provider ko-decision --prompt-language ko --timeout 120 --json
+brain-openkit classify local-search.md --vault examples/vault --taxonomy examples/taxonomy.json --provider ko-decision --prompt-language ko --timeout 120 --json
+~~~
+
+`--prompt-language ko` changes the built-in instructions and labels; it does not
+translate the query, notes, or taxonomy. English remains the default for every
+provider. Each instruction/option plus passage pair must fit 512 tokens,
+including special tokens. Oversized pairs return HTTP 413: search falls back to
+BM25 and classification returns an error. Scores are uncalibrated relative
+option probabilities, and the model does not generate summaries. See the
+[verification report](docs/ko-decision-verification-2026-10-05.md) for measured
+behavior and limitations. Kev and BM25 remain the defaults.
+
+The optional weights are downloaded separately under the publisher's
+[CC BY-SA 4.0 license](https://huggingface.co/mmetamong/ko-decision-roberta-large/blob/dfd606fff30d52963c0073659ff9a8f6bf1fce6d/README.md).
+Brain OpenKit's independently implemented integration remains MIT; the repository
+does not include the weights. See [attribution](ATTRIBUTION.md).
+
 ### Optional TypeSafe Jev
 
 Set `TYPESAFE_API_KEY` privately in the CLI environment. `JEV_API_KEY` is
@@ -336,6 +369,34 @@ override the model with `--model`. Jev health checks its model listing without
 inference. `doctor --provider jev --probe` performs an inference request and
 may incur service charges, as can search/classification. Live service behavior
 has not been verified with an actual key.
+
+### Optional Codex CLI (unreleased source)
+
+Install a compatible Codex CLI and sign in separately with `codex login` (or
+`/path/to/codex login` for a separate executable). Brain OpenKit uses that existing
+login; it does not read credentials. Replace `/path/to/codex` below with your CLI
+path, or omit `--codex-executable` to use `codex` from `PATH`.
+
+~~~bash
+brain-openkit doctor --provider codex --json
+brain-openkit doctor --provider codex --model gpt-6-astra --reasoning-effort ultra --codex-executable /path/to/codex --probe --json
+brain-openkit search "local search" --vault examples/vault --provider codex --model gpt-6-astra --reasoning-effort ultra --codex-executable /path/to/codex --codex-timeout 600 --json
+~~~
+
+Without `--probe`, `doctor` only checks the executable/version, not authentication
+or model access. `--probe` performs real inference and consumes usage or incurs
+charges, as do Codex search/classification requests. Selecting this provider sends
+the selected note passages, questions, and choice descriptions to the cloud.
+The provider is read-only and returns decisions; probabilities/confidence are
+self-assessments, not calibrated classifier scores. A failed search rerank returns
+BM25 with `rerank_status: "unavailable"`; this is not successful Codex inference.
+Classification failures return an error.
+
+`--model` and `--reasoning-effort` override the configured defaults above, without
+automatic model fallback. `--codex-timeout` defaults to 600 seconds and is separate
+from the HTTP `--timeout`. In a local check on 2026-10-09, CLI 0.149.0 was rejected
+by the server for `gpt-6-astra`; CLI 0.162.0 completed a real structured-output
+probe. This is an observed compatibility check, not a general quality ranking.
 
 ## Configuration and output
 
@@ -364,11 +425,18 @@ checkout root:
 
 Flags override JSON settings, which override defaults. JSON `vault` and
 `cache_dir` resolve from the config file. An optional `base_url` config field
-or `--base-url` overrides the selected provider's endpoint. Keys are environment
-variables only. `--model` overrides the selected Kev/Jev API model name;
+or `--base-url` overrides the selected HTTP provider's endpoint; Codex rejects it.
+HTTP API keys are environment variables only. `--model` overrides the selected
+Kev/Jev/ko-decision server model name or Codex model;
 Laya explicitly uses its multilingual model. Classification/organization/source-note
 paths are vault-relative; input drafts, taxonomy, datasets, and plans resolve
 from the working directory.
+
+The unreleased source also accepts `ko_decision_base_url` (default
+`http://127.0.0.1:8010`), `ko_decision_model` (default
+`mmetamong/ko-decision-roberta-large`), and `prompt_language` (`en` or `ko`,
+default `en`) in JSON. `--model` selects the identity already served; it does not
+download or replace weights.
 
 Output is UTF-8, including redirected files and pipes. Rerank status is
 `disabled`, `not_needed`, `complete`, or `unavailable`; unavailable
@@ -396,8 +464,10 @@ BM25 as the default and reviewing suggestions. See the
 - Model probability/confidence signals are not guaranteed calibrated. There is
   no universal threshold for automatically applying metadata.
 - Laya has a byte limit and sequence budget (`--max-tokens`, default 1024).
-  **Exact tokenizer preflight is not implemented.** Reported truncation,
+  **Exact tokenizer preflight for Laya is not implemented.** Reported truncation,
   dropped state, and collapsed options are rejected.
+- ko-decision checks each complete tokenized pair before inference and rejects
+  inputs over 512 tokens. Its relative option scores are not calibrated accuracy.
 - A reranker cannot retrieve a relevant note absent from the BM25 candidates.
   Large-vault performance and general Korean/English quality remain unproven.
 - Retrieval JSONL uses `{"query":"...","relevant":["note.md"]}` with existing
@@ -422,7 +492,7 @@ also describe intended behavior beyond completed validation.
 - [x] Broader frozen synthetic Korean/English evaluation with held-out labels.
 - [ ] Live Jev service verification.
 - [ ] User-reviewed real-vault retrieval and classification/tag acceptance.
-- [ ] Exact tokenizer preflight and additional provider question types.
+- [ ] Exact tokenizer preflight for Laya and additional provider question types.
 - [ ] Obsidian plugin UI.
 
 See the [roadmap evidence matrix](docs/roadmap-evidence.md) for each original

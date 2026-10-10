@@ -8,6 +8,7 @@ import unittest
 from unittest.mock import patch
 
 from brain_openkit.cli import main
+from test_providers import prediction, server
 
 
 class WorkflowCLITests(unittest.TestCase):
@@ -79,6 +80,22 @@ class WorkflowCLITests(unittest.TestCase):
             status, result = self.run_cli('doctor', '--provider', 'jev')
         self.assertEqual(status, 2)
         self.assertIn('missing_api_key', result['error']['message'])
+
+    def test_prompt_language_config_and_flag_reach_model_requests(self):
+        (self.vault / 'note.md').write_text('# 검색\n\n검색 문서입니다.\n', encoding='utf-8')
+        config = self.root / 'language.json'
+        config.write_text(json.dumps({'provider': 'laya', 'prompt_language': 'ko',
+                                      'cache_dir': str(self.root / 'cache')}), encoding='utf-8')
+        with server([{'body': prediction()}]) as (url, requests):
+            code, result = self.run_cli('search', '검색', '--config', str(config), '--base-url', url)
+            self.assertEqual(code, 0, result)
+            self.assertEqual(result['prompt_language'], 'ko')
+            self.assertIn('유용한', json.loads(requests[-1][3])['questions']['decision']['instructions'])
+            code, result = self.run_cli('search', '검색', '--config', str(config), '--base-url', url,
+                                        '--prompt-language', 'en')
+            self.assertEqual(code, 0, result)
+            self.assertEqual(result['prompt_language'], 'en')
+            self.assertIn('useful', json.loads(requests[-1][3])['questions']['decision']['instructions'])
 
     def test_provider_specific_configuration_and_environment_key_priority(self):
         config = self.root / 'providers.json'

@@ -1,25 +1,32 @@
-# Local Laya and Kev models
+# Local decision models
 
 English | [한국어](local-models.ko.md)
 
-Laya and Kev use the same Brain OpenKit search, classification, and evaluation
-commands. Select `--provider laya` or `--provider kev`. Both can download public
+Laya, Kev, and ko-decision use the same Brain OpenKit search, classification, and
+evaluation commands. Select `--provider laya`, `--provider kev`, or
+`--provider ko-decision`. They can download public
 weights from Hugging Face and run inference on your computer without a hosted
 inference subscription or Hugging Face token.
 
-Each model needs its own official runtime. Hugging Face is the shared model
+Laya and Kev use their official runtimes; ko-decision uses Brain OpenKit's optional
+local server. Hugging Face is the shared model
 registry, while Brain OpenKit provides the shared CLI. A generic text-generation
 endpoint does not replace these decision-model servers. The core CLI keeps its
 Python 3.11+ standard-library-only runtime; install model dependencies separately.
+
+**ko-decision and `--prompt-language` are unreleased source features.** They are
+absent from the `v0.2.0a4` tag and release assets. Install from the checkout that
+contains these changes; the project has no PyPI distribution.
 
 | Selection | Weights | Default local endpoint | Server model name |
 | --- | --- | --- | --- |
 | `--provider laya` | [`convaiinnovations/laya`](https://huggingface.co/convaiinnovations/laya), `multilingual` subfolder | `http://127.0.0.1:8000` | `multilingual`, sent explicitly |
 | `--provider kev` | [`jaredpalmer/kev-0.8b`](https://huggingface.co/jaredpalmer/kev-0.8b), default checkpoint | `http://127.0.0.1:8009` | `kev-latest` |
+| `--provider ko-decision` | [`mmetamong/ko-decision-roberta-large`](https://huggingface.co/mmetamong/ko-decision-roberta-large/tree/dfd606fff30d52963c0073659ff9a8f6bf1fce6d), pinned optional checkpoint | `http://127.0.0.1:8010` | `mmetamong/ko-decision-roberta-large` |
 
 `kev-latest` is an API alias for the checkpoint loaded by the server. It does
 not mean the newest Hugging Face weights. Brain OpenKit's `--model` overrides
-that API alias for Kev/Jev; it does not download or replace a checkpoint.
+the server model ID for Kev/Jev/ko-decision; it does not download or replace a checkpoint.
 The bundled `scripts/serve-kev.py` launcher defaults to
 `jaredpalmer/kev-0.8b@bf75a6a8848ea6960ff2ed108d9ed44c2941174f`, the recorded
 `v1.0` revision. Restart it with a different `--run` to change its weights.
@@ -27,9 +34,10 @@ Classification and `doctor` default to Kev; search and evaluation default to
 local BM25 (`--provider none`). Select `--provider kev` to rerank with Kev or
 `--provider laya` to use Laya explicitly.
 
-The commands below are for macOS/Linux. They need [uv](https://docs.astral.sh/uv/),
-Git, network access for the first installation/download, and sufficient local
-disk and memory. Servers bind to loopback. Stop a server with Ctrl+C when done.
+The commands below are for macOS/Linux. Laya/Kev setup uses
+[uv](https://docs.astral.sh/uv/) and Git; ko-decision uses Python's `venv` and pip.
+Initial installation/download needs network access and sufficient local disk
+and memory. Servers bind to loopback. Stop a server with Ctrl+C when done.
 
 ## Laya multilingual
 
@@ -113,7 +121,86 @@ installation can resolve a different base. Offline reuse needs the cached
 default-branch reference as well as weight files. These legacy results are
 separate from the default 0.8B model's evidence.
 
-## Check each provider
+## ko-decision (unreleased source)
+
+Start from the Brain OpenKit checkout containing this integration. Create a
+separate environment beside the checkout, outside your vault:
+
+```bash
+python3.13 -m venv ../brain-openkit-ko-decision-runtime
+../brain-openkit-ko-decision-runtime/bin/python -m pip install '.[ko-decision]'
+../brain-openkit-ko-decision-runtime/bin/brain-openkit-serve-ko-decision \
+  --device cpu --threads 4 --batch-size 4 --port 8010 \
+  --cache-dir ../brain-openkit-ko-decision-cache
+```
+
+This optional extra installs `torch>=2.6,<3` and `transformers>=4.57,<6` alongside
+Brain OpenKit in that environment. The core CLI has no mandatory model
+dependencies. For source development, the equivalent launcher is
+`../brain-openkit-ko-decision-runtime/bin/python scripts/serve-ko-decision.py`
+with the same options. Run either command from the checkout root.
+
+The server loads `mmetamong/ko-decision-roberta-large` revision
+`dfd606fff30d52963c0073659ff9a8f6bf1fce6d` before it starts accepting requests.
+The first launch downloads that checkpoint and tokenizer from Hugging Face.
+The default host is `127.0.0.1`; only loopback hosts are accepted. Default options
+are `--device auto`, `--threads 4`, `--batch-size 4`, and `--port 8010`.
+`auto` chooses CUDA, then MPS, then CPU when available; explicit choices are
+`cpu`, `mps`, and `cuda`. The documented verification used both CPU and MPS
+float32 on an Apple M1 Max with 64 GiB memory, four CPU threads, and option
+batches of four. It used Python 3.13.1, Torch 2.14.1, Transformers 5.18.0,
+and huggingface-hub 1.33.0. To reproduce the MPS run, replace `--device cpu`
+with `--device mps`. CPU and MPS returned the same choices in both prompt-language
+runs; their largest option-probability difference was below 0.00000322. See the
+[verification report](ko-decision-verification-2026-10-05.md) for the task results
+and deployment-specific timing comparison. CUDA and other dependency versions
+were not verified by this run.
+
+After the first successful download, retain the cache and restart with the same
+`--cache-dir` plus `--local-files-only` to prohibit further model downloads:
+
+```bash
+../brain-openkit-ko-decision-runtime/bin/brain-openkit-serve-ko-decision \
+  --device cpu --threads 4 --batch-size 4 --port 8010 \
+  --cache-dir ../brain-openkit-ko-decision-cache --local-files-only
+```
+
+In another terminal, use the CLI from the updated checkout or that environment:
+
+```bash
+../brain-openkit-ko-decision-runtime/bin/brain-openkit doctor --provider ko-decision --prompt-language ko --json
+../brain-openkit-ko-decision-runtime/bin/brain-openkit doctor --provider ko-decision --prompt-language ko --probe --timeout 120 --json
+../brain-openkit-ko-decision-runtime/bin/brain-openkit search "한국어 BM25 검색 후보" --vault examples/vault --provider ko-decision --prompt-language ko --timeout 120 --json
+../brain-openkit-ko-decision-runtime/bin/brain-openkit classify local-search.md --vault examples/vault --taxonomy examples/taxonomy.json --provider ko-decision --prompt-language ko --timeout 120 --json
+../brain-openkit-ko-decision-runtime/bin/brain-openkit evaluate examples/evaluation.jsonl --vault examples/vault --provider ko-decision --prompt-language ko --timeout 120 --json
+```
+
+`--prompt-language ko` localizes built-in instructions and labels for any provider.
+It does not translate queries, note contents, or taxonomy names/descriptions;
+use an appropriate taxonomy for the language you want to evaluate. `en` remains
+the default. The API model ID is `mmetamong/ko-decision-roberta-large`.
+`--model` must identify what the server already serves and cannot change its
+pinned weights. An alternate port requires a matching CLI `--base-url`.
+
+Each option is scored as the pair `(instruction + option, state)`. The server
+supports 1–10 options, applies softmax across the same question's scores at
+temperature 1, and returns no generated text. These probabilities and its
+top-versus-uniform confidence are uncalibrated; there is no automatic abstention
+threshold. All text and special tokens must fit **512 tokens per pair**. The
+server tokenizes without truncation and returns HTTP 413 if any pair exceeds
+the limit. Search then falls back to the complete BM25 order; classification
+returns an error. The ordinary 1,200-character Markdown chunk size does not
+guarantee that a Korean input fits this token budget. `--max-tokens` is a Laya
+option and does not increase this model's limit.
+
+The checkpoint is downloaded separately under the publisher's **CC BY-SA 4.0**
+license. Brain OpenKit's independently written server and adapter retain MIT;
+weights are not bundled. See [attribution](../ATTRIBUTION.md) and the
+[verification report](ko-decision-verification-2026-10-05.md) for actual results
+and their limits. Installing this provider does not change the Kev defaults for
+`doctor`/`classify` or the BM25 defaults for `search`/`evaluate`.
+
+## Check Laya and Kev
 
 Return to the Brain OpenKit checkout with its CLI environment active. Run each
 line for the server you started; both servers can remain available if the
@@ -144,9 +231,11 @@ To check failure behavior, stop the selected server and repeat its search.
 The result should retain BM25 order with an unavailable reason. Restart the
 server before checking classification. Use `--base-url` if you chose a
 different port; JSON configuration also supports `laya_base_url`,
-`kev_base_url`, and `kev_model`. Do not put API keys in JSON configuration.
+`kev_base_url`, and `kev_model`. The unreleased source also supports
+`ko_decision_base_url`, `ko_decision_model`, and `prompt_language` (`en` or `ko`).
+Do not put API keys in JSON configuration.
 
-For a repeatable check of both running servers, run from the checkout root:
+For a repeatable check of the running Laya and Kev servers, run from the checkout root:
 
 ```bash
 python benchmarks/check_local_providers.py --output ../brain-openkit-provider-check.json
@@ -165,6 +254,11 @@ and `--kev-url`. It reports suggestion contents but does not treat every
 model-selected tag as correct.
 
 ## Verification evidence and limits
+
+The optional ko-decision integration has a separate
+[verification report](ko-decision-verification-2026-10-05.md). Assess its results
+on the specified tasks and prompt language; a successful request alone is not
+evidence of improved retrieval, tagging, or general Korean judgment quality.
 
 The default 0.8B model has its own
 [verification record](kev-08-verification-2026-10-05.md). On 2026-10-05, its

@@ -1,25 +1,31 @@
-# 로컬 Laya 및 Kev 모델
+# 로컬 판단 모델
 
 [English](local-models.md) | 한국어
 
-Laya와 Kev는 동일한 Brain OpenKit 검색, 분류, 평가 명령을 사용합니다.
-`--provider laya` 또는 `--provider kev`로 선택합니다. 두 모델 모두
+Laya·Kev·ko-decision은 동일한 Brain OpenKit 검색, 분류, 평가 명령을 사용합니다.
+`--provider laya`, `--provider kev`, `--provider ko-decision`으로 선택합니다. 모두
 Hugging Face에서 공개 가중치를 내려받아 컴퓨터에서 추론을 실행할 수 있으며,
 호스팅 추론 서비스 구독이나 Hugging Face 토큰이 필요하지 않습니다.
 
-각 모델에는 해당 모델의 공식 런타임이 필요합니다. Hugging Face는 공통 모델
+Laya·Kev는 공식 런타임을, ko-decision은 Brain OpenKit의 선택적 로컬 서버를
+사용합니다. Hugging Face는 공통 모델
 레지스트리이고, Brain OpenKit은 공통 CLI를 제공합니다. 일반적인 텍스트 생성
 엔드포인트로는 이 의사결정 모델 서버들을 대체할 수 없습니다. 핵심 CLI는
 Python 3.11+ 표준 라이브러리만 사용하는 런타임을 유지하므로, 모델 의존성은 별도로 설치하세요.
+
+**ko-decision과 `--prompt-language`는 미릴리스 소스 기능입니다.**
+`v0.2.0a4` 태그와 릴리스 파일에는 없습니다. 이 변경이 포함된 체크아웃에서
+설치하세요. 이 프로젝트는 PyPI에 배포하지 않았습니다.
 
 | 선택 | 가중치 | 기본 로컬 엔드포인트 | 서버 모델 이름 |
 | --- | --- | --- | --- |
 | `--provider laya` | [`convaiinnovations/laya`](https://huggingface.co/convaiinnovations/laya), `multilingual` 하위 폴더 | `http://127.0.0.1:8000` | `multilingual`, 명시적으로 전송 |
 | `--provider kev` | [`jaredpalmer/kev-0.8b`](https://huggingface.co/jaredpalmer/kev-0.8b), 기본 체크포인트 | `http://127.0.0.1:8009` | `kev-latest` |
+| `--provider ko-decision` | [`mmetamong/ko-decision-roberta-large`](https://huggingface.co/mmetamong/ko-decision-roberta-large/tree/dfd606fff30d52963c0073659ff9a8f6bf1fce6d), 고정된 선택적 체크포인트 | `http://127.0.0.1:8010` | `mmetamong/ko-decision-roberta-large` |
 
 `kev-latest`는 서버에 로드된 체크포인트의 API 별칭입니다. Hugging Face의
-최신 가중치를 뜻하지 않습니다. Brain OpenKit의 `--model`은 Kev/Jev의
-API 별칭을 재정의하며, 체크포인트를 내려받거나 교체하지 않습니다.
+최신 가중치를 뜻하지 않습니다. Brain OpenKit의 `--model`은 Kev/Jev/ko-decision의
+서버 모델 이름을 재정의하며, 체크포인트를 내려받거나 교체하지 않습니다.
 함께 제공되는 `scripts/serve-kev.py` 실행 스크립트의 기본값은 기록된
 `v1.0` 리비전인
 `jaredpalmer/kev-0.8b@bf75a6a8848ea6960ff2ed108d9ed44c2941174f`입니다.
@@ -28,9 +34,10 @@ API 별칭을 재정의하며, 체크포인트를 내려받거나 교체하지 �
 로컬 BM25(`--provider none`)입니다. Kev로 순위를 재정렬하려면
 `--provider kev`를, Laya를 명시적으로 사용하려면 `--provider laya`를 선택하세요.
 
-아래 명령은 macOS/Linux용입니다. [uv](https://docs.astral.sh/uv/),
-Git, 최초 설치 및 다운로드를 위한 네트워크 연결, 충분한 로컬 디스크 공간과
-메모리가 필요합니다. 서버는 루프백 주소에 바인딩됩니다. 사용을 마치면 Ctrl+C로 서버를 중지하세요.
+아래 명령은 macOS/Linux용입니다. Laya·Kev 설정에는
+[uv](https://docs.astral.sh/uv/)와 Git을, ko-decision에는 Python의 `venv`와 pip를
+사용합니다. 최초 설치·다운로드에는 네트워크 연결과 충분한 로컬 디스크 공간·메모리가
+필요합니다. 서버는 루프백 주소에 바인딩됩니다. 사용을 마치면 Ctrl+C로 서버를 중지하세요.
 
 ## Laya 다국어 모델
 
@@ -114,7 +121,84 @@ float32, Qwen2.5-0.5B 기본 모델 리비전
 캐시된 기본 브랜치 참조도 필요합니다. 이 기존 모델의 결과는 기본 0.8B 모델의
 검증 근거와 구분해야 합니다.
 
-## 각 제공자 확인
+## ko-decision (미릴리스 소스)
+
+이 연동 기능을 포함한 Brain OpenKit 체크아웃에서 시작하세요. 보관함 밖,
+체크아웃 옆에 별도 환경을 만듭니다.
+
+```bash
+python3.13 -m venv ../brain-openkit-ko-decision-runtime
+../brain-openkit-ko-decision-runtime/bin/python -m pip install '.[ko-decision]'
+../brain-openkit-ko-decision-runtime/bin/brain-openkit-serve-ko-decision \
+  --device cpu --threads 4 --batch-size 4 --port 8010 \
+  --cache-dir ../brain-openkit-ko-decision-cache
+```
+
+이 선택적 extra는 해당 환경에 Brain OpenKit과 함께 `torch>=2.6,<3`,
+`transformers>=4.57,<6`을 설치합니다. 핵심 CLI에는 필수 모델 의존성이 없습니다.
+소스 개발 중에는 같은 옵션을 붙여
+`../brain-openkit-ko-decision-runtime/bin/python scripts/serve-ko-decision.py`로도
+실행할 수 있습니다. 두 실행 방법 모두 체크아웃 루트 기준입니다.
+
+서버는 `mmetamong/ko-decision-roberta-large`의
+`dfd606fff30d52963c0073659ff9a8f6bf1fce6d` 리비전을 적재한 뒤 요청을 받습니다.
+최초 실행은 Hugging Face에서 해당 체크포인트와 토크나이저를 내려받습니다.
+기본 주소는 `127.0.0.1`이며 루프백 주소만 허용합니다. 옵션 기본값은
+`--device auto`, `--threads 4`, `--batch-size 4`, `--port 8010`입니다.
+`auto`는 사용 가능한 장치를 CUDA, MPS, CPU 순으로 선택하며, `cpu`, `mps`,
+`cuda`를 명시할 수도 있습니다. Apple M1 Max·메모리 64 GiB에서 CPU와 MPS
+float32를 모두 검증했으며, CPU 스레드 4개와 선택지 배치 크기 4를 사용했습니다.
+Python 3.13.1, Torch 2.14.1, Transformers 5.18.0,
+huggingface-hub 1.33.0 환경입니다. MPS 실행을 재현하려면 `--device cpu`를
+`--device mps`로 바꾸세요. 영어·한국어 프롬프트 실행 모두 CPU와 MPS의 선택 결과가
+같았고, 선택지 확률의 최대 차이는 0.00000322 미만이었습니다. 작업별 결과와
+실행 환경별 시간 비교는 [검증 보고서](ko-decision-verification-2026-10-05.ko.md)에
+있습니다. 이 실행에서 CUDA나 다른 의존성 버전까지 검증하지는 않았습니다.
+
+첫 다운로드가 성공한 뒤 캐시를 보존하고, 같은 `--cache-dir`에
+`--local-files-only`를 추가해 재시작하면 추가 모델 다운로드 없이 사용합니다.
+
+```bash
+../brain-openkit-ko-decision-runtime/bin/brain-openkit-serve-ko-decision \
+  --device cpu --threads 4 --batch-size 4 --port 8010 \
+  --cache-dir ../brain-openkit-ko-decision-cache --local-files-only
+```
+
+다른 터미널에서 갱신된 체크아웃의 CLI 또는 위 환경에 설치한 CLI를 실행하세요.
+
+```bash
+../brain-openkit-ko-decision-runtime/bin/brain-openkit doctor --provider ko-decision --prompt-language ko --json
+../brain-openkit-ko-decision-runtime/bin/brain-openkit doctor --provider ko-decision --prompt-language ko --probe --timeout 120 --json
+../brain-openkit-ko-decision-runtime/bin/brain-openkit search "한국어 BM25 검색 후보" --vault examples/vault --provider ko-decision --prompt-language ko --timeout 120 --json
+../brain-openkit-ko-decision-runtime/bin/brain-openkit classify local-search.md --vault examples/vault --taxonomy examples/taxonomy.json --provider ko-decision --prompt-language ko --timeout 120 --json
+../brain-openkit-ko-decision-runtime/bin/brain-openkit evaluate examples/evaluation.jsonl --vault examples/vault --provider ko-decision --prompt-language ko --timeout 120 --json
+```
+
+`--prompt-language ko`는 모든 제공자에서 내장 지시문과 레이블을 한국어로 바꿉니다.
+검색 질문, 노트 내용, 분류·태그 이름과 설명은 번역하지 않으므로 평가하려는 언어에
+맞는 분류표를 사용하세요. 기본값은 `en`입니다. API 모델 이름은
+`mmetamong/ko-decision-roberta-large`입니다. `--model`은 서버가 이미 제공하는
+이름과 일치해야 하며 고정된 가중치를 바꾸지 않습니다. 서버 포트를 바꿨다면
+CLI의 `--base-url`도 맞추세요.
+
+각 선택지는 `(지시문 + 선택지, 상태 입력)` 쌍으로 점수를 매깁니다. 서버는
+1–10개 선택지를 지원하며, 같은 질문의 점수에 temperature 1의 softmax를
+적용합니다. 텍스트는 생성하지 않습니다. 선택지 확률과 균등 확률 대비 최상위
+확률로 계산한 신뢰도는 보정된 값이 아니며, 자동 판단 보류 임계값은 없습니다.
+모든 텍스트와 특수 토큰을 포함한 **입력 쌍당 512토큰** 제한이 있습니다.
+서버는 입력을 자르지 않고 토큰화하며, 하나라도 제한을 초과하면 HTTP 413을
+반환합니다. 검색은 전체 BM25 순서로 복귀하고 분류는 오류를 반환합니다.
+기본 Markdown 문단 크기인 1,200자만으로 한국어 입력이 이 토큰 예산에 들어간다고
+보장할 수 없습니다. `--max-tokens`는 Laya 전용이며 이 모델의 제한을 늘리지 않습니다.
+
+체크포인트는 게시자의 **CC BY-SA 4.0** 라이선스에 따라 별도로 내려받습니다.
+독립 구현한 Brain OpenKit 서버·어댑터는 MIT이며 가중치는 포함하지 않습니다.
+[출처·라이선스](../ATTRIBUTION.md)와 실제 결과·한계를 기록한
+[검증 보고서](ko-decision-verification-2026-10-05.ko.md)를 참고하세요.
+이 제공자를 설치해도 `doctor`·`classify`의 Kev 기본값과
+`search`·`evaluate`의 BM25 기본값은 유지됩니다.
+
+## Laya·Kev 확인
 
 CLI 환경을 활성화한 상태로 Brain OpenKit 체크아웃으로 돌아오세요. 시작한
 서버에 해당하는 줄을 각각 실행하세요. 컴퓨터에 메모리가 충분하면 두 서버를
@@ -145,9 +229,11 @@ BM25로 대체된 상태에서 종료 코드가 0이라고 해서 모델 추론�
 결과는 사용 불가 이유와 함께 BM25 순서를 유지해야 합니다. 분류를 확인하기
 전에는 서버를 다시 시작하세요. 다른 포트를 선택했다면 `--base-url`을 사용하세요.
 JSON 설정도 `laya_base_url`, `kev_base_url`, `kev_model`을 지원합니다.
+미릴리스 소스는 `ko_decision_base_url`, `ko_decision_model`,
+`prompt_language`(`en` 또는 `ko`)도 지원합니다.
 JSON 설정에는 API 키를 넣지 마세요.
 
-실행 중인 두 서버를 반복 가능한 방식으로 검사하려면 체크아웃 루트에서 실행하세요.
+실행 중인 Laya·Kev 서버를 반복 가능한 방식으로 검사하려면 체크아웃 루트에서 실행하세요.
 
 ```bash
 python benchmarks/check_local_providers.py --output ../brain-openkit-provider-check.json
@@ -165,6 +251,11 @@ python benchmarks/check_local_providers.py --provider kev --output ../brain-open
 모델이 선택한 모든 태그를 올바른 것으로 간주하지는 않습니다.
 
 ## 검증 근거와 한계
+
+선택적 ko-decision 연동에는 별도
+[검증 보고서](ko-decision-verification-2026-10-05.ko.md)가 있습니다. 명시된 작업과
+프롬프트 언어의 결과로 평가하세요. 요청 성공만으로 검색·태그·일반 한국어 판단
+품질이 개선되었다고 볼 수는 없습니다.
 
 기본 0.8B 모델에는 별도의
 [검증 기록](kev-08-verification-2026-10-05.md)이 있습니다. 2026-10-05에

@@ -1,0 +1,84 @@
+{
+  "model": "mmetamong/ko-decision-roberta-large",
+  "revision": "dfd606fff30d52963c0073659ff9a8f6bf1fce6d",
+  "device": "mps",
+  "limits": [
+    {
+      "actual_pair_tokens": 511,
+      "status": "accepted",
+      "decision": {
+        "choice": "A",
+        "probabilities": {
+          "A": 1.0
+        },
+        "confidence": 1.0,
+        "model": "mmetamong/ko-decision-roberta-large",
+        "usage": {
+          "input_tokens": 511,
+          "output_tokens": 0,
+          "state_tokens": 503,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": [],
+          "max_pair_tokens": 511,
+          "model_revision": "dfd606fff30d52963c0073659ff9a8f6bf1fce6d"
+        },
+        "elapsed_ms": 664.3765419939882,
+        "answer_confidence": null
+      }
+    },
+    {
+      "actual_pair_tokens": 512,
+      "status": "accepted",
+      "decision": {
+        "choice": "A",
+        "probabilities": {
+          "A": 1.0
+        },
+        "confidence": 1.0,
+        "model": "mmetamong/ko-decision-roberta-large",
+        "usage": {
+          "input_tokens": 512,
+          "output_tokens": 0,
+          "state_tokens": 504,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": [],
+          "max_pair_tokens": 512,
+          "model_revision": "dfd606fff30d52963c0073659ff9a8f6bf1fce6d"
+        },
+        "elapsed_ms": 189.65949999983422,
+        "answer_confidence": null
+      }
+    },
+    {
+      "actual_pair_tokens": 513,
+      "status": "rejected",
+      "error": "http_413"
+    }
+  ],
+  "card_example_through_http": {
+    "choice": "C",
+    "probabilities": {
+      "A": 7.784022870954216e-07,
+      "B": 6.238987943282872e-07,
+      "C": 0.9999985976989185
+    },
+    "confidence": 0.9999978965483778,
+    "model": "mmetamong/ko-decision-roberta-large",
+    "usage": {
+      "input_tokens": 181,
+      "output_tokens": 0,
+      "state_tokens": 25,
+      "state_tokens_dropped": 0,
+      "truncated": false,
+      "truncated_questions": [],
+      "max_pair_tokens": 63,
+      "model_revision": "dfd606fff30d52963c0073659ff9a8f6bf1fce6d"
+    },
+    "elapsed_ms": 151.007207998191,
+    "answer_confidence": null
+  },
+  "max_probability_difference_vs_direct_cpu": 2.8210393132610534e-08,
+  "passed": true
+}

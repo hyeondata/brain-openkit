@@ -1,0 +1,23 @@
+{
+  "provider": "kev",
+  "model": "jaredpalmer/kev-0.8b",
+  "revision": "bf75a6a8848ea6960ff2ed108d9ed44c2941174f",
+  "base_model": "Qwen/Qwen3.5-0.8B-Base",
+  "base_revision": "dc7cdfe2ee4154fa7e30f5b51ca41bfa40174e68",
+  "runtime_source": "fe64b1274ea7f80d4095866df90666abb03e9cf6",
+  "versions": {
+    "torch": "2.8.0",
+    "transformers": "5.17.0",
+    "huggingface_hub": "1.32.0",
+    "mlx": "0.32.2",
+    "mlx-lm": "0.31.3",
+    "fastapi": "0.141.1",
+    "uvicorn": "0.53.0",
+    "kev": "0.1.0"
+  },
+  "backend": "mlx",
+  "device": "mps",
+  "dtype": "bfloat16",
+  "temperature": 2.3510958125672174,
+  "python": "3.12.11"
+}

@@ -1,0 +1,1706 @@
+{
+  "hardware": {
+    "chip": "Apple M1 Max",
+    "memory_bytes": 68719476736,
+    "logical_cpu_count": 10
+  },
+  "runs": {
+    "ko-en-cpu": {
+      "provider": "ko-decision",
+      "prompt_language": "en",
+      "decision_requests": 352,
+      "errors": 0,
+      "median_decision_ms": 386.0257089982042,
+      "p95_decision_ms": 868.0730000050971,
+      "classification": {
+        "note_count": 18,
+        "error_count": 0,
+        "review_required_count": 0,
+        "category_accuracy": 0.8333333333333334,
+        "category_macro_f1": 0.8380952380952381,
+        "category_per_class": {
+          "software": {
+            "tp": 3,
+            "fp": 1,
+            "fn": 0,
+            "f1": 0.8571428571428571
+          },
+          "knowledge": {
+            "tp": 2,
+            "fp": 0,
+            "fn": 1,
+            "f1": 0.8
+          },
+          "home": {
+            "tp": 3,
+            "fp": 0,
+            "fn": 0,
+            "f1": 1.0
+          },
+          "travel": {
+            "tp": 3,
+            "fp": 0,
+            "fn": 0,
+            "f1": 1.0
+          },
+          "research": {
+            "tp": 2,
+            "fp": 2,
+            "fn": 1,
+            "f1": 0.5714285714285714
+          },
+          "workplace": {
+            "tp": 2,
+            "fp": 0,
+            "fn": 1,
+            "f1": 0.8
+          }
+        },
+        "tag_micro_f1": 0.4307692307692308,
+        "tag_micro_precision": 0.3333333333333333,
+        "tag_micro_recall": 0.6086956521739131,
+        "tag_false_positives": 28,
+        "tag_false_negatives": 9,
+        "tag_macro_f1": 0.4354575163398693,
+        "tag_sample_f1": 0.35873015873015873,
+        "tag_exact_match": 0.05555555555555555,
+        "tag_per_class": {
+          "privacy": {
+            "tp": 3,
+            "fp": 8,
+            "fn": 3,
+            "f1": 0.35294117647058826
+          },
+          "backup": {
+            "tp": 3,
+            "fp": 11,
+            "fn": 1,
+            "f1": 0.3333333333333333
+          },
+          "offline": {
+            "tp": 3,
+            "fp": 5,
+            "fn": 1,
+            "f1": 0.5
+          },
+          "maintenance": {
+            "tp": 5,
+            "fp": 4,
+            "fn": 4,
+            "f1": 0.5555555555555556
+          }
+        },
+        "elapsed_ms": 50814.42112899094,
+        "by_language": {
+          "ko": {
+            "note_count": 8,
+            "error_count": 0,
+            "review_required_count": 0,
+            "category_accuracy": 0.875,
+            "category_macro_f1": 0.9111111111111111,
+            "category_per_class": {
+              "software": {
+                "tp": 2,
+                "fp": 1,
+                "fn": 0,
+                "f1": 0.8
+              },
+              "knowledge": {
+                "tp": 1,
+                "fp": 0,
+                "fn": 0,
+                "f1": 1.0
+              },
+              "home": {
+                "tp": 1,
+                "fp": 0,
+                "fn": 0,
+                "f1": 1.0
+              },
+              "travel": {
+                "tp": 1,
+                "fp": 0,
+                "fn": 0,
+                "f1": 1.0
+              },
+              "research": {
+                "tp": 1,
+                "fp": 0,
+                "fn": 1,
+                "f1": 0.6666666666666666
+              },
+              "workplace": {
+                "tp": 1,
+                "fp": 0,
+                "fn": 0,
+                "f1": 1.0
+              }
+            },
+            "tag_micro_f1": 0.4827586206896552,
+            "tag_micro_precision": 0.4375,
+            "tag_micro_recall": 0.5384615384615384,
+            "tag_false_positives": 9,
+            "tag_false_negatives": 6,
+            "tag_macro_f1": 0.47896825396825393,
+            "tag_sample_f1": 0.35714285714285715,
+            "tag_exact_match": 0.125,
+            "tag_per_class": {
+              "privacy": {
+                "tp": 2,
+                "fp": 2,
+                "fn": 3,
+                "f1": 0.4444444444444444
+              },
+              "backup": {
+                "tp": 2,
+                "fp": 3,
+                "fn": 1,
+                "f1": 0.5
+              },
+              "offline": {
+                "tp": 2,
+                "fp": 3,
+                "fn": 0,
+                "f1": 0.5714285714285714
+              },
+              "maintenance": {
+                "tp": 1,
+                "fp": 1,
+                "fn": 2,
+                "f1": 0.4
+              }
+            },
+            "elapsed_ms": 18732.457293990592
+          },
+          "en": {
+            "note_count": 10,
+            "error_count": 0,
+            "review_required_count": 0,
+            "category_accuracy": 0.8,
+            "category_macro_f1": 0.8055555555555556,
+            "category_per_class": {
+              "software": {
+                "tp": 1,
+                "fp": 0,
+                "fn": 0,
+                "f1": 1.0
+              },
+              "knowledge": {
+                "tp": 1,
+                "fp": 0,
+                "fn": 1,
+                "f1": 0.6666666666666666
+              },
+              "home": {
+                "tp": 2,
+                "fp": 0,
+                "fn": 0,
+                "f1": 1.0
+              },
+              "travel": {
+                "tp": 2,
+                "fp": 0,
+                "fn": 0,
+                "f1": 1.0
+              },
+              "research": {
+                "tp": 1,
+                "fp": 2,
+                "fn": 0,
+                "f1": 0.5
+              },
+              "workplace": {
+                "tp": 1,
+                "fp": 0,
+                "fn": 1,
+                "f1": 0.6666666666666666
+              }
+            },
+            "tag_micro_f1": 0.3888888888888889,
+            "tag_micro_precision": 0.2692307692307692,
+            "tag_micro_recall": 0.7,
+            "tag_false_positives": 19,
+            "tag_false_negatives": 3,
+            "tag_macro_f1": 0.3663461538461539,
+            "tag_sample_f1": 0.36,
+            "tag_exact_match": 0.0,
+            "tag_per_class": {
+              "privacy": {
+                "tp": 1,
+                "fp": 6,
+                "fn": 0,
+                "f1": 0.25
+              },
+              "backup": {
+                "tp": 1,
+                "fp": 8,
+                "fn": 0,
+                "f1": 0.2
+              },
+              "offline": {
+                "tp": 1,
+                "fp": 2,
+                "fn": 1,
+                "f1": 0.4
+              },
+              "maintenance": {
+                "tp": 4,
+                "fp": 3,
+                "fn": 2,
+                "f1": 0.6153846153846154
+              }
+            },
+            "elapsed_ms": 32081.96383500035
+          }
+        }
+      },
+      "retrieval": {
+        "ko": {
+          "baseline": {
+            "query_count": 12,
+            "recall_at_k": 0.6666666666666666,
+            "mrr": 0.6666666666666666
+          },
+          "requested": {
+            "query_count": 12,
+            "recall_at_k": 0.75,
+            "mrr": 0.5277777777777778
+          }
+        },
+        "en": {
+          "baseline": {
+            "query_count": 12,
+            "recall_at_k": 0.8333333333333334,
+            "mrr": 0.8333333333333334
+          },
+          "requested": {
+            "query_count": 12,
+            "recall_at_k": 0.9166666666666666,
+            "mrr": 0.8333333333333334
+          }
+        }
+      }
+    },
+    "ko-ko-cpu": {
+      "provider": "ko-decision",
+      "prompt_language": "ko",
+      "decision_requests": 352,
+      "errors": 0,
+      "median_decision_ms": 415.12483400583733,
+      "p95_decision_ms": 840.5021250000573,
+      "classification": {
+        "note_count": 18,
+        "error_count": 0,
+        "review_required_count": 0,
+        "category_accuracy": 0.8333333333333334,
+        "category_macro_f1": 0.8194444444444444,
+        "category_per_class": {
+          "software": {
+            "tp": 3,
+            "fp": 2,
+            "fn": 0,
+            "f1": 0.75
+          },
+          "knowledge": {
+            "tp": 3,
+            "fp": 0,
+            "fn": 0,
+            "f1": 1.0
+          },
+          "home": {
+            "tp": 3,
+            "fp": 0,
+            "fn": 0,
+            "f1": 1.0
+          },
+          "travel": {
+            "tp": 3,
+            "fp": 0,
+            "fn": 0,
+            "f1": 1.0
+          },
+          "research": {
+            "tp": 2,
+            "fp": 1,
+            "fn": 1,
+            "f1": 0.6666666666666666
+          },
+          "workplace": {
+            "tp": 1,
+            "fp": 0,
+            "fn": 2,
+            "f1": 0.5
+          }
+        },
+        "tag_micro_f1": 0.4666666666666667,
+        "tag_micro_precision": 0.3783783783783784,
+        "tag_micro_recall": 0.6086956521739131,
+        "tag_false_positives": 23,
+        "tag_false_negatives": 9,
+        "tag_macro_f1": 0.46486928104575165,
+        "tag_sample_f1": 0.36296296296296293,
+        "tag_exact_match": 0.05555555555555555,
+        "tag_per_class": {
+          "privacy": {
+            "tp": 4,
+            "fp": 8,
+            "fn": 2,
+            "f1": 0.4444444444444444
+          },
+          "backup": {
+            "tp": 4,
+            "fp": 8,
+            "fn": 0,
+            "f1": 0.5
+          },
+          "offline": {
+            "tp": 2,
+            "fp": 3,
+            "fn": 2,
+            "f1": 0.4444444444444444
+          },
+          "maintenance": {
+            "tp": 4,
+            "fp": 4,
+            "fn": 5,
+            "f1": 0.47058823529411764
+          }
+        },
+        "elapsed_ms": 49841.82124798099,
+        "by_language": {
+          "ko": {
+            "note_count": 8,
+            "error_count": 0,
+            "review_required_count": 0,
+            "category_accuracy": 0.875,
+            "category_macro_f1": 0.9111111111111111,
+            "category_per_class": {
+              "software": {
+                "tp": 2,
+                "fp": 1,
+                "fn": 0,
+                "f1": 0.8
+              },
+              "knowledge": {
+                "tp": 1,
+                "fp": 0,
+                "fn": 0,
+                "f1": 1.0
+              },
+              "home": {
+                "tp": 1,
+                "fp": 0,
+                "fn": 0,
+                "f1": 1.0
+              },
+              "travel": {
+                "tp": 1,
+                "fp": 0,
+                "fn": 0,
+                "f1": 1.0
+              },
+              "research": {
+                "tp": 1,
+                "fp": 0,
+                "fn": 1,
+                "f1": 0.6666666666666666
+              },
+              "workplace": {
+                "tp": 1,
+                "fp": 0,
+                "fn": 0,
+                "f1": 1.0
+              }
+            },
+            "tag_micro_f1": 0.5714285714285714,
+            "tag_micro_precision": 0.45454545454545453,
+            "tag_micro_recall": 0.7692307692307693,
+            "tag_false_positives": 12,
+            "tag_false_negatives": 3,
+            "tag_macro_f1": 0.5401515151515152,
+            "tag_sample_f1": 0.525,
+            "tag_exact_match": 0.125,
+            "tag_per_class": {
+              "privacy": {
+                "tp": 4,
+                "fp": 2,
+                "fn": 1,
+                "f1": 0.7272727272727273
+              },
+              "backup": {
+                "tp": 3,
+                "fp": 4,
+                "fn": 0,
+                "f1": 0.6
+              },
+              "offline": {
+                "tp": 1,
+                "fp": 3,
+                "fn": 1,
+                "f1": 0.3333333333333333
+              },
+              "maintenance": {
+                "tp": 2,
+                "fp": 3,
+                "fn": 1,
+                "f1": 0.5
+              }
+            },
+            "elapsed_ms": 18683.44258298748
+          },
+          "en": {
+            "note_count": 10,
+            "error_count": 0,
+            "review_required_count": 0,
+            "category_accuracy": 0.8,
+            "category_macro_f1": 0.7222222222222222,
+            "category_per_class": {
+              "software": {
+                "tp": 1,
+                "fp": 1,
+                "fn": 0,
+                "f1": 0.6666666666666666
+              },
+              "knowledge": {
+                "tp": 2,
+                "fp": 0,
+                "fn": 0,
+                "f1": 1.0
+              },
+              "home": {
+                "tp": 2,
+                "fp": 0,
+                "fn": 0,
+                "f1": 1.0
+              },
+              "travel": {
+                "tp": 2,
+                "fp": 0,
+                "fn": 0,
+                "f1": 1.0
+              },
+              "research": {
+                "tp": 1,
+                "fp": 1,
+                "fn": 0,
+                "f1": 0.6666666666666666
+              },
+              "workplace": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 2,
+                "f1": 0.0
+              }
+            },
+            "tag_micro_f1": 0.32,
+            "tag_micro_precision": 0.26666666666666666,
+            "tag_micro_recall": 0.4,
+            "tag_false_positives": 11,
+            "tag_false_negatives": 6,
+            "tag_macro_f1": 0.3611111111111111,
+            "tag_sample_f1": 0.23333333333333334,
+            "tag_exact_match": 0.0,
+            "tag_per_class": {
+              "privacy": {
+                "tp": 0,
+                "fp": 6,
+                "fn": 1,
+                "f1": 0.0
+              },
+              "backup": {
+                "tp": 1,
+                "fp": 4,
+                "fn": 0,
+                "f1": 0.3333333333333333
+              },
+              "offline": {
+                "tp": 1,
+                "fp": 0,
+                "fn": 1,
+                "f1": 0.6666666666666666
+              },
+              "maintenance": {
+                "tp": 2,
+                "fp": 1,
+                "fn": 4,
+                "f1": 0.4444444444444444
+              }
+            },
+            "elapsed_ms": 31158.378664993506
+          }
+        }
+      },
+      "retrieval": {
+        "ko": {
+          "baseline": {
+            "query_count": 12,
+            "recall_at_k": 0.6666666666666666,
+            "mrr": 0.6666666666666666
+          },
+          "requested": {
+            "query_count": 12,
+            "recall_at_k": 0.6666666666666666,
+            "mrr": 0.5694444444444444
+          }
+        },
+        "en": {
+          "baseline": {
+            "query_count": 12,
+            "recall_at_k": 0.8333333333333334,
+            "mrr": 0.8333333333333334
+          },
+          "requested": {
+            "query_count": 12,
+            "recall_at_k": 0.75,
+            "mrr": 0.5555555555555556
+          }
+        }
+      }
+    },
+    "ko-en-mps": {
+      "provider": "ko-decision",
+      "prompt_language": "en",
+      "decision_requests": 352,
+      "errors": 0,
+      "median_decision_ms": 182.64737500430783,
+      "p95_decision_ms": 392.83808300388046,
+      "classification": {
+        "note_count": 18,
+        "error_count": 0,
+        "review_required_count": 0,
+        "category_accuracy": 0.8333333333333334,
+        "category_macro_f1": 0.8380952380952381,
+        "category_per_class": {
+          "software": {
+            "tp": 3,
+            "fp": 1,
+            "fn": 0,
+            "f1": 0.8571428571428571
+          },
+          "knowledge": {
+            "tp": 2,
+            "fp": 0,
+            "fn": 1,
+            "f1": 0.8
+          },
+          "home": {
+            "tp": 3,
+            "fp": 0,
+            "fn": 0,
+            "f1": 1.0
+          },
+          "travel": {
+            "tp": 3,
+            "fp": 0,
+            "fn": 0,
+            "f1": 1.0
+          },
+          "research": {
+            "tp": 2,
+            "fp": 2,
+            "fn": 1,
+            "f1": 0.5714285714285714
+          },
+          "workplace": {
+            "tp": 2,
+            "fp": 0,
+            "fn": 1,
+            "f1": 0.8
+          }
+        },
+        "tag_micro_f1": 0.4307692307692308,
+        "tag_micro_precision": 0.3333333333333333,
+        "tag_micro_recall": 0.6086956521739131,
+        "tag_false_positives": 28,
+        "tag_false_negatives": 9,
+        "tag_macro_f1": 0.4354575163398693,
+        "tag_sample_f1": 0.35873015873015873,
+        "tag_exact_match": 0.05555555555555555,
+        "tag_per_class": {
+          "privacy": {
+            "tp": 3,
+            "fp": 8,
+            "fn": 3,
+            "f1": 0.35294117647058826
+          },
+          "backup": {
+            "tp": 3,
+            "fp": 11,
+            "fn": 1,
+            "f1": 0.3333333333333333
+          },
+          "offline": {
+            "tp": 3,
+            "fp": 5,
+            "fn": 1,
+            "f1": 0.5
+          },
+          "maintenance": {
+            "tp": 5,
+            "fp": 4,
+            "fn": 4,
+            "f1": 0.5555555555555556
+          }
+        },
+        "elapsed_ms": 22309.085833003337,
+        "by_language": {
+          "ko": {
+            "note_count": 8,
+            "error_count": 0,
+            "review_required_count": 0,
+            "category_accuracy": 0.875,
+            "category_macro_f1": 0.9111111111111111,
+            "category_per_class": {
+              "software": {
+                "tp": 2,
+                "fp": 1,
+                "fn": 0,
+                "f1": 0.8
+              },
+              "knowledge": {
+                "tp": 1,
+                "fp": 0,
+                "fn": 0,
+                "f1": 1.0
+              },
+              "home": {
+                "tp": 1,
+                "fp": 0,
+                "fn": 0,
+                "f1": 1.0
+              },
+              "travel": {
+                "tp": 1,
+                "fp": 0,
+                "fn": 0,
+                "f1": 1.0
+              },
+              "research": {
+                "tp": 1,
+                "fp": 0,
+                "fn": 1,
+                "f1": 0.6666666666666666
+              },
+              "workplace": {
+                "tp": 1,
+                "fp": 0,
+                "fn": 0,
+                "f1": 1.0
+              }
+            },
+            "tag_micro_f1": 0.4827586206896552,
+            "tag_micro_precision": 0.4375,
+            "tag_micro_recall": 0.5384615384615384,
+            "tag_false_positives": 9,
+            "tag_false_negatives": 6,
+            "tag_macro_f1": 0.47896825396825393,
+            "tag_sample_f1": 0.35714285714285715,
+            "tag_exact_match": 0.125,
+            "tag_per_class": {
+              "privacy": {
+                "tp": 2,
+                "fp": 2,
+                "fn": 3,
+                "f1": 0.4444444444444444
+              },
+              "backup": {
+                "tp": 2,
+                "fp": 3,
+                "fn": 1,
+                "f1": 0.5
+              },
+              "offline": {
+                "tp": 2,
+                "fp": 3,
+                "fn": 0,
+                "f1": 0.5714285714285714
+              },
+              "maintenance": {
+                "tp": 1,
+                "fp": 1,
+                "fn": 2,
+                "f1": 0.4
+              }
+            },
+            "elapsed_ms": 8833.41679199657
+          },
+          "en": {
+            "note_count": 10,
+            "error_count": 0,
+            "review_required_count": 0,
+            "category_accuracy": 0.8,
+            "category_macro_f1": 0.8055555555555556,
+            "category_per_class": {
+              "software": {
+                "tp": 1,
+                "fp": 0,
+                "fn": 0,
+                "f1": 1.0
+              },
+              "knowledge": {
+                "tp": 1,
+                "fp": 0,
+                "fn": 1,
+                "f1": 0.6666666666666666
+              },
+              "home": {
+                "tp": 2,
+                "fp": 0,
+                "fn": 0,
+                "f1": 1.0
+              },
+              "travel": {
+                "tp": 2,
+                "fp": 0,
+                "fn": 0,
+                "f1": 1.0
+              },
+              "research": {
+                "tp": 1,
+                "fp": 2,
+                "fn": 0,
+                "f1": 0.5
+              },
+              "workplace": {
+                "tp": 1,
+                "fp": 0,
+                "fn": 1,
+                "f1": 0.6666666666666666
+              }
+            },
+            "tag_micro_f1": 0.3888888888888889,
+            "tag_micro_precision": 0.2692307692307692,
+            "tag_micro_recall": 0.7,
+            "tag_false_positives": 19,
+            "tag_false_negatives": 3,
+            "tag_macro_f1": 0.3663461538461539,
+            "tag_sample_f1": 0.36,
+            "tag_exact_match": 0.0,
+            "tag_per_class": {
+              "privacy": {
+                "tp": 1,
+                "fp": 6,
+                "fn": 0,
+                "f1": 0.25
+              },
+              "backup": {
+                "tp": 1,
+                "fp": 8,
+                "fn": 0,
+                "f1": 0.2
+              },
+              "offline": {
+                "tp": 1,
+                "fp": 2,
+                "fn": 1,
+                "f1": 0.4
+              },
+              "maintenance": {
+                "tp": 4,
+                "fp": 3,
+                "fn": 2,
+                "f1": 0.6153846153846154
+              }
+            },
+            "elapsed_ms": 13475.669041006768
+          }
+        }
+      },
+      "retrieval": {
+        "ko": {
+          "baseline": {
+            "query_count": 12,
+            "recall_at_k": 0.6666666666666666,
+            "mrr": 0.6666666666666666
+          },
+          "requested": {
+            "query_count": 12,
+            "recall_at_k": 0.75,
+            "mrr": 0.5277777777777778
+          }
+        },
+        "en": {
+          "baseline": {
+            "query_count": 12,
+            "recall_at_k": 0.8333333333333334,
+            "mrr": 0.8333333333333334
+          },
+          "requested": {
+            "query_count": 12,
+            "recall_at_k": 0.9166666666666666,
+            "mrr": 0.8333333333333334
+          }
+        }
+      }
+    },
+    "ko-ko-mps": {
+      "provider": "ko-decision",
+      "prompt_language": "ko",
+      "decision_requests": 352,
+      "errors": 0,
+      "median_decision_ms": 176.81045799690764,
+      "p95_decision_ms": 348.406042001443,
+      "classification": {
+        "note_count": 18,
+        "error_count": 0,
+        "review_required_count": 0,
+        "category_accuracy": 0.8333333333333334,
+        "category_macro_f1": 0.8194444444444444,
+        "category_per_class": {
+          "software": {
+            "tp": 3,
+            "fp": 2,
+            "fn": 0,
+            "f1": 0.75
+          },
+          "knowledge": {
+            "tp": 3,
+            "fp": 0,
+            "fn": 0,
+            "f1": 1.0
+          },
+          "home": {
+            "tp": 3,
+            "fp": 0,
+            "fn": 0,
+            "f1": 1.0
+          },
+          "travel": {
+            "tp": 3,
+            "fp": 0,
+            "fn": 0,
+            "f1": 1.0
+          },
+          "research": {
+            "tp": 2,
+            "fp": 1,
+            "fn": 1,
+            "f1": 0.6666666666666666
+          },
+          "workplace": {
+            "tp": 1,
+            "fp": 0,
+            "fn": 2,
+            "f1": 0.5
+          }
+        },
+        "tag_micro_f1": 0.4666666666666667,
+        "tag_micro_precision": 0.3783783783783784,
+        "tag_micro_recall": 0.6086956521739131,
+        "tag_false_positives": 23,
+        "tag_false_negatives": 9,
+        "tag_macro_f1": 0.46486928104575165,
+        "tag_sample_f1": 0.36296296296296293,
+        "tag_exact_match": 0.05555555555555555,
+        "tag_per_class": {
+          "privacy": {
+            "tp": 4,
+            "fp": 8,
+            "fn": 2,
+            "f1": 0.4444444444444444
+          },
+          "backup": {
+            "tp": 4,
+            "fp": 8,
+            "fn": 0,
+            "f1": 0.5
+          },
+          "offline": {
+            "tp": 2,
+            "fp": 3,
+            "fn": 2,
+            "f1": 0.4444444444444444
+          },
+          "maintenance": {
+            "tp": 4,
+            "fp": 4,
+            "fn": 5,
+            "f1": 0.47058823529411764
+          }
+        },
+        "elapsed_ms": 21788.569124022615,
+        "by_language": {
+          "ko": {
+            "note_count": 8,
+            "error_count": 0,
+            "review_required_count": 0,
+            "category_accuracy": 0.875,
+            "category_macro_f1": 0.9111111111111111,
+            "category_per_class": {
+              "software": {
+                "tp": 2,
+                "fp": 1,
+                "fn": 0,
+                "f1": 0.8
+              },
+              "knowledge": {
+                "tp": 1,
+                "fp": 0,
+                "fn": 0,
+                "f1": 1.0
+              },
+              "home": {
+                "tp": 1,
+                "fp": 0,
+                "fn": 0,
+                "f1": 1.0
+              },
+              "travel": {
+                "tp": 1,
+                "fp": 0,
+                "fn": 0,
+                "f1": 1.0
+              },
+              "research": {
+                "tp": 1,
+                "fp": 0,
+                "fn": 1,
+                "f1": 0.6666666666666666
+              },
+              "workplace": {
+                "tp": 1,
+                "fp": 0,
+                "fn": 0,
+                "f1": 1.0
+              }
+            },
+            "tag_micro_f1": 0.5714285714285714,
+            "tag_micro_precision": 0.45454545454545453,
+            "tag_micro_recall": 0.7692307692307693,
+            "tag_false_positives": 12,
+            "tag_false_negatives": 3,
+            "tag_macro_f1": 0.5401515151515152,
+            "tag_sample_f1": 0.525,
+            "tag_exact_match": 0.125,
+            "tag_per_class": {
+              "privacy": {
+                "tp": 4,
+                "fp": 2,
+                "fn": 1,
+                "f1": 0.7272727272727273
+              },
+              "backup": {
+                "tp": 3,
+                "fp": 4,
+                "fn": 0,
+                "f1": 0.6
+              },
+              "offline": {
+                "tp": 1,
+                "fp": 3,
+                "fn": 1,
+                "f1": 0.3333333333333333
+              },
+              "maintenance": {
+                "tp": 2,
+                "fp": 3,
+                "fn": 1,
+                "f1": 0.5
+              }
+            },
+            "elapsed_ms": 8497.58495700371
+          },
+          "en": {
+            "note_count": 10,
+            "error_count": 0,
+            "review_required_count": 0,
+            "category_accuracy": 0.8,
+            "category_macro_f1": 0.7222222222222222,
+            "category_per_class": {
+              "software": {
+                "tp": 1,
+                "fp": 1,
+                "fn": 0,
+                "f1": 0.6666666666666666
+              },
+              "knowledge": {
+                "tp": 2,
+                "fp": 0,
+                "fn": 0,
+                "f1": 1.0
+              },
+              "home": {
+                "tp": 2,
+                "fp": 0,
+                "fn": 0,
+                "f1": 1.0
+              },
+              "travel": {
+                "tp": 2,
+                "fp": 0,
+                "fn": 0,
+                "f1": 1.0
+              },
+              "research": {
+                "tp": 1,
+                "fp": 1,
+                "fn": 0,
+                "f1": 0.6666666666666666
+              },
+              "workplace": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 2,
+                "f1": 0.0
+              }
+            },
+            "tag_micro_f1": 0.32,
+            "tag_micro_precision": 0.26666666666666666,
+            "tag_micro_recall": 0.4,
+            "tag_false_positives": 11,
+            "tag_false_negatives": 6,
+            "tag_macro_f1": 0.3611111111111111,
+            "tag_sample_f1": 0.23333333333333334,
+            "tag_exact_match": 0.0,
+            "tag_per_class": {
+              "privacy": {
+                "tp": 0,
+                "fp": 6,
+                "fn": 1,
+                "f1": 0.0
+              },
+              "backup": {
+                "tp": 1,
+                "fp": 4,
+                "fn": 0,
+                "f1": 0.3333333333333333
+              },
+              "offline": {
+                "tp": 1,
+                "fp": 0,
+                "fn": 1,
+                "f1": 0.6666666666666666
+              },
+              "maintenance": {
+                "tp": 2,
+                "fp": 1,
+                "fn": 4,
+                "f1": 0.4444444444444444
+              }
+            },
+            "elapsed_ms": 13290.984167018905
+          }
+        }
+      },
+      "retrieval": {
+        "ko": {
+          "baseline": {
+            "query_count": 12,
+            "recall_at_k": 0.6666666666666666,
+            "mrr": 0.6666666666666666
+          },
+          "requested": {
+            "query_count": 12,
+            "recall_at_k": 0.6666666666666666,
+            "mrr": 0.5694444444444444
+          }
+        },
+        "en": {
+          "baseline": {
+            "query_count": 12,
+            "recall_at_k": 0.8333333333333334,
+            "mrr": 0.8333333333333334
+          },
+          "requested": {
+            "query_count": 12,
+            "recall_at_k": 0.75,
+            "mrr": 0.5555555555555556
+          }
+        }
+      }
+    },
+    "kev-en-mlx": {
+      "provider": "kev",
+      "prompt_language": "en",
+      "decision_requests": 352,
+      "errors": 0,
+      "median_decision_ms": 123.30479200318223,
+      "p95_decision_ms": 174.80266700295033,
+      "classification": {
+        "note_count": 18,
+        "error_count": 0,
+        "review_required_count": 0,
+        "category_accuracy": 0.8888888888888888,
+        "category_macro_f1": 0.8916666666666667,
+        "category_per_class": {
+          "software": {
+            "tp": 3,
+            "fp": 2,
+            "fn": 0,
+            "f1": 0.75
+          },
+          "knowledge": {
+            "tp": 3,
+            "fp": 0,
+            "fn": 0,
+            "f1": 1.0
+          },
+          "home": {
+            "tp": 2,
+            "fp": 0,
+            "fn": 1,
+            "f1": 0.8
+          },
+          "travel": {
+            "tp": 3,
+            "fp": 0,
+            "fn": 0,
+            "f1": 1.0
+          },
+          "research": {
+            "tp": 3,
+            "fp": 0,
+            "fn": 0,
+            "f1": 1.0
+          },
+          "workplace": {
+            "tp": 2,
+            "fp": 0,
+            "fn": 1,
+            "f1": 0.8
+          }
+        },
+        "tag_micro_f1": 0.7692307692307693,
+        "tag_micro_precision": 0.9375,
+        "tag_micro_recall": 0.6521739130434783,
+        "tag_false_positives": 1,
+        "tag_false_negatives": 8,
+        "tag_macro_f1": 0.7904040404040404,
+        "tag_sample_f1": 0.7037037037037037,
+        "tag_exact_match": 0.6111111111111112,
+        "tag_per_class": {
+          "privacy": {
+            "tp": 5,
+            "fp": 0,
+            "fn": 1,
+            "f1": 0.9090909090909091
+          },
+          "backup": {
+            "tp": 4,
+            "fp": 0,
+            "fn": 0,
+            "f1": 1.0
+          },
+          "offline": {
+            "tp": 4,
+            "fp": 1,
+            "fn": 0,
+            "f1": 0.8888888888888888
+          },
+          "maintenance": {
+            "tp": 2,
+            "fp": 0,
+            "fn": 7,
+            "f1": 0.36363636363636365
+          }
+        },
+        "elapsed_ms": 7813.722503000463,
+        "by_language": {
+          "ko": {
+            "note_count": 8,
+            "error_count": 0,
+            "review_required_count": 0,
+            "category_accuracy": 0.875,
+            "category_macro_f1": 0.8,
+            "category_per_class": {
+              "software": {
+                "tp": 2,
+                "fp": 1,
+                "fn": 0,
+                "f1": 0.8
+              },
+              "knowledge": {
+                "tp": 1,
+                "fp": 0,
+                "fn": 0,
+                "f1": 1.0
+              },
+              "home": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 1,
+                "f1": 0.0
+              },
+              "travel": {
+                "tp": 1,
+                "fp": 0,
+                "fn": 0,
+                "f1": 1.0
+              },
+              "research": {
+                "tp": 2,
+                "fp": 0,
+                "fn": 0,
+                "f1": 1.0
+              },
+              "workplace": {
+                "tp": 1,
+                "fp": 0,
+                "fn": 0,
+                "f1": 1.0
+              }
+            },
+            "tag_micro_f1": 0.8333333333333334,
+            "tag_micro_precision": 0.9090909090909091,
+            "tag_micro_recall": 0.7692307692307693,
+            "tag_false_positives": 1,
+            "tag_false_negatives": 3,
+            "tag_macro_f1": 0.7972222222222223,
+            "tag_sample_f1": 0.875,
+            "tag_exact_match": 0.75,
+            "tag_per_class": {
+              "privacy": {
+                "tp": 4,
+                "fp": 0,
+                "fn": 1,
+                "f1": 0.8888888888888888
+              },
+              "backup": {
+                "tp": 3,
+                "fp": 0,
+                "fn": 0,
+                "f1": 1.0
+              },
+              "offline": {
+                "tp": 2,
+                "fp": 1,
+                "fn": 0,
+                "f1": 0.8
+              },
+              "maintenance": {
+                "tp": 1,
+                "fp": 0,
+                "fn": 2,
+                "f1": 0.5
+              }
+            },
+            "elapsed_ms": 3500.0620419959887
+          },
+          "en": {
+            "note_count": 10,
+            "error_count": 0,
+            "review_required_count": 0,
+            "category_accuracy": 0.9,
+            "category_macro_f1": 0.8888888888888888,
+            "category_per_class": {
+              "software": {
+                "tp": 1,
+                "fp": 1,
+                "fn": 0,
+                "f1": 0.6666666666666666
+              },
+              "knowledge": {
+                "tp": 2,
+                "fp": 0,
+                "fn": 0,
+                "f1": 1.0
+              },
+              "home": {
+                "tp": 2,
+                "fp": 0,
+                "fn": 0,
+                "f1": 1.0
+              },
+              "travel": {
+                "tp": 2,
+                "fp": 0,
+                "fn": 0,
+                "f1": 1.0
+              },
+              "research": {
+                "tp": 1,
+                "fp": 0,
+                "fn": 0,
+                "f1": 1.0
+              },
+              "workplace": {
+                "tp": 1,
+                "fp": 0,
+                "fn": 1,
+                "f1": 0.6666666666666666
+              }
+            },
+            "tag_micro_f1": 0.6666666666666666,
+            "tag_micro_precision": 1.0,
+            "tag_micro_recall": 0.5,
+            "tag_false_positives": 0,
+            "tag_false_negatives": 5,
+            "tag_macro_f1": 0.8214285714285714,
+            "tag_sample_f1": 0.5666666666666667,
+            "tag_exact_match": 0.5,
+            "tag_per_class": {
+              "privacy": {
+                "tp": 1,
+                "fp": 0,
+                "fn": 0,
+                "f1": 1.0
+              },
+              "backup": {
+                "tp": 1,
+                "fp": 0,
+                "fn": 0,
+                "f1": 1.0
+              },
+              "offline": {
+                "tp": 2,
+                "fp": 0,
+                "fn": 0,
+                "f1": 1.0
+              },
+              "maintenance": {
+                "tp": 1,
+                "fp": 0,
+                "fn": 5,
+                "f1": 0.2857142857142857
+              }
+            },
+            "elapsed_ms": 4313.660461004474
+          }
+        }
+      },
+      "retrieval": {
+        "ko": {
+          "baseline": {
+            "query_count": 12,
+            "recall_at_k": 0.6666666666666666,
+            "mrr": 0.6666666666666666
+          },
+          "requested": {
+            "query_count": 12,
+            "recall_at_k": 0.75,
+            "mrr": 0.6666666666666666
+          }
+        },
+        "en": {
+          "baseline": {
+            "query_count": 12,
+            "recall_at_k": 0.8333333333333334,
+            "mrr": 0.8333333333333334
+          },
+          "requested": {
+            "query_count": 12,
+            "recall_at_k": 0.9166666666666666,
+            "mrr": 0.875
+          }
+        }
+      }
+    },
+    "kev-ko-mlx": {
+      "provider": "kev",
+      "prompt_language": "ko",
+      "decision_requests": 352,
+      "errors": 0,
+      "median_decision_ms": 127.80883400409948,
+      "p95_decision_ms": 183.72966699826065,
+      "classification": {
+        "note_count": 18,
+        "error_count": 0,
+        "review_required_count": 0,
+        "category_accuracy": 0.9444444444444444,
+        "category_macro_f1": 0.9428571428571428,
+        "category_per_class": {
+          "software": {
+            "tp": 3,
+            "fp": 1,
+            "fn": 0,
+            "f1": 0.8571428571428571
+          },
+          "knowledge": {
+            "tp": 3,
+            "fp": 0,
+            "fn": 0,
+            "f1": 1.0
+          },
+          "home": {
+            "tp": 3,
+            "fp": 0,
+            "fn": 0,
+            "f1": 1.0
+          },
+          "travel": {
+            "tp": 3,
+            "fp": 0,
+            "fn": 0,
+            "f1": 1.0
+          },
+          "research": {
+            "tp": 3,
+            "fp": 0,
+            "fn": 0,
+            "f1": 1.0
+          },
+          "workplace": {
+            "tp": 2,
+            "fp": 0,
+            "fn": 1,
+            "f1": 0.8
+          }
+        },
+        "tag_micro_f1": 0.7317073170731707,
+        "tag_micro_precision": 0.8333333333333334,
+        "tag_micro_recall": 0.6521739130434783,
+        "tag_false_positives": 3,
+        "tag_false_negatives": 8,
+        "tag_macro_f1": 0.7397727272727272,
+        "tag_sample_f1": 0.6037037037037037,
+        "tag_exact_match": 0.5,
+        "tag_per_class": {
+          "privacy": {
+            "tp": 5,
+            "fp": 0,
+            "fn": 1,
+            "f1": 0.9090909090909091
+          },
+          "backup": {
+            "tp": 4,
+            "fp": 2,
+            "fn": 0,
+            "f1": 0.8
+          },
+          "offline": {
+            "tp": 3,
+            "fp": 1,
+            "fn": 1,
+            "f1": 0.75
+          },
+          "maintenance": {
+            "tp": 3,
+            "fp": 0,
+            "fn": 6,
+            "f1": 0.5
+          }
+        },
+        "elapsed_ms": 8072.963624996191,
+        "by_language": {
+          "ko": {
+            "note_count": 8,
+            "error_count": 0,
+            "review_required_count": 0,
+            "category_accuracy": 1.0,
+            "category_macro_f1": 1.0,
+            "category_per_class": {
+              "software": {
+                "tp": 2,
+                "fp": 0,
+                "fn": 0,
+                "f1": 1.0
+              },
+              "knowledge": {
+                "tp": 1,
+                "fp": 0,
+                "fn": 0,
+                "f1": 1.0
+              },
+              "home": {
+                "tp": 1,
+                "fp": 0,
+                "fn": 0,
+                "f1": 1.0
+              },
+              "travel": {
+                "tp": 1,
+                "fp": 0,
+                "fn": 0,
+                "f1": 1.0
+              },
+              "research": {
+                "tp": 2,
+                "fp": 0,
+                "fn": 0,
+                "f1": 1.0
+              },
+              "workplace": {
+                "tp": 1,
+                "fp": 0,
+                "fn": 0,
+                "f1": 1.0
+              }
+            },
+            "tag_micro_f1": 0.8461538461538461,
+            "tag_micro_precision": 0.8461538461538461,
+            "tag_micro_recall": 0.8461538461538461,
+            "tag_false_positives": 2,
+            "tag_false_negatives": 2,
+            "tag_macro_f1": 0.8365079365079365,
+            "tag_sample_f1": 0.9,
+            "tag_exact_match": 0.75,
+            "tag_per_class": {
+              "privacy": {
+                "tp": 4,
+                "fp": 0,
+                "fn": 1,
+                "f1": 0.8888888888888888
+              },
+              "backup": {
+                "tp": 3,
+                "fp": 1,
+                "fn": 0,
+                "f1": 0.8571428571428571
+              },
+              "offline": {
+                "tp": 2,
+                "fp": 1,
+                "fn": 0,
+                "f1": 0.8
+              },
+              "maintenance": {
+                "tp": 2,
+                "fp": 0,
+                "fn": 1,
+                "f1": 0.8
+              }
+            },
+            "elapsed_ms": 3600.8771659980994
+          },
+          "en": {
+            "note_count": 10,
+            "error_count": 0,
+            "review_required_count": 0,
+            "category_accuracy": 0.9,
+            "category_macro_f1": 0.8888888888888888,
+            "category_per_class": {
+              "software": {
+                "tp": 1,
+                "fp": 1,
+                "fn": 0,
+                "f1": 0.6666666666666666
+              },
+              "knowledge": {
+                "tp": 2,
+                "fp": 0,
+                "fn": 0,
+                "f1": 1.0
+              },
+              "home": {
+                "tp": 2,
+                "fp": 0,
+                "fn": 0,
+                "f1": 1.0
+              },
+              "travel": {
+                "tp": 2,
+                "fp": 0,
+                "fn": 0,
+                "f1": 1.0
+              },
+              "research": {
+                "tp": 1,
+                "fp": 0,
+                "fn": 0,
+                "f1": 1.0
+              },
+              "workplace": {
+                "tp": 1,
+                "fp": 0,
+                "fn": 1,
+                "f1": 0.6666666666666666
+              }
+            },
+            "tag_micro_f1": 0.5333333333333333,
+            "tag_micro_precision": 0.8,
+            "tag_micro_recall": 0.4,
+            "tag_false_positives": 1,
+            "tag_false_negatives": 6,
+            "tag_macro_f1": 0.6547619047619048,
+            "tag_sample_f1": 0.36666666666666664,
+            "tag_exact_match": 0.3,
+            "tag_per_class": {
+              "privacy": {
+                "tp": 1,
+                "fp": 0,
+                "fn": 0,
+                "f1": 1.0
+              },
+              "backup": {
+                "tp": 1,
+                "fp": 1,
+                "fn": 0,
+                "f1": 0.6666666666666666
+              },
+              "offline": {
+                "tp": 1,
+                "fp": 0,
+                "fn": 1,
+                "f1": 0.6666666666666666
+              },
+              "maintenance": {
+                "tp": 1,
+                "fp": 0,
+                "fn": 5,
+                "f1": 0.2857142857142857
+              }
+            },
+            "elapsed_ms": 4472.086458998092
+          }
+        }
+      },
+      "retrieval": {
+        "ko": {
+          "baseline": {
+            "query_count": 12,
+            "recall_at_k": 0.6666666666666666,
+            "mrr": 0.6666666666666666
+          },
+          "requested": {
+            "query_count": 12,
+            "recall_at_k": 0.6666666666666666,
+            "mrr": 0.6111111111111112
+          }
+        },
+        "en": {
+          "baseline": {
+            "query_count": 12,
+            "recall_at_k": 0.8333333333333334,
+            "mrr": 0.8333333333333334
+          },
+          "requested": {
+            "query_count": 12,
+            "recall_at_k": 0.8333333333333334,
+            "mrr": 0.8333333333333334
+          }
+        }
+      }
+    }
+  },
+  "completed_decision_requests_including_warmups": 2112,
+  "automated_tests": {
+    "python_3_11": {
+      "run": 288,
+      "passed": 284,
+      "skipped": 4,
+      "failed": 0
+    },
+    "python_3_13": {
+      "run": 288,
+      "passed": 284,
+      "skipped": 4,
+      "failed": 0
+    }
+  },
+  "incomplete_attempts": [
+    {
+      "run": "kev-en",
+      "reason": "No listener at port8009; failed before inference, excluded."
+    },
+    {
+      "run": "kev-en-rerun",
+      "reason": "CPU execution stopped early after observing slow requests; no completed quality report, excluded."
+    }
+  ],
+  "limitations": [
+    "Authored synthetic corpus, not an independent real-vault sample.",
+    "Classification holdout18notes:8Korean,10English; retrievalholdout24queries:12perlanguage.",
+    "Prompt language changes instruction and fixed yes/no descriptions; taxonomy descriptions remain frozen in English.",
+    "GPU configurations differ: Ko Torch/MPS float32; Kev MLX bfloat16; timings are observed deployments, not architecture-only or statistical speed claims.",
+    "Ko CPU English run overlaps briefly with Kev startup; its latency is exploratory.",
+    "No prompt/threshold/label tuning after viewing holdout predictions.",
+    "No Claude/Codex paid-model quality or cost benchmark.",
+    "File-level Markdown/frontmatter save and undo checked; Obsidian UI not rerun for this model change."
+  ],
+  "functional_checks": {
+    "functional.json": true,
+    "limits-source.json": true,
+    "limits-wheel.json": true,
+    "actual-boundaries.json": true
+  }
+}
