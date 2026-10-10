@@ -84,6 +84,8 @@ def _parser() -> argparse.ArgumentParser:
         elif name == "classify":
             command.add_argument("note", type=Path)
             command.add_argument("--taxonomy", required=True, type=Path)
+            command.add_argument("--suggestions", type=Path,
+                                 help="Validate host-written document suggestion JSON locally; no provider call")
         elif name == "evaluate":
             command.add_argument("dataset", type=Path)
         elif name == "doctor":
@@ -118,7 +120,7 @@ def _parser() -> argparse.ArgumentParser:
     return parser
 
 
-def _read_json(path: Path, max_bytes: int = 1024 * 1024) -> dict:
+def _read_json(path: Path, max_bytes: int = 1024 * 1024, *, strict: bool = False) -> dict:
     if path.stat().st_size > max_bytes:
         raise ValueError("JSON input exceeds the size limit")
     try:
@@ -126,8 +128,11 @@ def _read_json(path: Path, max_bytes: int = 1024 * 1024) -> dict:
             raw = stream.read(max_bytes + 1)
         if len(raw) > max_bytes:
             raise ValueError("JSON input exceeds the size limit")
+        if strict:
+            from .providers import _unique_object, _reject_constant
+            return json.loads(raw.decode("utf-8"), object_pairs_hook=_unique_object, parse_constant=_reject_constant)
         return json.loads(raw.decode("utf-8"))
-    except (json.JSONDecodeError, UnicodeError, RecursionError) as exc:
+    except (ValueError, UnicodeError, RecursionError) as exc:
         raise ValueError("Input must be valid UTF-8 JSON") from exc
 
 
@@ -295,6 +300,12 @@ def _execute(args: argparse.Namespace) -> tuple[dict, int]:
         finally:
             index.close()
         return report, 1 if report["errors"] else 0
+    if args.command == "classify" and args.suggestions is not None:
+        if args.provider not in (None, "none"):
+            raise ValueError("--suggestions cannot be combined with a model --provider")
+        return classify(vault, args.note, _read_json(args.taxonomy),
+                        suggestions=_read_json(args.suggestions, strict=True),
+                        prompt_language=settings["prompt_language"]), 0
     provider = _provider(settings)
     if args.command == "doctor":
         if provider is None:
@@ -343,6 +354,13 @@ def _text_report(command: str, report: dict) -> str:
     if command == "classify":
         lines = [f"Note: {report['path']}", f"Category: {report['category'] or 'review conflicting passages'}",
                  "Suggested tags: " + (", ".join(report["tags"]) or "none"), "Source note unchanged."]
+        if report.get("classification_scope") == "document":
+            lines.extend(["Classification scope: whole document",
+                          f"Review required: {'yes' if report['review_required'] else 'no'}",
+                          "Rationale: " + report["rationale"]])
+            for passage in report["passages"]:
+                lines.extend([f"\nLines {passage['start_line']}-{passage['end_line']}:", passage["text"].rstrip()])
+            return "\n".join(lines)
         for passage in report["passages"]:
             lines.append(f"\nLines {passage['start_line']}-{passage['end_line']}: {passage['category']}")
             lines.append(passage["text"].rstrip())

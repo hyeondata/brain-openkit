@@ -34,7 +34,8 @@ Python 3.11+ 표준 라이브러리만 사용하는 런타임을 유지하므로
 로컬 BM25(`--provider none`)입니다. Kev로 순위를 재정렬하려면
 `--provider kev`를, Laya를 명시적으로 사용하려면 `--provider laya`를 선택하세요.
 
-아래 명령은 macOS/Linux용입니다. Laya·Kev 설정에는
+아래 명령은 macOS 기준 예제이며, Windows·Linux에서는 이번 변경을 검증하지 않았습니다.
+Laya·Kev 설정에는
 [uv](https://docs.astral.sh/uv/)와 Git을, ko-decision에는 Python의 `venv`와 pip를
 사용합니다. 최초 설치·다운로드에는 네트워크 연결과 충분한 로컬 디스크 공간·메모리가
 필요합니다. 서버는 루프백 주소에 바인딩됩니다. 사용을 마치면 Ctrl+C로 서버를 중지하세요.

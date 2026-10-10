@@ -99,14 +99,52 @@ def validate_taxonomy(taxonomy: dict) -> dict:
     return {"categories": categories, "tags": tags}
 
 
-def classify(vault: Path, note: Path, taxonomy: dict, provider: DecisionProvider,
-             *, prompt_language: str = "en") -> dict:
+def _document_suggestion(suggestion, taxonomy):
+    if (type(suggestion) is not dict
+            or set(suggestion) != {"category", "tags", "rationale", "review_required"}
+            or not isinstance(suggestion["category"], str)
+            or suggestion["category"] not in taxonomy["categories"]
+            or type(suggestion["tags"]) is not list
+            or any(not isinstance(tag, str) or tag not in taxonomy["tags"] for tag in suggestion["tags"])
+            or len(set(suggestion["tags"])) != len(suggestion["tags"])
+            or not isinstance(suggestion["rationale"], str)
+            or not suggestion["rationale"].strip() or len(suggestion["rationale"]) > 2000
+            or type(suggestion["review_required"]) is not bool):
+        raise ValueError("Invalid document suggestion: use allowed category, unique allowed tags, rationale and review_required")
+    return {**suggestion, "tags": sorted(suggestion["tags"])}
+
+
+def classify(vault: Path, note: Path, taxonomy: dict, provider: DecisionProvider | None = None,
+             *, prompt_language: str = "en", suggestions: dict | None = None) -> dict:
     if prompt_language not in ("en", "ko"):
         raise ValueError("prompt_language must be en or ko")
     taxonomy = validate_taxonomy(taxonomy)
     chunks = read_note(vault, note)
     if not chunks:
         raise ValueError("The note has no nonempty passages to classify")
+    if suggestions is not None and provider is not None:
+        raise ValueError("Choose host suggestions or a provider, not both")
+    document_classifier = getattr(provider, "classify_document", None)
+    if suggestions is not None or callable(document_classifier):
+        metadata = {"model": None, "usage": {}, "elapsed_ms": 0.0}
+        if callable(document_classifier):
+            document = {**asdict(chunks[0]), "end_line": chunks[-1].end_line,
+                        "text": "".join(chunk.text for chunk in chunks)}
+            result = document_classifier(document, taxonomy, prompt_language=prompt_language)
+            try:
+                suggestions = _document_suggestion(result["suggestion"], taxonomy)
+                metadata = {key: result[key] for key in metadata}
+            except (ValueError, TypeError, KeyError) as exc:
+                raise ProviderError("invalid_document_response") from exc
+        else:
+            suggestions = _document_suggestion(suggestions, taxonomy)
+        return {"path": chunks[0].path, "provider": "host" if provider is None else provider.name,
+                "prompt_language": prompt_language, "classification_scope": "document",
+                "status": "complete", **suggestions, **metadata,
+                "category_candidates": [suggestions["category"]],
+                "passages": [asdict(chunk) for chunk in chunks], "note_modified": False}
+    if provider is None:
+        raise ValueError("Classification requires a provider or host suggestions")
     if len(chunks) > 200:
         raise ValueError("The note exceeds the 200-passage classification limit")
     names = list(taxonomy["categories"])
@@ -140,7 +178,7 @@ def classify(vault: Path, note: Path, taxonomy: dict, provider: DecisionProvider
         passages.append({**asdict(chunk), "category": selected,
                          "category_decision": asdict(category), "tags": tag_results})
     return {"path": chunks[0].path, "provider": getattr(provider, "name", type(provider).__name__),
-            "prompt_language": prompt_language,
+            "prompt_language": prompt_language, "classification_scope": "passage",
             "model": passages[0]["category_decision"]["model"],
             "status": "complete", "review_required": len(category_names) > 1,
             "category": next(iter(category_names)) if len(category_names) == 1 else None,

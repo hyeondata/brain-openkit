@@ -2,6 +2,8 @@
 
 [English](agent-integration.md) | 한국어
 
+이 안내의 예제는 macOS 기준입니다. Windows·Linux에서는 이번 변경을 검증하지 않았습니다.
+
 두 호스트에서 동일한 스킬 8개가 함께 제공되는 Python CLI를 실행합니다.
 요청한 문장은 Claude나 Codex가 작성하고, BM25는 로컬에서 검색하며,
 선택적으로 사용하는 Laya·Kev·Jev 제공자는 분류나 관련성을 판단합니다.
@@ -24,7 +26,7 @@ git clone --branch v0.2.0a4 --depth 1 https://github.com/hyeondata/brain-openkit
 
 제품 체크아웃이나 압축을 푼 소스는 실제 vault와 별도 디렉터리에 둡니다.
 호스트에서 **Python 3.11 이상**을 실행할 수 있어야 합니다.
-`python3 --version`으로 확인하며, Windows에서는 `python --version`으로 확인합니다.
+`python3 --version`으로 확인합니다.
 macOS에 기본 제공되는 오래된 Python으로는 실행할 수 없습니다.
 아카이브 훅에는 선택적으로 `BRAIN_OPENKIT_PYTHON` 환경 변수에 Python 3.11 이상
 실행기의 절대 경로를 지정할 수 있습니다. [아카이브 설정 예제](conversation-archive.ko.md)를
@@ -121,7 +123,7 @@ agent-workspace/.agents/
 업데이트할 때도 디렉터리 3개를 함께 유지하세요. 공통 참고 문서와 핵심 모듈 없이
 `SKILL.md` 하나만 복사하면 동작하지 않습니다. 심볼릭 링크로 설치할 때는 각 스킬
 디렉터리를 연결하고 전체 제품 트리를 유지하며, 실행기를 찾기 전에 스킬의 실제 경로를
-확인해야 합니다. Windows에서는 복사 방식이 더 폭넓게 동작합니다.
+확인해야 합니다.
 이 대체 설치 방식은 검토 후 실행하는 스킬 8개를 설치합니다. 디렉터리 3개를
 복사하는 것만으로 자동 아카이브 훅이 등록되지는 않습니다.
 

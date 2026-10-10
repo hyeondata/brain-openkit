@@ -26,21 +26,28 @@
 > [이전 0.2.0a3 검증](docs/release-0.2.0a3.ko.md),
 > [구현·검증 기록](docs/implementation-notes.md)을 참고하세요.
 
-아래의 선택적 `ko-decision`·`codex` 제공자와 `--prompt-language` 옵션은 아직 릴리스하지
+**현재 검증 환경은 macOS입니다.** 테스트와 CI는 macOS 및 Python 3.11
+이상을 대상으로 합니다. Windows와 Linux에서는 이번 변경을 검증하지 않았습니다.
+기록된 앱·실제 모델 검증은 Apple Silicon 환경이며, Intel Mac은 별도로 검증하지
+않았습니다. 이전 릴리스 보고서의 CI 결과는 당시의 검증 기록으로 유지합니다.
+
+아래의 선택적 `ko-decision`·`codex` 제공자, 문서 전체 분류와 `--prompt-language` 옵션은 아직 릴리스하지
 않은 소스 변경입니다. `v0.2.0a4` 태그와 릴리스 파일에는 없으며, 이 변경이 포함된
 체크아웃에서 사용할 수 있습니다.
 
 Brain OpenKit은 원문 경로, 줄 번호, 발췌와 함께 Markdown 문단을 찾습니다.
 **기본 검색은 모델이나 API 키가 필요 없는 로컬 BM25입니다.** Claude Code와 Codex는
 동일한 8개 스킬로 근거를 검색하고 노트를 작성하며 검토한 변경을 적용할 수 있습니다.
-선택적 Laya·Kev·ko-decision·Codex·TypeSafe Jev 어댑터는 관련성·분류·태그를 판단하고, 문장을 생성하지 않습니다.
+선택적 Laya·Kev·ko-decision·Codex·TypeSafe Jev 어댑터는 관련성·분류·태그를 판단하고,
+노트 초안 작성은 호스트 Claude/Codex 모델이 담당합니다.
 
 ## 현재 기능
 
 - 수정·삭제된 노트를 반영하고 1부터 시작하는 시작·끝 줄 번호와 원문을 검색합니다.
   재정렬이 실패하면 전체 BM25 순서를 유지합니다.
-- 최대 10개 분류 중 하나를 고르고 최대 30개 태그를 각각 판단합니다.
-  문단 사이의 분류 충돌을 표시하며 분류 명령은 노트를 수정하지 않습니다.
+- 최대 10개 분류와 30개 태그 중에서 추천합니다. 호스트 Claude/Codex 또는 Codex
+  제공자는 문서 전체를 판단하며, Laya·Kev·Jev·ko-decision은 문단별 판단과 충돌 표시를
+  유지합니다. 분류 명령은 노트를 수정하지 않습니다.
 - 검토할 수 있는 변경 계획으로 vault 초기화·기존 vault 채택, 로컬 원문 수집,
   선택한 초안 저장, 메타데이터·링크 추가, 발췌형 개요 작성을 제공합니다.
 - 정확히 승인한 계획을 적용하고 트랜잭션을 기록하며, 파일이 기록된 상태와
@@ -69,7 +76,7 @@ Obsidian 1.13.4에서 합성 보관함의 저장 결과, 본문·태그 검색, 
 
 ## 소스에서 설치
 
-**Python 3.11 이상**이 필요합니다. 다음 macOS/Linux 명령은 `v0.2.0a4` 태그로
+macOS에서 **Python 3.11 이상**이 필요합니다. 다음 명령은 `v0.2.0a4` 태그로
 버전을 고정합니다. 계속되는 개발은 `main`에서 진행합니다.
 
 ~~~bash
@@ -82,7 +89,6 @@ python -m brain_openkit --help
 brain-openkit --version
 ~~~
 
-Windows는 PowerShell에서 `.venv\Scripts\Activate.ps1`로 활성화합니다.
 CLI에는 외부 런타임 의존성이 없지만 설치 중 빌드 도구를 다운로드할 수 있습니다.
 로컬 Laya·Kev·ko-decision 서버는 각각 별도 선택적 환경을 사용합니다.
 
@@ -142,7 +148,7 @@ codex plugin add brain-openkit@brain-openkit
 | `brain-search` | vault 범위의 질문에 실제 원문 인용으로 답합니다. |
 | `brain-ingest` | 제공된 원문을 보존하고 연결된 노트를 만듭니다. |
 | `brain-save` | 선택한 지식을 출처 링크와 함께 저장합니다. |
-| `brain-organize` | 선택한 메타데이터와 기존 노트 링크를 검토·적용합니다. |
+| `brain-organize` | 호스트가 문서의 분류·태그를 추천하고 메타데이터·링크를 검토·적용합니다. |
 | `brain-lint` | 자동 수정 없이 링크·메타데이터 문제를 보고합니다. |
 | `brain-fold` | 원본 노트를 보존하면서 발췌형 개요를 만듭니다. |
 | `brain-research` | 호스트 조사 도구를 사용하고 출처가 있는 조사 노트를 저장합니다. |
@@ -151,6 +157,13 @@ codex plugin add brain-openkit@brain-openkit
 `$brain-openkit:brain-search`를 호출하고 vault의 절대 경로를 전달합니다.
 설치·호출·워크스페이스 스킬 대안·검증·제거의 기준 문서는
 [에이전트 통합 안내](docs/agent-integration.ko.md)입니다.
+
+분류·태그 추천을 요청하면 `brain-organize`는 별도 제공자를 선택하지 않은 경우 현재
+Claude/Codex 호스트를 사용합니다. 노트 전체와 분류·태그 목록을 읽고 중심 주제와 주요
+태그를 추천한 뒤 `classify --suggestions FILE`로 JSON을 검증합니다. 이 검증은 모델
+프로세스를 추가로 실행하지 않으며, 호스트 대화의 통상 사용량은 발생합니다.
+승인된 변경은 기존 미리보기·적용·되돌리기 절차로 처리합니다. Claude는 이 공용 스킬을
+사용하며 `--provider claude` 옵션은 없습니다.
 
 요청한 문장 작성과 웹 검색·자료 추출은 호스트가 담당합니다.
 CLI 자체는 로컬 UTF-8 텍스트를 수집하며 웹 탐색·OCR·음성 전사를 하지 않습니다.
@@ -244,7 +257,7 @@ brain-openkit recover INTERRUPTED_TRANSACTION_ID --vault ../brain-openkit-demo -
 서버 실행 스크립트는 0.8B를 선택합니다. Laya는 `--provider laya`로 지정합니다.
 검색·평가 기본값은 로컬 BM25(`--provider none`)를 유지합니다.
 공통 계약은 현재 `choose`를 구현했으며 일반 `score`·`noul` 연산은 후속 범위입니다.
-원격 제공자를 명시적으로 선택하면 발췌문이 전송되며 클라우드로 자동 전환하지 않습니다.
+원격 제공자를 명시적으로 선택하면 선택한 텍스트가 전송되며 클라우드로 자동 전환하지 않습니다.
 
 Laya와 Kev는 모두 Hugging Face의 공개 가중치를 내려받아 로컬에서 실행합니다.
 각 모델의 공식 서버를 사용하되 Brain OpenKit에서는 같은 명령으로 교체합니다.
@@ -368,11 +381,18 @@ brain-openkit classify local-search.md --vault examples/vault --taxonomy example
 brain-openkit doctor --provider codex --json
 brain-openkit doctor --provider codex --model gpt-6-astra --reasoning-effort ultra --codex-executable /path/to/codex --probe --json
 brain-openkit search "로컬 검색" --vault examples/vault --provider codex --model gpt-6-astra --reasoning-effort ultra --codex-executable /path/to/codex --codex-timeout 600 --json
+brain-openkit classify local-search.md --vault examples/vault --taxonomy examples/taxonomy.json --provider codex --codex-executable /path/to/codex --json
 ~~~
+
+Codex 분류는 노트 전체와 분류·태그 목록을 한 요청에 담습니다. 분류 하나, 선택한 태그,
+추천 이유와 검토 필요 여부를 반환하며, 모든 문단의 분류 일치나 문단별 태그의 합집합을
+요구하지 않습니다. 입력이 너무 크면 노트를 조용히 자르지 않고 오류를 반환합니다.
+검색은 기존 문단 재정렬 방식을 유지합니다.
 
 `--probe` 없는 `doctor`는 실행 파일·버전만 확인하며 로그인이나 모델 접근을 검증하지
 않습니다. `--probe`는 실제 추론을 실행하여 사용량을 소모하거나 비용이 발생하며,
-Codex 검색·분류 요청도 마찬가지입니다. 이 제공자를 선택하면 해당 노트 본문·질문·선택지
+Codex 검색·분류 요청도 마찬가지입니다. 이 제공자를 선택하면 검색 대상 문단 또는 분류
+대상 노트 전체와 질문·선택지
 설명이 클라우드로 전송됩니다. 제공자는 읽기 전용으로 판단을 반환하며, 확률·신뢰도는
 보정된 분류 점수가 아닌 모델의 자체 평가입니다. 검색 재정렬에 실패하면
 `rerank_status: "unavailable"`과 함께 BM25 결과를 반환하므로 이를 Codex 추론 성공으로
@@ -383,6 +403,26 @@ Codex 검색·분류 요청도 마찬가지입니다. 이 제공자를 선택하
 2026-10-09 로컬 확인에서 CLI 0.149.0은 `gpt-6-astra` 요청을 서버가 거절했고,
 CLI 0.162.0은 실제 구조화 출력 probe를 완료했습니다. 이는 해당 환경의 호환성 확인이며
 모델의 전반적인 품질 순위를 뜻하지 않습니다.
+
+### 호스트 추천 검증 (미릴리스 소스)
+
+호스트가 만든 JSON을 vault 밖에 저장합니다. 분류·태그 이름은 사용자의 목록에 있어야 합니다.
+
+~~~json
+{"category":"research","tags":["local"],"rationale":"로컬 검색 방법이 문서의 중심 주제입니다.","review_required":false}
+~~~
+
+~~~bash
+brain-openkit classify local-search.md --vault examples/vault --taxonomy examples/taxonomy.json --suggestions /path/to/suggestions.json --json
+~~~
+
+JSON에는 위 네 필드만 있어야 합니다. 분류와 중복 없는 태그는 허용된 이름이어야 하며,
+추천 이유는 공백뿐인 내용을 제외한 1–2,000자 문자열, `review_required`는 불리언입니다.
+결과에는 `provider: "host"`, `classification_scope: "document"`가 표시됩니다.
+`--suggestions`는 `classify` 전용이며, 이 호출에서 저장된 제공자 설정을 덮어쓰고 해당
+제공자를 호출하지 않습니다. `none` 이외의 명시적 `--provider`와 함께 사용할 수 없습니다.
+노트는 바뀌지 않습니다. 검증 통과가 추천의 정확성이나 쓰기 승인을 뜻하지는 않으며,
+적용할 때는 기존 `organize` 계획·적용 절차를 사용합니다.
 
 ## 설정과 출력
 

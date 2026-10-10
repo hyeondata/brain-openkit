@@ -26,7 +26,13 @@
 > [historical 0.2.0a3 verification](docs/release-0.2.0a3.md) and
 > [implementation notes](docs/implementation-notes.md) for their respective evidence and limits.
 
-The optional `ko-decision` and `codex` providers and `--prompt-language` option described below
+**Validation scope: macOS.** Current testing and CI target macOS with
+Python 3.11 or newer. Windows and Linux are unverified for the current changes.
+Recorded app and live-model checks used Apple Silicon; Intel Macs have not been
+verified separately. Earlier release reports retain their historical CI results.
+
+The optional `ko-decision` and `codex` providers, whole-document classification,
+and `--prompt-language` option described below
 are unreleased source changes. They are not included in the `v0.2.0a4` tag or its
 release assets; use the checkout containing these changes to try them.
 
@@ -34,14 +40,15 @@ Brain OpenKit finds Markdown passages with original paths, line numbers, and
 excerpts. **Search defaults to local BM25, without a model or API key.** Claude
 Code or Codex can use the same eight skills to retrieve evidence, draft notes,
 and apply reviewed changes. Optional Laya, Kev, ko-decision, Codex, and TypeSafe Jev adapters make
-relevance and category/tag decisions; they do not generate prose.
+relevance and category/tag decisions; note drafting uses the host Claude/Codex model.
 
 ## What it does
 
 - Index changed/deleted notes and retrieve original passages with inclusive,
   one-based source lines. Failed reranking preserves the complete BM25 order.
-- Suggest among up to 10 categories and evaluate up to 30 tags independently.
-  Conflicting passage categories remain visible; classification never edits notes.
+- Suggest among up to 10 categories and 30 tags. The host Claude/Codex or the
+  Codex provider can judge the whole document; Laya/Kev/Jev/ko-decision retain
+  passage-based judgments and expose conflicts. Classification never edits notes.
 - Initialize/adopt a vault, capture local sources, save selected drafts, add
   metadata/links, and create extractive overviews through reviewable change plans.
 - Apply an exact approved plan, record a transaction, and undo or recover when
@@ -72,7 +79,7 @@ and the verified scope.
 
 ## Install from source
 
-Use **Python 3.11 or newer**. These macOS/Linux commands use the `v0.2.0a4`
+Use **Python 3.11 or newer** on macOS. These commands use the `v0.2.0a4`
 tag to fix the version; ongoing development uses `main`.
 
 ~~~bash
@@ -85,7 +92,6 @@ python -m brain_openkit --help
 brain-openkit --version
 ~~~
 
-On Windows, activate with `.venv\Scripts\Activate.ps1` in PowerShell.
 The CLI has no third-party runtime dependencies; installation may download
 build tooling. Local Laya, Kev, and ko-decision servers use separate optional environments.
 
@@ -145,7 +151,7 @@ release and does not verify conversation archiving.
 | `brain-search` | Answer a vault-scoped question with real source citations. |
 | `brain-ingest` | Preserve supplied source text and create a linked note. |
 | `brain-save` | Save selected knowledge with source links. |
-| `brain-organize` | Review and apply chosen metadata and existing-note links. |
+| `brain-organize` | Suggest document categories/tags with the host, then review and apply metadata/links. |
 | `brain-lint` | Report link and metadata issues without repairs. |
 | `brain-fold` | Create an extractive overview while preserving source notes. |
 | `brain-research` | Use host research tools, then save a cited dossier. |
@@ -154,6 +160,14 @@ For example, invoke `/brain-openkit:brain-search` in Claude Code or
 `$brain-openkit:brain-search` in Codex and supply your vault's absolute path.
 See the canonical [agent integration guide](docs/agent-integration.md) for
 installation, invocation, workspace skill fallback, validation, and removal.
+
+For category/tag suggestions, `brain-organize` uses the current Claude/Codex host
+unless you select a separate provider. It reads the entire note and taxonomy,
+chooses the dominant topic and central tags, then validates its JSON with
+`classify --suggestions FILE`. This validation starts no additional model process;
+the host conversation still consumes its normal usage. The existing preview,
+apply, and undo workflow handles approved changes. Claude uses this shared skill;
+there is no `--provider claude`.
 
 The host writes requested prose and supplies any web/extraction tools.
 The CLI itself ingests local UTF-8 text; it does not browse, perform OCR, or
@@ -249,7 +263,7 @@ Keep the journal for recovery; removing a plugin does not remove it.
 the bundled Kev launcher selects 0.8B. Select Laya with `--provider laya`.
 Search and evaluation continue to default to local BM25 (`--provider none`).
 The common protocol currently implements `choose`; generic `score` and
-`noul` operations are future work. Remote providers receive selected excerpts
+`noul` operations are future work. Remote providers receive selected text
 when explicitly selected; there is no automatic cloud failover.
 
 Laya and Kev both download public weights from Hugging Face and run locally.
@@ -381,12 +395,18 @@ path, or omit `--codex-executable` to use `codex` from `PATH`.
 brain-openkit doctor --provider codex --json
 brain-openkit doctor --provider codex --model gpt-6-astra --reasoning-effort ultra --codex-executable /path/to/codex --probe --json
 brain-openkit search "local search" --vault examples/vault --provider codex --model gpt-6-astra --reasoning-effort ultra --codex-executable /path/to/codex --codex-timeout 600 --json
+brain-openkit classify local-search.md --vault examples/vault --taxonomy examples/taxonomy.json --provider codex --codex-executable /path/to/codex --json
 ~~~
+
+Codex classification uses one request containing the whole note and taxonomy.
+It returns one category, selected tags, a rationale, and a review flag; it does
+not require every passage to agree or union all passage tags. Oversized input
+fails instead of silently truncating the note. Search retains passage reranking.
 
 Without `--probe`, `doctor` only checks the executable/version, not authentication
 or model access. `--probe` performs real inference and consumes usage or incurs
 charges, as do Codex search/classification requests. Selecting this provider sends
-the selected note passages, questions, and choice descriptions to the cloud.
+the selected search passages or whole classification note, questions, and choice descriptions to the cloud.
 The provider is read-only and returns decisions; probabilities/confidence are
 self-assessments, not calibrated classifier scores. A failed search rerank returns
 BM25 with `rerank_status: "unavailable"`; this is not successful Codex inference.
@@ -397,6 +417,28 @@ automatic model fallback. `--codex-timeout` defaults to 600 seconds and is separ
 from the HTTP `--timeout`. In a local check on 2026-10-09, CLI 0.149.0 was rejected
 by the server for `gpt-6-astra`; CLI 0.162.0 completed a real structured-output
 probe. This is an observed compatibility check, not a general quality ranking.
+
+### Validate host suggestions (unreleased source)
+
+Save a host-generated JSON file outside the vault, using names from your taxonomy:
+
+~~~json
+{"category":"research","tags":["local"],"rationale":"The note focuses on local search methods.","review_required":false}
+~~~
+
+~~~bash
+brain-openkit classify local-search.md --vault examples/vault --taxonomy examples/taxonomy.json --suggestions /path/to/suggestions.json --json
+~~~
+
+The file must contain exactly these four fields. The category and unique tags
+must be permitted by the taxonomy, the rationale must be a nonblank string of
+1–2,000 characters,
+and `review_required` must be boolean. The result identifies `provider: "host"`
+and `classification_scope: "document"`. `--suggestions` is only available on
+`classify`; it overrides the saved provider for that call without contacting it,
+and cannot be combined with an explicit provider other than `none`. No note is
+changed. Successful validation does not establish recommendation quality or
+authorize a write; use the existing `organize` plan/apply workflow for that.
 
 ## Configuration and output
 
