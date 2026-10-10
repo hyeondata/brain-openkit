@@ -183,8 +183,30 @@ def _append_links(text, paths, heading, files, current):
     if not missing:
         return text
     newline = _newline(text)
+    links = "".join(f"- {_link(p)}{newline}" for p in missing)
+    sections, offset = [], 0
+    clean_lines = _lines(_without_code(text))
+    frontmatter = bool(clean_lines and clean_lines[0].rstrip("\r\n").lstrip("\ufeff") == "---")
+    for number, line in enumerate(clean_lines):
+        if frontmatter:
+            if number and line.rstrip("\r\n") in ("---", "..."):
+                frontmatter = False
+        else:
+            match = re.match(r"^ {0,3}(#{1,6})[ \t]+(.+?)(?:[ \t]+#+)?[ \t]*$", line.rstrip("\r\n"))
+            if match:
+                sections.append((offset, match[1], match[2]))
+        offset += len(line)
+    matches = [i for i, (_, level, title) in enumerate(sections) if level == "##" and title == heading]
+    if matches:
+        # Extend the last existing section; do not migrate earlier duplicates or
+        # place new links beneath the user's following subsection/heading.
+        index = matches[-1]
+        position = sections[index + 1][0] if index + 1 < len(sections) else len(text)
+        before, after = text[:position], text[position:]
+        separator = "" if before.endswith(("\r", "\n")) else newline
+        return before + separator + links + (newline if after else "") + after
     separator = "" if not text else (newline if text.endswith(("\n", "\r")) else newline * 2)
-    return text + separator + f"## {heading}" + newline * 2 + "".join(f"- {_link(p)}{newline}" for p in missing)
+    return text + separator + f"## {heading}" + newline * 2 + links
 
 
 def _index(vault, paths):

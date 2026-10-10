@@ -5,8 +5,23 @@ from pathlib import Path
 from time import perf_counter
 
 from .index import Index
-from .providers import DecisionProvider, ProviderError
+from .providers import Decision, DecisionProvider, ProviderError
 from .vault import read_note
+
+
+def _choose_decisions(provider: DecisionProvider,
+                      requests: list[tuple[str, str, dict[str, str]]]) -> list[Decision]:
+    choose_many = getattr(provider, "choose_many", None)
+    if not callable(choose_many):
+        return [provider.choose(*request) for request in requests]
+    decisions = []
+    for start in range(0, len(requests), 64):
+        batch = requests[start:start + 64]
+        received = choose_many(batch)
+        if not isinstance(received, list) or len(received) != len(batch):
+            raise ProviderError("invalid_batch_response")
+        decisions.extend(received)
+    return decisions
 
 
 def search(vault: Path, query: str, *, cache_dir: Path,
@@ -32,17 +47,18 @@ def search(vault: Path, query: str, *, cache_dir: Path,
     model = None
     if provider is not None and rows:
         try:
-            decisions = []
+            requests = []
             for row in rows:
                 state = f"Query: {query}\nNote: {row['path']}\nTitle: {row['title']}\nPassage:\n{row['text']}"
                 if prompt_language == "ko":
                     state = f"검색 질문: {query}\n문서: {row['path']}\n제목: {row['title']}\n본문:\n{row['text']}"
-                decisions.append(provider.choose(
+                requests.append((
                     state, "본문에 검색 질문에 답하는 데 유용한 정보가 있는가?" if prompt_language == "ko" else
                     "Does the passage contain information useful for the query?",
                     {"A": "검색 질문과 관련된 유용한 정보가 있다", "B": "관련이 없거나 정보가 부족하다"}
                     if prompt_language == "ko" else
                     {"A": "Relevant information for the query", "B": "Unrelated or insufficient information"}))
+            decisions = _choose_decisions(provider, requests)
             # Apply only after every candidate succeeds: never mix score scales.
             for row, decision in zip(rows, decisions):
                 row["model_score"] = decision.probabilities["A"]
@@ -95,22 +111,28 @@ def classify(vault: Path, note: Path, taxonomy: dict, provider: DecisionProvider
         raise ValueError("The note exceeds the 200-passage classification limit")
     names = list(taxonomy["categories"])
     choices = {chr(65+i): f"{name}: {taxonomy['categories'][name]}" for i, name in enumerate(names)}
-    passages, category_names, tags = [], set(), set()
+    requests = []
     for chunk in chunks:
         state = f"Note: {chunk.path}\nTitle: {chunk.title}\nPassage:\n{chunk.text}"
         if prompt_language == "ko":
             state = f"문서: {chunk.path}\n제목: {chunk.title}\n본문:\n{chunk.text}"
-        category = provider.choose(state, "본문에 가장 적합한 기존 분류를 고르세요." if prompt_language == "ko" else
-                                   "Which existing category best describes this passage?", choices)
+        requests.append((state, "본문에 가장 적합한 기존 분류를 고르세요." if prompt_language == "ko" else
+                         "Which existing category best describes this passage?", choices))
+        for name, description in taxonomy["tags"].items():
+            requests.append((state,
+                             f"본문이 다음 태그에 해당하는가? {name}: {description}" if prompt_language == "ko" else
+                             f"Does this passage match the tag {name}: {description}?",
+                             {"A": "태그에 해당한다", "B": "태그에 해당하지 않는다"} if prompt_language == "ko" else
+                             {"A": "The tag applies", "B": "The tag does not apply"}))
+    decisions = iter(_choose_decisions(provider, requests))
+    passages, category_names, tags = [], set(), set()
+    for chunk in chunks:
+        category = next(decisions)
         selected = names[ord(category.choice)-65]
         category_names.add(selected)
         tag_results = {}
-        for name, description in taxonomy["tags"].items():
-            decision = provider.choose(state,
-                                       f"본문이 다음 태그에 해당하는가? {name}: {description}" if prompt_language == "ko" else
-                                       f"Does this passage match the tag {name}: {description}?",
-                                       {"A": "태그에 해당한다", "B": "태그에 해당하지 않는다"} if prompt_language == "ko" else
-                                       {"A": "The tag applies", "B": "The tag does not apply"})
+        for name in taxonomy["tags"]:
+            decision = next(decisions)
             applies = decision.probabilities["A"] > decision.probabilities["B"]
             if applies:
                 tags.add(name)

@@ -26,14 +26,14 @@
 > [이전 0.2.0a3 검증](docs/release-0.2.0a3.ko.md),
 > [구현·검증 기록](docs/implementation-notes.md)을 참고하세요.
 
-아래의 선택적 `ko-decision` 제공자와 `--prompt-language` 옵션은 아직 릴리스하지
+아래의 선택적 `ko-decision`·`codex` 제공자와 `--prompt-language` 옵션은 아직 릴리스하지
 않은 소스 변경입니다. `v0.2.0a4` 태그와 릴리스 파일에는 없으며, 이 변경이 포함된
 체크아웃에서 사용할 수 있습니다.
 
 Brain OpenKit은 원문 경로, 줄 번호, 발췌와 함께 Markdown 문단을 찾습니다.
 **기본 검색은 모델이나 API 키가 필요 없는 로컬 BM25입니다.** Claude Code와 Codex는
 동일한 8개 스킬로 근거를 검색하고 노트를 작성하며 검토한 변경을 적용할 수 있습니다.
-선택적 Laya·Kev·ko-decision·TypeSafe Jev 어댑터는 관련성·분류·태그를 판단하고, 문장을 생성하지 않습니다.
+선택적 Laya·Kev·ko-decision·Codex·TypeSafe Jev 어댑터는 관련성·분류·태그를 판단하고, 문장을 생성하지 않습니다.
 
 ## 현재 기능
 
@@ -238,6 +238,7 @@ brain-openkit recover INTERRUPTED_TRANSACTION_ID --vault ../brain-openkit-demo -
 | `kev` | 분류·상태 확인 기본값. 포함된 서버 실행 스크립트가 Hugging Face의 고정된 Kev 0.8B 가중치를 선택하며, [실제 CLI 검증](docs/kev-08-verification-2026-10-05.md)을 통과했습니다. |
 | `jev` | TypeSafe 호스팅 어댑터. 계약 fixture 테스트를 통과했으며 실제 키로 추론은 미검증입니다. |
 | `ko-decision` | 미릴리스 소스에서 제공하는 선택적 한국어 RoBERTa 판단. 고정된 외부 체크포인트를 사용합니다. [설정](docs/local-models.ko.md#ko-decision-미릴리스-소스)과 [검증 기록](docs/ko-decision-verification-2026-10-05.ko.md)을 참고하세요. |
+| `codex` | 미릴리스 소스에서 제공하는 선택적 클라우드 판단. 로그인한 Codex CLI를 사용하며, 현재 설정 기본값은 `gpt-6-astra`와 `ultra` 추론입니다. |
 
 `classify`·`doctor`는 설정이나 옵션으로 바꾸지 않으면 Kev를 사용하며, 포함된
 서버 실행 스크립트는 0.8B를 선택합니다. Laya는 `--provider laya`로 지정합니다.
@@ -356,6 +357,33 @@ brain-openkit classify local-search.md --vault examples/vault --taxonomy example
 `doctor --provider jev --probe`는 추론 요청을 보내므로 검색·분류와 마찬가지로
 서비스 비용이 발생할 수 있습니다. 실제 키로 서비스 동작은 아직 검증하지 않았습니다.
 
+### 선택적 Codex CLI (미릴리스 소스)
+
+호환되는 Codex CLI를 설치하고 `codex login`으로 별도 로그인합니다. 별도 실행 파일은
+`/path/to/codex login`을 사용합니다. Brain OpenKit은 기존 로그인을 이용하며 인증
+정보를 직접 읽지 않습니다. 아래 `/path/to/codex`는 실제 CLI 경로로 바꾸세요.
+`--codex-executable`을 생략하면 `PATH`의 `codex`를 사용합니다.
+
+~~~bash
+brain-openkit doctor --provider codex --json
+brain-openkit doctor --provider codex --model gpt-6-astra --reasoning-effort ultra --codex-executable /path/to/codex --probe --json
+brain-openkit search "로컬 검색" --vault examples/vault --provider codex --model gpt-6-astra --reasoning-effort ultra --codex-executable /path/to/codex --codex-timeout 600 --json
+~~~
+
+`--probe` 없는 `doctor`는 실행 파일·버전만 확인하며 로그인이나 모델 접근을 검증하지
+않습니다. `--probe`는 실제 추론을 실행하여 사용량을 소모하거나 비용이 발생하며,
+Codex 검색·분류 요청도 마찬가지입니다. 이 제공자를 선택하면 해당 노트 본문·질문·선택지
+설명이 클라우드로 전송됩니다. 제공자는 읽기 전용으로 판단을 반환하며, 확률·신뢰도는
+보정된 분류 점수가 아닌 모델의 자체 평가입니다. 검색 재정렬에 실패하면
+`rerank_status: "unavailable"`과 함께 BM25 결과를 반환하므로 이를 Codex 추론 성공으로
+보면 안 됩니다. 분류 실패는 오류로 반환합니다.
+
+`--model`·`--reasoning-effort`로 위 기본 설정을 바꿀 수 있으며 모델을 자동 변경하지
+않습니다. `--codex-timeout`은 기본 600초이고 HTTP의 `--timeout`과 별개입니다.
+2026-10-09 로컬 확인에서 CLI 0.149.0은 `gpt-6-astra` 요청을 서버가 거절했고,
+CLI 0.162.0은 실제 구조화 출력 probe를 완료했습니다. 이는 해당 환경의 호환성 확인이며
+모델의 전반적인 품질 순위를 뜻하지 않습니다.
+
 ## 설정과 출력
 
 노트·제공자 명령은 `--config settings.json`과 `--json`을 받습니다.
@@ -382,8 +410,8 @@ brain-openkit classify local-search.md --vault examples/vault --taxonomy example
 
 명령 옵션이 JSON 설정보다, JSON 설정이 기본값보다 우선합니다. JSON의 `vault`,
 `cache_dir`는 설정 파일 기준입니다. 선택적인 `base_url` 설정이나 `--base-url`은
-선택한 제공자의 주소를 덮어씁니다. 키는 환경 변수로만 전달합니다.
-`--model`은 선택한 Kev·Jev·ko-decision의 서버 모델 이름을 덮어쓰며, Laya는 다국어 모델을 명시적으로 사용합니다.
+선택한 HTTP 제공자의 주소를 덮어쓰며 Codex에서는 이 옵션을 거절합니다. HTTP API 키는 환경 변수로만 전달합니다.
+`--model`은 선택한 Kev·Jev·ko-decision의 서버 모델 이름 또는 Codex 모델을 덮어쓰며, Laya는 다국어 모델을 명시적으로 사용합니다.
 분류·정리·원본 노트 경로는 vault 기준이며, 입력 초안·분류 목록·평가 자료·계획 파일은
 현재 디렉터리 기준입니다.
 

@@ -43,6 +43,52 @@ class NoteWorkflowTests(unittest.TestCase):
         self.assertNotIn('\n', index.replace('\r\n', ''))
         self.assertEqual([], plan_init(self.vault)['changes'])
 
+    def test_sequential_saves_extend_one_index_notes_section(self):
+        for number in range(1, 7):
+            self.apply(plan_save(self.vault, f'Notes/{number}.md', f'# Topic {number}\n'))
+        index = (self.vault / 'Index.md').read_bytes().decode()
+        self.assertEqual(index.count('## Notes\n'), 1)
+        self.assertIn(''.join(f'- [[Notes/{number}]]\n' for number in range(1, 7)), index)
+
+    def test_link_sections_ignore_fenced_headings_and_preserve_following_sections(self):
+        self.write('First.md', '# First\n')
+        self.write('Second.md', '# Second\n')
+        for heading in ('Notes', 'Sources', 'Related'):
+            for newline in ('\n', '\r\n', '\r'):
+                with self.subTest(heading=heading, newline=repr(newline)):
+                    prefix = newline.join(['# User note', '```markdown', f'## {heading}',
+                                           '- [[Second]]', '```', '', f'## {heading}', '',
+                                           'Keep this explanation.', '- [[First]]', '',
+                                           '~~~markdown', '### Heading inside code', '~~~', '', ''])
+                    suffix = newline.join(['### User subsection', 'Keep this body.', '',
+                                           '## Other', 'Unchanged tail.', ''])
+                    destination = 'Index.md' if heading == 'Notes' else 'Selected.md'
+                    self.write(destination, prefix + suffix)
+                    if heading == 'Notes':
+                        plan = plan_save(self.vault, 'Second.md', '# Second\n')
+                    elif heading == 'Sources':
+                        plan = plan_save(self.vault, destination, prefix + suffix, sources=['Second'])
+                    else:
+                        plan = plan_organize(self.vault, destination, links=['Second'])
+                    self.apply(plan)
+                    after = (self.vault / destination).read_bytes().decode()
+                    self.assertEqual(after, prefix + f'- [[Second]]{newline}{newline}' + suffix)
+
+    def test_save_sources_heading_does_not_reuse_a_frontmatter_comment(self):
+        self.write('Source.md', '# Source\n')
+        before = '---\n## Sources\ncustom: kept\n---\n# User note\nBody\n'
+        self.apply(plan_save(self.vault, 'Selected.md', before, sources=['Source']))
+        self.assertEqual((self.vault / 'Selected.md').read_bytes().decode(),
+                         before + '\n## Sources\n\n- [[Source]]\n')
+
+    def test_legacy_duplicate_link_headings_are_preserved_without_adding_another(self):
+        self.write('First.md', '# First\n')
+        self.write('Second.md', '# Second\n')
+        before = '# Index\n## Notes\nOld user content.\n## Notes\n- [[First]]\n'
+        self.write('Index.md', before)
+        self.apply(plan_save(self.vault, 'Second.md', '# Second\n'))
+        self.assertEqual((self.vault / 'Index.md').read_bytes().decode(), before + '- [[Second]]\n')
+
     def test_ingest_captures_exact_bytes_and_duplicate_keeps_later_edits(self):
         source = self.root / 'source.txt'
         raw = '# 원본\r\n검색은 로컬에서 수행합니다.\r\n'
